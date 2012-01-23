@@ -2,6 +2,17 @@
 
 {% block body %}
 <h2>Hello world from django templates rendered on django.</h2>
+    {% for x in lista %}
+    <div class="{% cycle 'c1' 'c2' %}">
+        {% if x.pow < 20 %}
+        <span style="color: red">{{ x }}</span>
+        {% elif x.pow < 100 %}
+        <span style="color: blue">{{ x }}</span>
+        {% else %}
+        <span style="color: green">{{ x }}</span>
+        {% endif %}
+    </div>
+    {% endfor %}
 {% endblock body %}
 
 {% block footer %}
