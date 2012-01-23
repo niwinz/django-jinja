@@ -4,7 +4,7 @@ from django.template import TemplateDoesNotExist
 from django.template.loaders import app_directories
 from django.template.loaders import filesystem
 
-from django_jinja import env
+from django_jinja.base import env
 import jinja2
 
 DEFAULT_JINJA2_TEMPLATE_EXTENSION = getattr(settings, 

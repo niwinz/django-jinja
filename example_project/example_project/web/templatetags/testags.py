@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django_jinja import Library
+from django_jinja.base import Library
 
 register = Library()
 
