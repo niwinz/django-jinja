@@ -46,7 +46,7 @@ class Template(Template):
             self.origin = Origin(self.filename)
             signals.template_rendered.send(sender=self, template=self, context=context)
 
-        return super(Template, self).render(context_dict)
+        return super(Template, self).render(new_context)
 
 
 class Environment(Environment):

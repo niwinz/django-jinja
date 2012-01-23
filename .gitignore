@@ -1,0 +1,7 @@
+*.pyc
+.*swp
+build/
+dist/
+superview.egg-info/
+django_superview.egg-info
+versiontools-*.egg
