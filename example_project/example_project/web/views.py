@@ -7,11 +7,11 @@ from django.template import RequestContext
 
 class Test1(View):
     def get(self, request):
-        return render_to_response("base.jinja", {},
+        return render_to_response("home.jinja", {},
             context_instance=RequestContext(request))
 
 
 class Test2(View):
     def get(self, request):
-        return render_to_response("base.html", {},
+        return render_to_response("home.html", {},
             context_instance=RequestContext(request))

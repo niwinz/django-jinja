@@ -5,6 +5,7 @@
         <title>Test jinja templates</title>
     </head>
     <body>
-        <h2>Hello world from jinja templates rendered on django.</h2>
+        {% block body %}{% endblock %}
+        {% block footer %}{% endblock %}
     </body>
 </html>
