@@ -15,7 +15,7 @@ class LoaderMixin(object):
 
     def load_template(self, template_name, template_dirs=None):
         if not template_name.endswith(DEFAULT_JINJA2_TEMPLATE_EXTENSION):
-            return super(FileSystemLoader, self).load_template(template_name, template_dirs)
+            return super(LoaderMixin, self).load_template(template_name, template_dirs)
         
         try:
             template = env.get_template(template_name)
@@ -25,8 +25,8 @@ class LoaderMixin(object):
 
 
 class FileSystemLoader(LoaderMixin, filesystem.Loader):
-    is_usable = True
+    pass
 
 
 class AppLoader(LoaderMixin, app_directories.Loader):
-    is_usable = True
+    pass

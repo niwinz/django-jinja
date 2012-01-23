@@ -4,7 +4,7 @@ from django.conf.urls import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
-from example_project.web.views import Test1
+from example_project.web.views import Test1, Test2
 
 urlpatterns = patterns('',
     # Examples:
@@ -17,4 +17,5 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^test1/$', Test1.as_view(), name='test-1'),
+    url(r'^test2/$', Test2.as_view(), name='test-2'),
 )
