@@ -5,10 +5,12 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 lista = [{'id':x, 'pow': x*x} for x in xrange(20)]
+import datetime
 
 class Test1(View):
     def get(self, request):
-        return render_to_response("home.jinja", {'lista':lista},
+        return render_to_response("home.jinja", 
+            {'lista':lista, 'pub_date': datetime.datetime.now()},
             context_instance=RequestContext(request))
 
 
