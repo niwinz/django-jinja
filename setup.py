@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 import superview
 
 setup(
-    name = 'django-jinja2',
+    name = 'django-jinja',
     version = ":versiontools:django_jinja:",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
