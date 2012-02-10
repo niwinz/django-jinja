@@ -12,13 +12,21 @@ from django.template import TemplateDoesNotExist
 from django.template import Origin
 from django.template import InvalidTemplateLibrary
 from django.template.loaders import app_directories
+from django.utils.importlib import import_module
 
+import os
 import copy
 
 JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, 'JINJA2_ENVIRONMENT_OPTIONS', {})
 JINJA2_EXTENSIONS = getattr(settings, 'JINJA2_EXTENSIONS', [])
 JINJA2_FILTERS = getattr(settings, 'JINJA2_FILTERS', {})
 JINJA2_TESTS = getattr(settings, 'JINJA2_TESTS', {})
+
+from django_jinja.builtins import filters
+
+JINJA2_FILTERS.update({
+    'url': filters.url,
+})
 
 
 def dict_from_context(context):
@@ -27,12 +35,12 @@ def dict_from_context(context):
     """
 
     if isinstance(context, BaseContext):
-        d = {}
+        new_dict = {}
         for i in reversed(list(context)):
-            d.update(dict_from_context(i))
-        return d
-    else:
-        return dict(context)
+            new_dict.update(dict_from_context(i))
+        return new_dict
+
+    return dict(context)
 
 
 class Template(Template):
@@ -51,8 +59,6 @@ class Template(Template):
 
         return super(Template, self).render(new_context)
 
-from django.utils.importlib import import_module
-import os
 
 class Environment(Environment):
     def __init__(self, *args, **kwargs):
@@ -113,7 +119,7 @@ class Environment(Environment):
 
             if reg_attr.tests:
                 self.tests.update(reg_attr.tests)
-                
+
 
 class Library(object):
     def __init__(self):
