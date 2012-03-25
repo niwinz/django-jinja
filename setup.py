@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup, find_packages
-import superview
 
 setup(
     name = 'django-jinja',
