@@ -23,7 +23,6 @@ JINJA2_FILTERS = getattr(settings, 'JINJA2_FILTERS', {})
 JINJA2_TESTS = getattr(settings, 'JINJA2_TESTS', {})
 JINJA2_GLOBALS = getattr(settings, 'JINJA2_GLOBALS', {})
 
-from django_jinja.builtins import filters
 from django_jinja import builtins
 
 JINJA2_FILTERS.update({
@@ -130,6 +129,10 @@ class Environment(Environment):
             if reg_attr.tests:
                 self.tests.update(reg_attr.tests)
 
+        # Add builtin extensions.
+        self.add_extension(builtins.extensions.CsrfExtension)
+        #self.add_extension(builtins.extensions.LoadExtension)
+
 
 class Library(object):
     def __init__(self):
@@ -188,7 +191,7 @@ class Library(object):
 initial_params = {
     'autoescape': False,
     'loader': FileSystemLoader(app_directories.app_template_dirs + settings.TEMPLATE_DIRS),
-    'extensions':['jinja2.ext.i18n'] + JINJA2_EXTENSIONS,
+    'extensions':['jinja2.ext.i18n'],
 }
 
 initial_params.update(JINJA2_ENVIRONMENT_OPTIONS)

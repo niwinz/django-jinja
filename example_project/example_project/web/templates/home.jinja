@@ -30,6 +30,11 @@
         <li><b>Url filter</b> - {{ url('test-2') }}</li>
     </ul>
 </div>
+
+<div class="csrf-token-test">
+    <h3>csrf token test</h3>
+    {% csrf_token %}
+</div>
 {% endblock body %}
 
 {% block footer %}
