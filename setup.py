@@ -12,7 +12,7 @@ setup(
     keywords = 'django, jinja2',
     author = 'Andrei Antoukh',
     author_email = 'niwi@niwi.be',
-    url = 'https://github.com/niwibe/django-jinja2',
+    url = 'https://github.com/niwibe/django-jinja',
     license = 'BSD',
     include_package_data = True,
     packages = find_packages(),
@@ -24,7 +24,6 @@ setup(
         'versiontools >= 1.8',
     ],
     classifiers = [
-        "Programming Language :: Python",
         'Development Status :: 4 - Beta',
         'Framework :: Django',
         'Intended Audience :: Developers',

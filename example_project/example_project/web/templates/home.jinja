@@ -17,9 +17,17 @@
     {% endfor %}
 </div>
 <div class="urls">
-    <h3>Url testing</h3>
+    <h3>Url testing with filter</h3>
     <ul>
-        <li><b>Url filter</b> - {{ 'test-2'|url }}</li>
+        <li><b>Url filter</b> - {{ 'test-2'|reverse }}</li>
+    </ul>
+</div>
+
+
+<div class="urls">
+    <h3>Url testing with global function</h3>
+    <ul>
+        <li><b>Url filter</b> - {{ url('test-2') }}</li>
     </ul>
 </div>
 {% endblock body %}

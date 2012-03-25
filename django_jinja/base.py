@@ -21,11 +21,17 @@ JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, 'JINJA2_ENVIRONMENT_OPTIONS', {})
 JINJA2_EXTENSIONS = getattr(settings, 'JINJA2_EXTENSIONS', [])
 JINJA2_FILTERS = getattr(settings, 'JINJA2_FILTERS', {})
 JINJA2_TESTS = getattr(settings, 'JINJA2_TESTS', {})
+JINJA2_GLOBALS = getattr(settings, 'JINJA2_GLOBALS', {})
 
 from django_jinja.builtins import filters
+from django_jinja import builtins
 
 JINJA2_FILTERS.update({
-    'url': filters.url,
+    'reverse': builtins.filters.reverse,
+})
+
+JINJA2_GLOBALS.update({
+    'url': builtins.global_context.url,
 })
 
 
@@ -73,13 +79,17 @@ class Environment(Environment):
 
         self.template_class = Template
         
-        # Add filters defined on settings
+        # Add filters defined on settings + builtins
         for name, value in JINJA2_FILTERS.iteritems():
             self.filters[name] = value
         
-        # Add tests defined on settings
+        # Add tests defined on settings + builtins
         for name, value in JINJA2_TESTS.iteritems():
             self.tests[name] = value
+        
+        # Add globals defined on settings + builtins
+        for name, value in JINJA2_GLOBALS.iteritems():
+            self.globals[name] = value
 
         mod_list = []
         for app_path in settings.INSTALLED_APPS:
@@ -127,19 +137,25 @@ class Library(object):
         self.extensions = []
         self.globals = {}
         self.tests = {}
+
     def tag(self, func,name=None):
-        if name==None:
+        if name == None:
             name = getattr(func, "_decorated_function", func).__name__
         self.globals[name] = func
 
     def filter(self, func,name=None):
-        if name==None:
+        if name == None:
             name = getattr(func, "_decorated_function", func).__name__
         self.filters[name] = func
 
     def extension(self, ext):
         self.extensions.append(ext)
-    
+
+    def global_context(self, func, name=None):
+        if name == None:
+            name = getattr(func, "_decorated_function", func).__name__
+        self.globals[name] = func
+
     def set(self,*args,**kwargs):
         for k in kwargs.keys(): #is a object with a name
             self[k] = kwargs[k]
@@ -150,14 +166,14 @@ class Library(object):
         if takes_context:
             import jinja2
             @jinja2.contextfunction
-            def tag(context,*args,**kwargs):
+            def tag(context, *args, **kwargs):
                 from django.template.loader import render_to_string
                 return render_to_string(template, func(dict_from_context(context),*args,**kwargs))
 
         else:
-            def tag(*args,**kwargs):
+            def tag(*args, **kwargs):
                 from django.template.loader import render_to_string
-                return render_to_string(template, func(*args,**kwargs))
+                return render_to_string(template, func(*args, **kwargs))
 
         #raise Exception(getattr(func, "_decorated_function", func))
         self.tag(tag,name=getattr(func, "_decorated_function", func).__name__)
@@ -166,7 +182,7 @@ class Library(object):
         self.globals[item] = value
 
     def __getitem__(self, item, value): #for reciprocity with __setitem__
-        return globals[item]
+        return self.globals[item]
 
 
 initial_params = {
