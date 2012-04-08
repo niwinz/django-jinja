@@ -22,6 +22,7 @@ JINJA2_EXTENSIONS = getattr(settings, 'JINJA2_EXTENSIONS', [])
 JINJA2_FILTERS = getattr(settings, 'JINJA2_FILTERS', {})
 JINJA2_TESTS = getattr(settings, 'JINJA2_TESTS', {})
 JINJA2_GLOBALS = getattr(settings, 'JINJA2_GLOBALS', {})
+JINJA2_AUTOESCAPE = getattr(settings, 'JINJA2_AUTOESCAPE', False)
 
 from django_jinja import builtins
 
@@ -57,6 +58,7 @@ JINJA2_FILTERS.update({
     'yesno': builtins.filters.yesno,
     'filesizeformat': builtins.filters.filesizeformat,
     'pprint': builtins.filters.pprint,
+    'safe': builtins.filters.safe,
 })
 
 JINJA2_GLOBALS.update({
@@ -224,9 +226,9 @@ class Library(object):
 
 
 initial_params = {
-    'autoescape': False,
+    'autoescape': JINJA2_AUTOESCAPE,
     'loader': FileSystemLoader(app_directories.app_template_dirs + settings.TEMPLATE_DIRS),
-    'extensions':['jinja2.ext.i18n'],
+    'extensions':['jinja2.ext.i18n', 'jinja2.ext.autoescape'],
 }
 
 initial_params.update(JINJA2_ENVIRONMENT_OPTIONS)

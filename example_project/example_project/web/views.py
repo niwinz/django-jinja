@@ -9,8 +9,14 @@ import datetime
 
 class Test1(View):
     def get(self, request):
-        return render_to_response("home.jinja", 
-            {'lista':lista, 'pub_date': datetime.datetime.now()},
+        context = {
+            'lista': lista,
+            'pub_date': datetime.datetime.now(),
+        }
+        
+        context['footext'] = "<div>Test</div>"
+
+        return render_to_response("home.jinja", context,
             context_instance=RequestContext(request))
 
 

@@ -20,9 +20,6 @@ Under development:
 ------------------
 
 * gettext/i18n scripts for jinja2 templates.
-* more integration with django.
-* convert some django filters for use with jinja2
-* integration with django-superview
 
 How to install?
 ---------------
@@ -69,6 +66,9 @@ You can specify the default extension for jinja2 by the parameter ``DEFAULT_JINJ
 You can also assign different options to the Environment by ``JINJA2_ENVIRONMENT_OPTIONS`` parameter.
 To see more details, please see the sample application.
 
+Additionally you can specify whether or not to activate Autoescape extension with 
+``JINJA2_AUTOESCAPE`` boolean parameter. By default is desactivated.
+
 
 Djangon integration filters and functions:
 ------------------------------------------
@@ -87,11 +87,45 @@ Usage examples:
     {{ url('ns:urlaname', arg1=val1) }}
 
 
+Other ported django filters:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* ``reverse``
+* ``addslashes``
+* ``escapejs``
+* ``capfirst``
+* ``floatformat``
+* ``truncatechars``
+* ``truncatewords``
+* ``truncatewords_html``
+* ``wordwrap'``
+* ``title``
+* ``slugify``
+* ``lower``
+* ``ljust``
+* ``rjust``
+* ``linebreaksbr``
+* ``linebreaks``
+* ``removetags``
+* ``striptags``
+* ``join``
+* ``random``
+* ``add``
+* ``date``
+* ``time``
+* ``timesince``
+* ``timeuntil``
+* ``default``
+* ``default_if_none``
+* ``divisibleby``
+* ``yesno``
+* ``filesizeformat``
+* ``pprint``
+* ``safe``
 
 
 .. .. toctree::
-   :maxdepth: 2
-
+   :maxdepth: 2 
 
 ..  Indices and tables
     ==================

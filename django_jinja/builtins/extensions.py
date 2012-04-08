@@ -1,5 +1,6 @@
 from jinja2.ext import Extension
 from jinja2 import nodes
+from jinja2 import Markup
 from django.utils.safestring import mark_safe
 
 import traceback
@@ -23,8 +24,8 @@ class CsrfExtension(Extension):
             if csrf_token == 'NOTPROVIDED':
                 return mark_safe(u"")
 
-            return mark_safe(u"<div style='display:none'><input type='hidden'"
-                             u" name='csrfmiddlewaretoken' value='%s' /></div>" % (csrf_token))
+            return Markup(u"<div style='display:none'><input type='hidden'"
+                          u" name='csrfmiddlewaretoken' value='%s' /></div>" % (csrf_token))
 
         from django.conf import settings
         if settings.DEBUG:

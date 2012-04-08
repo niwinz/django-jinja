@@ -6,8 +6,12 @@ from django.utils.encoding import force_unicode, iri_to_uri
 from django.utils.text import Truncator, wrap, phone2numeric
 from django.utils.dateformat import format, time_format
 from django.utils.timesince import timesince, timeuntil
-from django.utils.html import escapejs, strip_tags, urlize_impl
+from django.utils.html import escapejs, strip_tags
 from pprint import pformat
+from jinja2 import Markup
+
+def safe(value):
+    return Markup(force_unicode(value))
 
 def reverse(value, *args, **kwargs):
     """
@@ -47,7 +51,7 @@ def capfirst(value):
     return value and value[0].upper() + value[1:]
 
 
-def floatformat(text, arg=-1)
+def floatformat(text, arg=-1):
     """
     Displays a float to a specified number of decimal places.
     
