@@ -27,6 +27,36 @@ from django_jinja import builtins
 
 JINJA2_FILTERS.update({
     'reverse': builtins.filters.reverse,
+    'addslashes': builtins.filters.addslashes,
+    'escapejs': builtins.filters.escapejs_filter,
+    'capfirst': builtins.filters.capfirst,
+    'floatformat': builtins.filters.floatformat,
+    'truncatechars': builtins.filters.truncatechars,
+    'truncatewords': builtins.filters.truncatewords,
+    'truncatewords_html': builtins.filters.truncatewords_html,
+    'wordwrap': builtins.filters.wordwrap,
+    'title': builtins.filters.title,
+    'slugify': builtins.filters.slugify,
+    'lower': builtins.filters.lower,
+    'ljust': builtins.filters.ljust,
+    'rjust': builtins.filters.rjust,
+    'linebreaksbr': builtins.filters.linebreaksbr,
+    'linebreaks': builtins.filters.linebreaks_filter,
+    'removetags': builtins.filters.removetags,
+    'striptags': builtins.filters.striptags,
+    'join': builtins.filters.join,
+    'random': builtins.filters.random,
+    'add': builtins.filters.add,
+    'date': builtins.filters.date,
+    'time': builtins.filters.time,
+    'timesince': builtins.filters.timesince_filter,
+    'timeuntil': builtins.filters.timeuntil_filter,
+    'default': builtins.filters.default,
+    'default_if_none': builtins.filters.default_if_none,
+    'divisibleby': builtins.filters.divisibleby,
+    'yesno': builtins.filters.yesno,
+    'filesizeformat': builtins.filters.filesizeformat,
+    'pprint': builtins.filters.pprint,
 })
 
 JINJA2_GLOBALS.update({
@@ -128,6 +158,10 @@ class Environment(Environment):
 
             if reg_attr.tests:
                 self.tests.update(reg_attr.tests)
+            
+            if reg_attr.globals:
+                self.globals.update(reg_attr.globals)
+        
 
         # Add builtin extensions.
         self.add_extension(builtins.extensions.CsrfExtension)
@@ -141,12 +175,12 @@ class Library(object):
         self.globals = {}
         self.tests = {}
 
-    def tag(self, func,name=None):
+    def tag(self, func, name=None):
         if name == None:
             name = getattr(func, "_decorated_function", func).__name__
         self.globals[name] = func
 
-    def filter(self, func,name=None):
+    def filter(self, func, name=None):
         if name == None:
             name = getattr(func, "_decorated_function", func).__name__
         self.filters[name] = func
@@ -157,15 +191,16 @@ class Library(object):
     def global_context(self, func, name=None):
         if name == None:
             name = getattr(func, "_decorated_function", func).__name__
+        
         self.globals[name] = func
 
-    def set(self,*args,**kwargs):
+    def set(self, *args, **kwargs):
         for k in kwargs.keys(): #is a object with a name
             self[k] = kwargs[k]
         for a in args:
             self.tag(a) #is a function
 
-    def inclusion_tag(self,template,func,takes_context=False):
+    def inclusion_tag(self, template, func, takes_context=False):
         if takes_context:
             import jinja2
             @jinja2.contextfunction
