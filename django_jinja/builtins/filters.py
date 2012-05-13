@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse as django_reverse
 from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_unicode, iri_to_uri
 from django.utils.text import Truncator, wrap, phone2numeric
-from django.utils.dateformat import format, time_format
+from django.utils.formats import date_format, time_format, number_format
 from django.utils.timesince import timesince, timeuntil
 from django.utils.html import escapejs, strip_tags
 from pprint import pformat
@@ -106,7 +106,7 @@ def floatformat(text, arg=-1):
         return input_val
     
     if not m and p < 0:
-        return formats.number_format(u'%d' % (int(d)), 0)
+        return number_format(u'%d' % (int(d)), 0)
     
     if p == 0:
         exp = Decimal(1)
@@ -129,7 +129,7 @@ def floatformat(text, arg=-1):
         if sign:
             digits.append(u'-')
         number = u''.join(reversed(digits))
-        return formats.number_format(number, abs(p))
+        return number_format(number, abs(p))
     except InvalidOperation:
         return input_val
 
@@ -300,10 +300,10 @@ def date(value, arg=None):
     if arg is None:
         arg = settings.DATE_FORMAT
     try:
-        return formats.date_format(value, arg)
+        return date_format(value, arg)
     except AttributeError:
         try:
-            return format(value, arg)
+            return date_format(value, arg)
         except AttributeError:
             return ''
 
@@ -314,7 +314,7 @@ def time(value, arg=None):
     if arg is None:
         arg = settings.TIME_FORMAT
     try:
-        return formats.time_format(value, arg)
+        return time_format(value, arg)
     except AttributeError:
         try:
             return time_format(value, arg)
@@ -396,7 +396,7 @@ def filesizeformat(bytes):
     except (TypeError,ValueError,UnicodeDecodeError):
         return ungettext("%(size)d byte", "%(size)d bytes", 0) % {'size': 0}
 
-    filesize_number_format = lambda value: formats.number_format(round(value, 1), 1)
+    filesize_number_format = lambda value: number_format(round(value, 1), 1)
 
     if bytes < 1024:
         return ungettext("%(size)d byte", "%(size)d bytes", bytes) % {'size': bytes}
