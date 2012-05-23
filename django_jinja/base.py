@@ -130,7 +130,6 @@ class Environment(Environment):
             except ImportError:
                 pass
         
-        file_mod_list = []
         for app_path, mod_path in mod_list:
             for filename in filter(lambda x: x.endswith(".py"), os.listdir(mod_path)):
                 if filename == '__init__.py':
@@ -139,30 +138,23 @@ class Environment(Environment):
                 file_mod_path = "%s.templatetags.%s" % (app_path, filename.rsplit(".", 1)[0])
                 try:
                     filemod = import_module(file_mod_path)
-                    file_mod_list.append(filemod)
                 except ImportError:
                     pass
+        
 
-        for mod in file_mod_list:
-            try:
-                reg_attr = mod.register
-            except AttributeError:
-                continue
+        reg_attr = Library
 
-            if not isinstance(reg_attr, Library):
-                continue
+        if reg_attr.extensions:
+            self.extensions.extend(reg_attr.extensions)
 
-            if reg_attr.extensions:
-                self.extensions.extend(reg_attr.extensions)
+        if reg_attr.filters:
+            self.filters.update(reg_attr.filters)
 
-            if reg_attr.filters:
-                self.filters.update(reg_attr.filters)
-
-            if reg_attr.tests:
-                self.tests.update(reg_attr.tests)
-            
-            if reg_attr.globals:
-                self.globals.update(reg_attr.globals)
+        if reg_attr.tests:
+            self.tests.update(reg_attr.tests)
+        
+        if reg_attr.globals:
+            self.globals.update(reg_attr.globals)
         
 
         # Add builtin extensions.
@@ -171,11 +163,17 @@ class Environment(Environment):
 
 
 class Library(object):
-    def __init__(self):
-        self.filters = {}
-        self.extensions = []
-        self.globals = {}
-        self.tests = {}
+    instance = None
+
+    filters = {}
+    extensions = []
+    globals = {}
+    tests = {}
+
+    def __new__(cls, *args, **kwargs):
+        if cls.instance == None:
+            cls.instance = super(Library, cls).__new__(cls, *args, **kwargs)
+        return cls.instance
 
     def tag(self, func, name=None):
         if name == None:
