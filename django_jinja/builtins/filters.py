@@ -12,6 +12,9 @@ from decimal import InvalidOperation, Decimal, ROUND_HALF_UP, Context
 from pprint import pformat
 from jinja2 import Markup
 
+import re
+import unicodedata
+
 def safe(value):
     return Markup(force_unicode(value))
 
