@@ -2,6 +2,7 @@
 
 from django.test import TestCase
 from django_jinja.base import env
+import datetime
 
 class TemplateFunctionsTest(TestCase):
     def setUp(self):
@@ -26,6 +27,11 @@ class TemplateFunctionsTest(TestCase):
             ("{{ 'hello'|ljust(10) }}", {}, "hello     "),
             ("{{ 'hello'|rjust(10) }}", {}, "     hello"),
             ("{{ 'hello\nworld'|linebreaksbr }}", {}, "hello<br />world"),
+            ("{{ '<div>hello</div>'|removetags('div') }}", {}, "hello"),
+            ("{{ '<div>hello</div>'|striptags }}", {}, "hello"),
+            ("{{ list|join(',') }}", {'list':['a','b']}, 'a,b'),
+            ("{{ 3|add(2) }}", {}, "5"),
+            ("{{ now|date('n Y') }}", {"now": datetime.datetime(2012, 12, 20)}, "12 2012"),
         ]
         
         print

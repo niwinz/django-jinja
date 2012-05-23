@@ -6,7 +6,9 @@ from django.utils.encoding import force_unicode, iri_to_uri
 from django.utils.text import Truncator, wrap, phone2numeric
 from django.utils.formats import date_format, time_format, number_format
 from django.utils.timesince import timesince, timeuntil
-from django.utils.html import escapejs, strip_tags
+from django.utils.html import escapejs, strip_tags, conditional_escape, fix_ampersands, \
+    escape, urlize as urlize_impl, linebreaks, strip_tags
+
 from django.utils.text import normalize_newlines
 from decimal import InvalidOperation, Decimal, ROUND_HALF_UP, Context
 from pprint import pformat
@@ -298,6 +300,10 @@ def add(value, arg):
         except Exception:
             return ''
 
+from django.utils import formats
+from django.utils.dateformat import format, time_format
+
+
 def date(value, arg=None):
     """Formats a date according to the given format."""
     if not value:
@@ -305,10 +311,10 @@ def date(value, arg=None):
     if arg is None:
         arg = settings.DATE_FORMAT
     try:
-        return date_format(value, arg)
+        return formats.date_format(value, arg)
     except AttributeError:
         try:
-            return date_format(value, arg)
+            return format(value, arg)
         except AttributeError:
             return ''
 
@@ -319,7 +325,7 @@ def time(value, arg=None):
     if arg is None:
         arg = settings.TIME_FORMAT
     try:
-        return time_format(value, arg)
+        return formats.time_format(value, arg)
     except AttributeError:
         try:
             return time_format(value, arg)
