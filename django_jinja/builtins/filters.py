@@ -7,6 +7,7 @@ from django.utils.text import Truncator, wrap, phone2numeric
 from django.utils.dateformat import format, time_format
 from django.utils.timesince import timesince, timeuntil
 from django.utils.html import escapejs, strip_tags
+from django.utils.text import normalize_newlines
 from pprint import pformat
 from jinja2 import Markup
 
