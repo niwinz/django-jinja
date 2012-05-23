@@ -27,7 +27,7 @@ JINJA2_AUTOESCAPE = getattr(settings, 'JINJA2_AUTOESCAPE', False)
 from django_jinja import builtins
 
 JINJA2_FILTERS.update({
-    'reverse': builtins.filters.reverse,
+    'reverseurl': builtins.filters.reverse,
     'addslashes': builtins.filters.addslashes,
     'escapejs': builtins.filters.escapejs_filter,
     'capfirst': builtins.filters.capfirst,
@@ -86,7 +86,7 @@ class Template(Template):
     Add correct handling django context objects.
     """
 
-    def render(self, context):
+    def render(self, context={}):
         new_context = dict_from_context(context)
 
         if settings.TEMPLATE_DEBUG:
