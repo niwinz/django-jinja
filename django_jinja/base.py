@@ -226,7 +226,7 @@ class Library(object):
 initial_params = {
     'autoescape': JINJA2_AUTOESCAPE,
     'loader': FileSystemLoader(app_directories.app_template_dirs + settings.TEMPLATE_DIRS),
-    'extensions':['jinja2.ext.i18n', 'jinja2.ext.autoescape'],
+    'extensions': JINJA2_EXTENSIONS + ['jinja2.ext.i18n', 'jinja2.ext.autoescape'],
 }
 
 initial_params.update(JINJA2_ENVIRONMENT_OPTIONS)
