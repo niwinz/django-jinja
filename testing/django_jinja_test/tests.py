@@ -33,7 +33,7 @@ class TemplateFunctionsTest(TestCase):
             ("{{ 3|add(2) }}", {}, "5"),
             ("{{ now|date('n Y') }}", {"now": datetime.datetime(2012, 12, 20)}, "12 2012"),
         ]
-        
+
         print
         for template_str, kwargs, result in filters_data:
             print "- Testing: ", template_str, "with:", kwargs
@@ -41,3 +41,22 @@ class TemplateFunctionsTest(TestCase):
             template = env.from_string(template_str)
             _result = template.render(kwargs)
             self.assertEqual(_result, result)
+
+    def test_custom_addons_01(self):
+        template = env.from_string("{{ 'Hello'|replace('H','M') }}")
+        result = template.render({})
+
+        self.assertEqual(result, "Mello")
+
+    def test_custom_addons_02(self):
+        template = env.from_string("{% if m is one %}Foo{% endif %}")
+        result = template.render({'m': 1})
+
+        self.assertEqual(result, "Foo")
+
+    def test_custom_addons_03(self):
+        template = env.from_string("{{ myecho('foo') }}")
+        result = template.render({})
+
+        self.assertEqual(result, "foo")
+

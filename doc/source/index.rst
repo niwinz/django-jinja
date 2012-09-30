@@ -16,10 +16,6 @@ Features:
 * Auto load templatetags compatible with jinja2
 * Can combine django templates with jinja2 templates.
 
-Under development:
-------------------
-
-* gettext/i18n scripts for jinja2 templates.
 
 How to install?
 ---------------

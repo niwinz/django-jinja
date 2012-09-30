@@ -7,7 +7,7 @@ from django.template.loaders import filesystem
 from django_jinja.base import env
 import jinja2
 
-DEFAULT_JINJA2_TEMPLATE_EXTENSION = getattr(settings, 
+DEFAULT_JINJA2_TEMPLATE_EXTENSION = getattr(settings,
     'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
 
 class LoaderMixin(object):
@@ -16,7 +16,7 @@ class LoaderMixin(object):
     def load_template(self, template_name, template_dirs=None):
         if not template_name.endswith(DEFAULT_JINJA2_TEMPLATE_EXTENSION):
             return super(LoaderMixin, self).load_template(template_name, template_dirs)
-        
+
         try:
             template = env.get_template(template_name)
             return template, template.filename

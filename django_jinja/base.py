@@ -100,7 +100,7 @@ class Template(Template):
 class Environment(Environment):
     def __init__(self, *args, **kwargs):
         super(Environment, self).__init__(*args, **kwargs)
-        
+
         # install translations
         if settings.USE_I18N:
             from django.utils import translation
@@ -109,17 +109,17 @@ class Environment(Environment):
             self.install_null_translations(newstyle=False)
 
         self.template_class = Template
-        
+
         # Add filters defined on settings + builtins
-        for name, value in JINJA2_FILTERS.iteritems():
+        for name, value in JINJA2_FILTERS.items():
             self.filters[name] = value
-        
+
         # Add tests defined on settings + builtins
-        for name, value in JINJA2_TESTS.iteritems():
+        for name, value in JINJA2_TESTS.items():
             self.tests[name] = value
-        
+
         # Add globals defined on settings + builtins
-        for name, value in JINJA2_GLOBALS.iteritems():
+        for name, value in JINJA2_GLOBALS.items():
             self.globals[name] = value
 
         mod_list = []
@@ -129,7 +129,7 @@ class Environment(Environment):
                 mod_list.append((app_path,os.path.dirname(mod.__file__)))
             except ImportError:
                 pass
-        
+
         for app_path, mod_path in mod_list:
             for filename in filter(lambda x: x.endswith(".py"), os.listdir(mod_path)):
                 if filename == '__init__.py':
@@ -140,81 +140,72 @@ class Environment(Environment):
                     filemod = import_module(file_mod_path)
                 except ImportError:
                     pass
-        
 
-        reg_attr = Library
-
-        if reg_attr.extensions:
-            self.extensions.extend(reg_attr.extensions)
-
-        if reg_attr.filters:
-            self.filters.update(reg_attr.filters)
-
-        if reg_attr.tests:
-            self.tests.update(reg_attr.tests)
-        
-        if reg_attr.globals:
-            self.globals.update(reg_attr.globals)
-        
+        # Update current environment with app filters
+        Library()._update_env(self)
 
         # Add builtin extensions.
         self.add_extension(builtins.extensions.CsrfExtension)
-        #self.add_extension(builtins.extensions.LoadExtension)
 
 
 class Library(object):
     instance = None
 
-    filters = {}
-    extensions = []
-    globals = {}
-    tests = {}
+    _globals = {}
+    _tests = {}
+    _filters = {}
 
     def __new__(cls, *args, **kwargs):
         if cls.instance == None:
             cls.instance = super(Library, cls).__new__(cls, *args, **kwargs)
         return cls.instance
 
-    def tag(self, func, name=None):
-        if name == None:
-            name = getattr(func, "_decorated_function", func).__name__
-        self.globals[name] = func
+    @classmethod
+    def get_instance(cls):
+        return cls.instance
 
-    def filter(self, func, name=None):
-        if name == None:
-            name = getattr(func, "_decorated_function", func).__name__
-        self.filters[name] = func
+    def _update_env(self, env):
+        env.filters.update(self._filters)
+        env.globals.update(self._globals)
+        env.tests.update(self._tests)
 
-    def extension(self, ext):
-        self.extensions.append(ext)
+    def _new_function(self, attr, func, name=None):
+        _attr = getattr(self, attr)
+        if name is None:
+            name = func.__name__
 
-    def global_context(self, func, name=None):
-        if name == None:
-            name = getattr(func, "_decorated_function", func).__name__
-        
-        self.globals[name] = func
+        _attr[name] = func
+        return func
 
-    def set(self, *args, **kwargs):
-        for k in kwargs.keys(): #is a object with a name
-            self[k] = kwargs[k]
-        for a in args:
-            self.tag(a) #is a function
+    def _function(self, attr, name=None, _function=None):
+        if name is None and _function is None:
+            def dec(func):
+                return self._new_function(attr, func)
+            return dec
 
-    def inclusion_tag(self, template, func, takes_context=False):
-        if takes_context:
-            import jinja2
-            @jinja2.contextfunction
-            def tag(context, *args, **kwargs):
-                from django.template.loader import render_to_string
-                return render_to_string(template, func(dict_from_context(context),*args,**kwargs))
+        elif name is not None and _function is None:
+            if callable(name):
+                return self._new_function(attr, name)
 
-        else:
-            def tag(*args, **kwargs):
-                from django.template.loader import render_to_string
-                return render_to_string(template, func(*args, **kwargs))
+            else:
+                def dec(func):
+                    return self._function(attr, name, func)
 
-        #raise Exception(getattr(func, "_decorated_function", func))
-        self.tag(tag,name=getattr(func, "_decorated_function", func).__name__)
+                return dec
+
+        elif name is not None and _function is not None:
+            return self._new_function(attr, _function, name)
+
+        raise RuntimeError("Invalid parameters")
+
+    def global_function(self, *args, **kwargs):
+        return self._function("_globals", *args, **kwargs)
+
+    def test(self, *args, **kwargs):
+        return self._function("_tests", *args, **kwargs)
+
+    def filter(self, *args, **kwargs):
+        return self._function("_filters", *args, **kwargs)
 
     def __setitem__(self, item, value):
         self.globals[item] = value

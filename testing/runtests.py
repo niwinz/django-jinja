@@ -2,6 +2,7 @@
 
 import sys, os
 from django.conf import settings
+from django.core.management import call_command
 
 TEST_TEMPLATE_DIR = 'templates'
 RUNTESTS_DIR = os.path.dirname(__file__)
@@ -57,8 +58,5 @@ if __name__ == '__main__':
 
     if not test_args:
         test_args = ['django_jinja_test']
-    
-    from django.test.simple import DjangoTestSuiteRunner
-    runner = DjangoTestSuiteRunner(verbosity=2, interactive=True, failfast=False)
-    failures = runner.run_tests(test_args)
-    sys.exit(failures)
+
+    call_command("test", *test_args, verbosity=2)
