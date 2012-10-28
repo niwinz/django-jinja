@@ -31,7 +31,10 @@ from django.template.defaultfilters import floatformat
 from django.template.defaultfilters import iriencode
 from django.template.defaultfilters import linenumbers
 from django.template.defaultfilters import make_list
-from django.utils.text import slugify
+try:
+    from django.utils.text import slugify
+except ImportError:
+    from django.template.defaultfilters import slugify
 from django.template.defaultfilters import stringformat
 from django.template.defaultfilters import title
 from django.template.defaultfilters import truncatechars
