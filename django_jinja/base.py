@@ -77,6 +77,7 @@ JINJA2_FILTERS.update({
 
 JINJA2_GLOBALS.update({
     'url': builtins.global_context.url,
+    'static': builtins.global_context.static,
 })
 
 
