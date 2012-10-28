@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function, unicode_literals
+
 from django.test import TestCase
 from django_jinja.base import env
 import datetime
@@ -34,9 +36,9 @@ class TemplateFunctionsTest(TestCase):
             ("{{ now|date('n Y') }}", {"now": datetime.datetime(2012, 12, 20)}, "12 2012"),
         ]
 
-        print
+        print()
         for template_str, kwargs, result in filters_data:
-            print "- Testing: ", template_str, "with:", kwargs
+            print("- Testing: ", template_str, "with:", kwargs)
 
             template = env.from_string(template_str)
             _result = template.render(kwargs)
