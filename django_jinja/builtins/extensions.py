@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.core.cache import cache
 from django.utils.http import urlquote
 
@@ -19,7 +20,7 @@ class CsrfExtension(Extension):
 
     def parse(self, parser):
         try:
-            token = parser.stream.next()
+            token = next(parser.stream)
             call_res = self.call_method('_render', [nodes.Name('csrf_token','load')])
             return nodes.Output([call_res]).set_lineno(token.lineno)
         except Exception:
@@ -33,7 +34,6 @@ class CsrfExtension(Extension):
             return Markup("<input type='hidden'"
                           " name='csrfmiddlewaretoken' value='%s' />" % (csrf_token))
 
-        from django.conf import settings
         if settings.DEBUG:
             import warnings
             warnings.warn("A {% csrf_token %} was used in a template, but the context"

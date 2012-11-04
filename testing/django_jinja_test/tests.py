@@ -7,7 +7,7 @@ from django.test.client import RequestFactory
 from django.template.loader import render_to_string
 from django.template import RequestContext
 
-from django_jinja.base import env
+from django_jinja.base import env, dict_from_context
 import datetime
 
 class TemplateFunctionsTest(TestCase):
@@ -87,15 +87,22 @@ class TemplateFunctionsTest(TestCase):
         env.autoescape = old_autoescape_value
 
     def test_csrf_01(self):
-        pass
+        template_content = "{% csrf_token %}"
+
+        request = self.factory.get('/customer/details')
+        request.META["CSRF_COOKIE"] = '1234123123'
+
+        context = dict_from_context(RequestContext(request))
+
+        template = env.from_string(template_content)
+        result = template.render(context)
+        self.assertEqual(result, "<input type='hidden' name='csrfmiddlewaretoken' value='1234123123' />")
 
     def test_cache_01(self):
         template_content = "{% cache 200 'fooo' %}foo bar{% endcache %}"
 
         request = self.factory.get('/customer/details')
-
-        context = {}
-        RequestContext(request).update(context)
+        context = dict_from_context(RequestContext(request))
 
         template = env.from_string(template_content)
         result = template.render(context)
