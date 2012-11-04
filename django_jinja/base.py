@@ -160,6 +160,7 @@ class Environment(Environment):
 
         # Add builtin extensions.
         self.add_extension(builtins.extensions.CsrfExtension)
+        self.add_extension(builtins.extensions.CacheExtension)
 
         if self.autoescape:
             from django.utils import safestring

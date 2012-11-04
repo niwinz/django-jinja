@@ -1,9 +1,15 @@
+from __future__ import unicode_literals
+
+from django.core.cache import cache
+from django.utils.http import urlquote
+
 from jinja2.ext import Extension
 from jinja2 import nodes
 from jinja2 import Markup
-from django.utils.safestring import mark_safe
 
+import hashlib
 import traceback
+
 
 class CsrfExtension(Extension):
     tags = set(['csrf_token'])
@@ -22,10 +28,10 @@ class CsrfExtension(Extension):
     def _render(self, csrf_token):
         if csrf_token:
             if csrf_token == 'NOTPROVIDED':
-                return mark_safe(u"")
+                return Markup("")
 
-            return Markup(u"<div style='display:none'><input type='hidden'"
-                          u" name='csrfmiddlewaretoken' value='%s' /></div>" % (csrf_token))
+            return Markup("<input type='hidden'"
+                          " name='csrfmiddlewaretoken' value='%s' />" % (csrf_token))
 
         from django.conf import settings
         if settings.DEBUG:
@@ -33,37 +39,68 @@ class CsrfExtension(Extension):
             warnings.warn("A {% csrf_token %} was used in a template, but the context"
                           "did not provide the value.  This is usually caused by not "
                           "using RequestContext.")
-        return u''
+        return ''
 
-        
-#class LoadExtension(Extension):
-#    """Changes auto escape rules for a scope."""
-#    tags = set(['load'])
-#
-#    def parse(self, parser):
-#        node = nodes.ExprStmt(lineno=next(parser.stream).lineno)
-#
-#        modules = []
-#        while parser.stream.current.type != 'block_end':
-#            lineno = parser.stream.current.lineno
-#            if modules:
-#                parser.stream.expect('comma')
-#            expr = parser.parse_expression()
-#            module = expr.as_const()
-#            modules.append(module)
-#
-#        assignments = []
-#        from djinja.template.defaultfunctions import Load
-#        for m in modules:
-#            target = nodes.Name(m,'store')
-#            func = nodes.Call(nodes.Name('load', 'load'), [nodes.Const(m)],
-#                              [], None, None)
-#            assignments.append(nodes.Assign(target, func, lineno=lineno))
-#                
-#            for i in Load(m).globals.keys():
-#                target = nodes.Name(i,'store')
-#                f = nodes.Getattr(nodes.Name(m,'load'), i, 'load')
-#            
-#                assignments.append(nodes.Assign(target, f, lineno=lineno))
-#
-#        return assignments
+
+class CacheExtension(Extension):
+    """
+    Exactly like Django's own tag, but supports full Jinja2
+    expressiveness for all arguments.
+
+        {% cache gettimeout()*2 "foo"+options.cachename  %}
+            ...
+        {% endcache %}
+
+    General Syntax:
+
+        {% cache [expire_time] [fragment_name] [var1] [var2] .. %}
+            .. some expensive processing ..
+        {% endcache %}
+
+    Available by default (does not need to be loaded).
+
+    Partly based on the ``FragmentCacheExtension`` from the Jinja2 docs.
+    """
+
+    tags = set(['cache'])
+
+    def parse(self, parser):
+        lineno = next(parser.stream).lineno
+
+        expire_time = parser.parse_expression()
+        fragment_name = parser.parse_expression()
+        vary_on = []
+
+        while not parser.stream.current.test('block_end'):
+            vary_on.append(parser.parse_expression())
+
+        body = parser.parse_statements(['name:endcache'], drop_needle=True)
+
+        return nodes.CallBlock(
+            self.call_method('_cache_support',
+                             [expire_time, fragment_name,
+                              nodes.List(vary_on), nodes.Const(lineno)]),
+            [], [], body).set_lineno(lineno)
+
+    def _cache_support(self, expire_time, fragm_name, vary_on, lineno, caller):
+        try:
+            expire_time = int(expire_time)
+        except (ValueError, TypeError):
+            raise TemplateSyntaxError('"%s" tag got a non-integer timeout '
+                'value: %r' % (list(self.tags)[0], expire_time), lineno)
+
+        args_map = map(urlquote, vary_on)
+        args_map = map(lambda x: x.encode('utf-8'), args_map)
+
+        args_string = b':'.join(args_map)
+        args_hash = hashlib.md5(args_string).hexdigest()
+
+        cache_key = 'template.cache.{0}.{1}'.format(fragm_name, args_hash)
+
+        value = cache.get(cache_key)
+        if value is not None:
+            return value.decode('utf-8')
+
+        value = caller()
+        cache.set(cache_key, value.encode('utf-8'), expire_time)
+        return value

@@ -3,12 +3,16 @@
 from __future__ import print_function, unicode_literals
 
 from django.test import TestCase
+from django.test.client import RequestFactory
+from django.template.loader import render_to_string
+from django.template import RequestContext
+
 from django_jinja.base import env
 import datetime
 
 class TemplateFunctionsTest(TestCase):
     def setUp(self):
-        pass
+        self.factory = RequestFactory()
 
     def tearDown(self):
         pass
@@ -81,3 +85,19 @@ class TemplateFunctionsTest(TestCase):
         self.assertEqual(result, "&lt;h1&gt;Hellp&lt;/h1&gt;")
 
         env.autoescape = old_autoescape_value
+
+    def test_csrf_01(self):
+        pass
+
+    def test_cache_01(self):
+        template_content = "{% cache 200 'fooo' %}foo bar{% endcache %}"
+
+        request = self.factory.get('/customer/details')
+
+        context = {}
+        RequestContext(request).update(context)
+
+        template = env.from_string(template_content)
+        result = template.render(context)
+
+        self.assertEqual(result, "foo bar")
