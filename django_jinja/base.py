@@ -72,7 +72,6 @@ JINJA2_FILTERS.update({
     'filesizeformat': builtins.filters.filesizeformat,
     'pprint': builtins.filters.pprint,
     'pluralize': builtins.filters.pluralize,
-    'safe': builtins.filters.safe,
 })
 
 JINJA2_GLOBALS.update({
@@ -162,6 +161,35 @@ class Environment(Environment):
         # Add builtin extensions.
         self.add_extension(builtins.extensions.CsrfExtension)
 
+        if self.autoescape:
+            from django.utils import safestring
+            if hasattr(safestring, "SafeText"):
+                if not hasattr(safestring.SafeText, '__html__'):
+                    if sys.version_info.major < 3:
+                        safestring.SafeText.__html__ = lambda self: unicode(self)
+                    else:
+                        safestring.SafeText.__html__ = lambda self: str(self)
+
+            if hasattr(safestring, "SafeString"):
+                if not hasattr(safestring.SafeString, '__html__'):
+                    if sys.version_info.major < 3:
+                        safestring.SafeString.__html__ = lambda self: unicode(self)
+                    else:
+                        safestring.SafeString.__html__ = lambda self: str(self)
+
+            if hasattr(safestring, "SafeUnicode"):
+                if not hasattr(safestring.SafeUnicode, '__html__'):
+                    if sys.version_info.major < 3:
+                        safestring.SafeUnicode.__html__ = lambda self: unicode(self)
+                    else:
+                        safestring.SafeUnicode.__html__ = lambda self: str(self)
+
+            if hasattr(safestring, "SafeBytes"):
+                if not hasattr(safestring.SafeBytes, '__html__'):
+                    if sys.version_info.major < 3:
+                        safestring.SafeBytes.__html__ = lambda self: unicode(self)
+                    else:
+                        safestring.SafeBytes.__html__ = lambda self: str(self)
 
 class Library(object):
     instance = None

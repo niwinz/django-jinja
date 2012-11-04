@@ -4,10 +4,6 @@ from django.core.urlresolvers import reverse as django_reverse
 from jinja2 import Markup
 
 
-def safe(value):
-    return Markup(force_unicode(value))
-
-
 def reverse(value, *args, **kwargs):
     """
     Shortcut filter for reverse url on templates. Is a alternative to
