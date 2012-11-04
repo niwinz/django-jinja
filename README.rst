@@ -69,8 +69,8 @@ Additionally you can specify whether or not to activate Autoescape extension wit
 ``JINJA2_AUTOESCAPE`` boolean parameter. By default is desactivated.
 
 
-Djangon integration filters and functions:
-------------------------------------------
+Django filters and functions:
+-----------------------------
 
 Url reverse:
 ^^^^^^^^^^^^
