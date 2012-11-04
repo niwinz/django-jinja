@@ -88,6 +88,17 @@ Usage examples:
 Almost all of django templatefilters are available in "django-jinja", and if you find one at fault, patches are welcome.
 
 
+I18N and Django gettext
+-----------------------
+
+``django-jinja`` incorporates an extension to makemessages command, so you can deal with differences of translations jinja tags.
+
+This is an example of use:
+
+.. code-block:: python
+
+    python ../manage.py makemessages  -a -e py,jinja,html
+
 .. .. toctree::
     :maxdepth: 2
 
