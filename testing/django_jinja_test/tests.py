@@ -8,7 +8,9 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 
 from django_jinja.base import env, dict_from_context
+
 import datetime
+import sys
 
 class TemplateFunctionsTest(TestCase):
     def setUp(self):
@@ -90,7 +92,10 @@ class TemplateFunctionsTest(TestCase):
         template_content = "{% csrf_token %}"
 
         request = self.factory.get('/customer/details')
-        request.META["CSRF_COOKIE"] = '1234123123'
+        if sys.version_info.major < 3:
+            request.META["CSRF_COOKIE"] = b'1234123123'
+        else:
+            request.META["CSRF_COOKIE"] = '1234123123'
 
         context = dict_from_context(RequestContext(request))
 
