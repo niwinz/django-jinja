@@ -15,6 +15,7 @@ from django.template.loaders import app_directories
 from django.utils.importlib import import_module
 
 import os
+import sys
 import copy
 
 JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, 'JINJA2_ENVIRONMENT_OPTIONS', {})
