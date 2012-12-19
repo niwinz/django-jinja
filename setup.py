@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'django-jinja',
-    version = "0.8",
+    version = "0.9",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     keywords = 'django, jinja2',
