@@ -5,11 +5,11 @@ from setuptools import setup, find_packages
 
 setup(
     name = 'django-jinja',
-    version = "0.11",
+    version = "0.12",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     keywords = 'django, jinja2',
-    author = 'Andrei Antoukh',
+    author = 'Andrey Antukh',
     author_email = 'niwi@niwi.be',
     url = 'https://github.com/niwibe/django-jinja',
     license = 'BSD',
