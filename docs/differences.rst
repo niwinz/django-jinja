@@ -56,3 +56,10 @@ Here is an example:
 
     python manage.py makemessages -a -e py,jinja,html
 
+.. code-block:: jinja
+
+    {{ _('i18n data') }}
+    {% trans %}
+        i18n data
+    {% endtrans %}
+
