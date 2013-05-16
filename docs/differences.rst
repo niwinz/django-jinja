@@ -63,3 +63,24 @@ Here is an example:
         i18n data
     {% endtrans %}
 
+
+Register global functions
+-------------------------
+
+You can regiser your global functions as you are registering template tags or filters on django.
+
+Simple example:
+
+.. code-block:: python
+
+    # <someapp>/templatetags/<anyfile>.py
+    from django_jinja import library
+
+    lib = library.Library()
+
+    @lib.global_function
+    def myupper(name):
+        return name.upper()
+
+Functions, filters, or tests are registred globally on jinja automaticaly, without explicit
+load templatetag.
