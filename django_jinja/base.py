@@ -17,8 +17,9 @@ from django.template import Origin
 from django.template import InvalidTemplateLibrary
 from django.template.loaders import app_directories
 from django.utils.importlib import import_module
+from django.utils import six
 
-from . import builtins
+from . import builtins, utils
 from .library import Library
 
 
@@ -31,56 +32,56 @@ JINJA2_AUTOESCAPE = getattr(settings, 'JINJA2_AUTOESCAPE', False)
 
 
 JINJA2_FILTERS.update({
-    'reverseurl': builtins.filters.reverse,
-    'addslashes': builtins.filters.addslashes,
-    'capfirst': builtins.filters.capfirst,
-    'escapejs': builtins.filters.escapejs_filter,
-    'fix_ampersands': builtins.filters.fix_ampersands_filter,
-    'floatformat': builtins.filters.floatformat,
-    'iriencode': builtins.filters.iriencode,
-    'linenumbers': builtins.filters.linenumbers,
-    'make_list': builtins.filters.make_list,
-    'slugify': builtins.filters.slugify,
-    'stringformat': builtins.filters.stringformat,
-    'title': builtins.filters.title,
-    'truncatechars': builtins.filters.truncatechars,
-    'truncatewords': builtins.filters.truncatewords,
-    'truncatewords_html': builtins.filters.truncatewords_html,
-    'upper': builtins.filters.upper,
-    'lower': builtins.filters.lower,
-    'urlencode': builtins.filters.urlencode,
-    'urlize': builtins.filters.urlize,
-    'urlizetrunc': builtins.filters.urlizetrunc,
-    'wordcount': builtins.filters.wordcount,
-    'wordwrap': builtins.filters.wordwrap,
-    'ljust': builtins.filters.ljust,
-    'rjust': builtins.filters.rjust,
-    'center': builtins.filters.center,
-    'cut': builtins.filters.cut,
-    'linebreaksbr': builtins.filters.linebreaksbr,
-    'linebreaks': builtins.filters.linebreaks_filter,
-    'removetags': builtins.filters.removetags,
-    'striptags': builtins.filters.striptags,
-    'join': builtins.filters.join,
-    'length': builtins.filters.length,
-    'random': builtins.filters.random,
-    'add': builtins.filters.add,
-    'date': builtins.filters.date,
-    'time': builtins.filters.time,
-    'timesince': builtins.filters.timesince_filter,
-    'timeuntil': builtins.filters.timeuntil_filter,
-    'default': builtins.filters.default,
-    'default_if_none': builtins.filters.default_if_none,
-    'divisibleby': builtins.filters.divisibleby,
-    'yesno': builtins.filters.yesno,
-    'filesizeformat': builtins.filters.filesizeformat,
-    'pprint': builtins.filters.pprint,
-    'pluralize': builtins.filters.pluralize,
+    'reverseurl': "django_jinja.builtins.filters.reverse",
+    'addslashes': "django_jinja.builtins.filters.addslashes",
+    'capfirst': "django_jinja.builtins.filters.capfirst",
+    'escapejs': "django_jinja.builtins.filters.escapejs_filter",
+    'fix_ampersands': "django_jinja.builtins.filters.fix_ampersands_filter",
+    'floatformat': "django_jinja.builtins.filters.floatformat",
+    'iriencode': "django_jinja.builtins.filters.iriencode",
+    'linenumbers': "django_jinja.builtins.filters.linenumbers",
+    'make_list': "django_jinja.builtins.filters.make_list",
+    'slugify': "django_jinja.builtins.filters.slugify",
+    'stringformat': "django_jinja.builtins.filters.stringformat",
+    'title': "django_jinja.builtins.filters.title",
+    'truncatechars': "django_jinja.builtins.filters.truncatechars",
+    'truncatewords': "django_jinja.builtins.filters.truncatewords",
+    'truncatewords_html': "django_jinja.builtins.filters.truncatewords_html",
+    'upper': "django_jinja.builtins.filters.upper",
+    'lower': "django_jinja.builtins.filters.lower",
+    'urlencode': "django_jinja.builtins.filters.urlencode",
+    'urlize': "django_jinja.builtins.filters.urlize",
+    'urlizetrunc': "django_jinja.builtins.filters.urlizetrunc",
+    'wordcount': "django_jinja.builtins.filters.wordcount",
+    'wordwrap': "django_jinja.builtins.filters.wordwrap",
+    'ljust': "django_jinja.builtins.filters.ljust",
+    'rjust': "django_jinja.builtins.filters.rjust",
+    'center': "django_jinja.builtins.filters.center",
+    'cut': "django_jinja.builtins.filters.cut",
+    'linebreaksbr': "django_jinja.builtins.filters.linebreaksbr",
+    'linebreaks': "django_jinja.builtins.filters.linebreaks_filter",
+    'removetags': "django_jinja.builtins.filters.removetags",
+    'striptags': "django_jinja.builtins.filters.striptags",
+    'join': "django_jinja.builtins.filters.join",
+    'length': "django_jinja.builtins.filters.length",
+    'random': "django_jinja.builtins.filters.random",
+    'add': "django_jinja.builtins.filters.add",
+    'date': "django_jinja.builtins.filters.date",
+    'time': "django_jinja.builtins.filters.time",
+    'timesince': "django_jinja.builtins.filters.timesince_filter",
+    'timeuntil': "django_jinja.builtins.filters.timeuntil_filter",
+    'default': "django_jinja.builtins.filters.default",
+    'default_if_none': "django_jinja.builtins.filters.default_if_none",
+    'divisibleby': "django_jinja.builtins.filters.divisibleby",
+    'yesno': "django_jinja.builtins.filters.yesno",
+    'filesizeformat': "django_jinja.builtins.filters.filesizeformat",
+    'pprint': "django_jinja.builtins.filters.pprint",
+    'pluralize': "django_jinja.builtins.filters.pluralize",
 })
 
 JINJA2_GLOBALS.update({
-    'url': builtins.global_context.url,
-    'static': builtins.global_context.static,
+    'url': "django_jinja.builtins.global_context.url",
+    'static': "django_jinja.builtins.global_context.static",
 })
 
 
@@ -130,15 +131,24 @@ class Environment(Environment):
 
         # Add filters defined on settings + builtins
         for name, value in JINJA2_FILTERS.items():
-            self.filters[name] = value
+            if isinstance(value, six.string_types):
+                self.filters[name] = utils.load_class(value)
+            else:
+                self.filters[name] = value
 
         # Add tests defined on settings + builtins
         for name, value in JINJA2_TESTS.items():
-            self.tests[name] = value
+            if isinstance(value, six.string_types):
+                self.tests[name] = utils.load_class(value)
+            else:
+                self.tests[name] = value
 
         # Add globals defined on settings + builtins
         for name, value in JINJA2_GLOBALS.items():
-            self.globals[name] = value
+            if isinstance(value, six.string_types):
+                self.globals[name] = utils.load_class(value)
+            else:
+                self.globals[name] = value
 
         mod_list = []
         for app_path in settings.INSTALLED_APPS:

@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+try:
+    from django.utils.encoding import force_text
+except ImportError:
+    from django.utils.encoding import force_unicode as force_text
+
 from django.core.urlresolvers import reverse as django_reverse
 from jinja2 import Markup
 
@@ -27,10 +32,6 @@ from django.template.defaultfilters import floatformat
 from django.template.defaultfilters import iriencode
 from django.template.defaultfilters import linenumbers
 from django.template.defaultfilters import make_list
-try:
-    from django.utils.text import slugify
-except ImportError:
-    from django.template.defaultfilters import slugify
 from django.template.defaultfilters import stringformat
 from django.template.defaultfilters import title
 from django.template.defaultfilters import truncatechars
@@ -66,3 +67,11 @@ from django.template.defaultfilters import yesno
 from django.template.defaultfilters import filesizeformat
 from django.template.defaultfilters import pprint
 from django.template.defaultfilters import pluralize
+
+try:
+    from django.utils.text import slugify as djslugify
+except ImportError:
+    from django.template.defaultfilters import slugify as djslugify
+
+def slugify(value):
+    return djslugify(force_text(value))

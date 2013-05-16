@@ -45,7 +45,6 @@ class TemplateFunctionsTest(TestCase):
         print()
         for template_str, kwargs, result in filters_data:
             print("- Testing: ", template_str, "with:", kwargs)
-
             template = env.from_string(template_str)
             _result = template.render(kwargs)
             self.assertEqual(_result, result)
