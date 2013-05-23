@@ -8,7 +8,7 @@ from django.template.loaders import filesystem
 from django_jinja.base import env
 import jinja2
 
-DEFAULT_JINJA2_TEMPLATE_EXTENSION = getattr(settings,
+DEFAULT_JINJA2_TEMPLATE_EXTENSION = getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION')
 
 
 class LoaderMixin(object):
