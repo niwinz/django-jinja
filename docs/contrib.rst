@@ -3,7 +3,7 @@ Contrib modules
 
 django-jinja comes with integration with other applications in django.
 
-At the momento, has only one contrib app, but in near future can integrate with others.
+At the moment, it only has one contrib app, but in future it can integrate with others.
 
 django-pipeline
 ---------------
@@ -12,7 +12,7 @@ Pipeline_ is an asset packaging library for Django (official description).
 
 .. _Pipeline: https://github.com/cyberdelia/django-pipeline
 
-For activate this plugin add ``django_jinja.contrib.pipeline`` on your's installed apps tuple:
+To activate this plugin add ``django_jinja.contrib.pipeline`` to your ``INSTALLED_APPS`` tuple:
 
 .. code-block:: python
 
