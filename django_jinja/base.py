@@ -11,10 +11,10 @@ from jinja2 import TemplateSyntaxError
 from jinja2 import FileSystemLoader
 
 from django.conf import settings
-from django.template.context import BaseContext
-from django.template import TemplateDoesNotExist
 from django.template import Origin
+from django.template import TemplateDoesNotExist
 from django.template import InvalidTemplateLibrary
+from django.template.context import BaseContext
 from django.template.loaders import app_directories
 from django.utils.importlib import import_module
 from django.utils import six
