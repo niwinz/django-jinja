@@ -43,16 +43,29 @@ render jinja templates.
 This condition is very simple. Basically it depends on the file extension, files with ``.html`` extension
 are rendered with django template engine and files with ``.jinja`` extension are rendered with jinja2 template engine.
 
-Also, you can specify the default extension for jinja2 with this settings:
+You can specify the default extension for jinja2 with this settings:
 
 .. code-block:: python
 
     DEFAULT_JINJA2_TEMPLATE_EXTENSION = '.jinja'
 
 
-.. versionadded:: 0.13
-    DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE settings parameter
+With **0.13** version, **django-jinja** incorporates more flexible method for
+intercept templates, using regex for matching.
 
+Note: this method has worse perfomance that the default intercept
+method (by extension):
+
+
+.. code-block:: python
+
+    # Same behavior of default intercept method
+    # by extension but using regex (not recommended)
+    DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE = r'.*jinja$'
+
+    # More advanced method. Intercept all templates
+    # except from django admin.
+    DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE = r"^(?!admin/).*"
 
 
 Optional settings
@@ -77,7 +90,7 @@ Low level kwargs parameters for a jinja2 ``Environment`` instance. Example usage
         'line_comment_prefix' : '%#',
         'trim_blocks' : True,
         'autoescape' : False,
-        }
+    }
 
 **JINJA2_AUTOESCAPE**
 
