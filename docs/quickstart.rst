@@ -6,7 +6,7 @@ Install
 
 You can download tarball from Pypi_, extract this and install with:
 
-.. _Pypy: http://pypi.python.org/pypi/django-jinja/
+.. _Pypi: http://pypi.python.org/pypi/django-jinja/
 
 .. code-block:: console
 
@@ -48,6 +48,11 @@ Also, you can specify the default extension for jinja2 with this settings:
 .. code-block:: python
 
     DEFAULT_JINJA2_TEMPLATE_EXTENSION = '.jinja'
+
+
+.. versionadded:: 0.13
+    DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE settings parameter
+
 
 
 Optional settings

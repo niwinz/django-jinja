@@ -8,7 +8,8 @@ django-jinja
 
 Release v\ |version|.
 
-django-jinja is a :ref:`BSD LIcensed`, simple and nonobstructive jinja2 integration with Django.
+django-jinja is a :ref:`BSD Licensed`, simple and nonobstructive jinja2 integration with Django.
+
 
 Introduction
 ------------
@@ -21,14 +22,20 @@ There are another projects that attempt do same think: Djinja, Coffin, etc... Wh
 - Unline djinja, **django-jinja** is not intended to replace a django template engine, but rather, it complements the django template engine, giving the possibility to use both.
 - Unlike coffin, the django-jinja codebase is much smaller and more modern. This way is much more maintainable and easily understandable how the library works.
 
+
 Features
 --------
 
 - Auto load templatetags compatible with jinja2 on same way as django.
-- Can combine the django templates with jinja2 templates without any problems.
+- Django templates can coexists with jinja2 templates without any problems.
+  It works as middleware, intercepts a jinja templates by extension or regex.
 - Django template filters and tags mostly can be used on jinja2 templates.
 - I18n subsystem adapted for jinja2 (makemessages now collects messages from jinja templates)
 - Compatible with python2 and python3 with same codebase.
+
+.. versionadded:: 0.13
+    Regex template intercept (it gives a lot of flexibility with slighty
+    performance decrease over a default intercept method).
 
 
 User guide
