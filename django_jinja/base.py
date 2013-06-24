@@ -31,6 +31,16 @@ JINJA2_GLOBALS = getattr(settings, 'JINJA2_GLOBALS', {})
 JINJA2_AUTOESCAPE = getattr(settings, 'JINJA2_AUTOESCAPE', False)
 
 
+# Default jinja extension list
+DEFAULT_EXTENSIONS = [
+    'jinja2.ext.do',
+    'jinja2.ext.loopcontrols',
+    'jinja2.ext.with_',
+    'jinja2.ext.i18n',
+    'jinja2.ext.autoescape',
+]
+
+
 JINJA2_FILTERS.update({
     'reverseurl': "django_jinja.builtins.filters.reverse",
     'addslashes': "django_jinja.builtins.filters.addslashes",
@@ -210,7 +220,7 @@ class Environment(Environment):
 initial_params = {
     'autoescape': JINJA2_AUTOESCAPE,
     'loader': FileSystemLoader(app_directories.app_template_dirs + tuple(settings.TEMPLATE_DIRS)),
-    'extensions': JINJA2_EXTENSIONS + ['jinja2.ext.i18n', 'jinja2.ext.autoescape'],
+    'extensions': list(set(list(JINJA2_EXTENSIONS) + DEFAULT_EXTENSIONS)),
 }
 
 initial_params.update(JINJA2_ENVIRONMENT_OPTIONS)
