@@ -28,7 +28,7 @@ JINJA2_EXTENSIONS = getattr(settings, 'JINJA2_EXTENSIONS', [])
 JINJA2_FILTERS = getattr(settings, 'JINJA2_FILTERS', {})
 JINJA2_TESTS = getattr(settings, 'JINJA2_TESTS', {})
 JINJA2_GLOBALS = getattr(settings, 'JINJA2_GLOBALS', {})
-JINJA2_AUTOESCAPE = getattr(settings, 'JINJA2_AUTOESCAPE', False)
+JINJA2_AUTOESCAPE = getattr(settings, 'JINJA2_AUTOESCAPE', True)
 
 
 # Default jinja extension list
