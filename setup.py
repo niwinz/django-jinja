@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
+from distutils.core import setup
 
 setup(
     name = "django-jinja",
-    version = "0.15",
+    version = "0.16",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     keywords = "django, jinja2",
@@ -13,12 +13,25 @@ setup(
     author_email = "niwi@niwi.be",
     url = "https://github.com/niwibe/django-jinja",
     license = "BSD",
-    include_package_data = True,
-    packages = find_packages(),
-    install_requires=[
-        "distribute",
-        "jinja2",
+    packages = [
+        "django_jinja",
+        "django_jinja.builtins",
+        "django_jinja.management",
+        "django_jinja.management.commands",
+        "django_jinja.contrib",
+        "django_jinja.contrib.pipeline",
+        "django_jinja.contrib.pipeline.templatetags",
+        "django_jinja.contrib.easy_thumbnails",
+        "django_jinja.contrib.easy_thumbnails.templatetags",
+        "django_jinja.contrib.humanize",
+        "django_jinja.contrib.humanize.templatetags",
     ],
+
+    requires = [
+        "jinja2 (>=2.5)",
+        "django (>=1.4)",
+    ],
+
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Framework :: Django",
