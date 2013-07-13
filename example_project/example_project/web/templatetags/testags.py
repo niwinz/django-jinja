@@ -10,6 +10,6 @@ register = Library()
 def datetimeformat(ctx, value, format='%H:%M / %d-%m-%Y'):
     return value.strftime(format)
 
-@register.global_context
+@register.global_function
 def hello(name):
     return "Hello" + name
