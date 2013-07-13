@@ -84,3 +84,23 @@ Simple example:
 
 Functions, filters, or tests are registered globally on jinja automatically, without an explicit
 load templatetag.
+
+
+Render 4xx/500 pages with jinja
+-------------------------------
+
+Due to that django-jinja works as middleware that intercepts template rendering matching extension
+or regex defined on settings, standard django sepecial handlers (views) does not use jinja for
+render 404, 403 and 500 pages. For fix it, you can define your own views or use a django-jinja
+predefined ones.
+
+Example:
+
+.. code-block:: python
+
+    # Your main urls.py
+    from django_jinja import views
+
+    handler403 = views.PermissionDenied.as_view()
+    handler404 = views.PageNotFound.as_view()
+    handler500 = views.ServerError.as_view()

@@ -6,6 +6,7 @@ from django.test import TestCase
 from django.test.client import RequestFactory
 from django.template.loader import render_to_string
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
 
 from django_jinja.base import env, dict_from_context
 
@@ -112,3 +113,18 @@ class TemplateFunctionsTest(TestCase):
         result = template.render(context)
 
         self.assertEqual(result, "foo bar")
+
+    def test_404_page(self):
+        response = self.client.get(reverse("page-404"))
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.content, "404")
+
+    def test_403_page(self):
+        response = self.client.get(reverse("page-403"))
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.content, "403")
+
+    def test_500_page(self):
+        response = self.client.get(reverse("page-500"))
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.content, "500")
