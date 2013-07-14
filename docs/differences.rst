@@ -2,7 +2,7 @@ Differences
 ===========
 
 In django, creating new tags is simpler than in Jinja2. You should remember that
-in jinja tags are really extensions and have a different purpose to the django template tags.
+in jinja tags are really extensions and have a different purpose than the django template tags.
 
 Thus for many things that the django template system uses tags, django-jinja will provide
 functions with the same functionality.
@@ -17,7 +17,7 @@ In django you are accustomed to using the url tag:
 
     {% url 'ns:name' pk=obj.pk %}
 
-With jinja, you can use **reverse** filter or **url** global function. See example:
+With jinja, you can use **reverse** filter or **url** global function. For example:
 
 .. code-block:: jinja
 
@@ -47,7 +47,7 @@ Jinja exposes a **static** global function which does the same thing:
 I18N and Django gettext
 -----------------------
 
-**django-jinja** has a builtin extension to the ``makemessages`` command, that correctly collects
+**django-jinja** has a built-in extension to the ``makemessages`` command, that correctly collects
 messages from jinja templates.
 
 Here is an example:
@@ -67,7 +67,7 @@ Here is an example:
 Register global functions
 -------------------------
 
-You can register your global functions as you are registering template tags or filters on django.
+You can register your global functions as you are registering template tags or filters in django.
 
 Simple example:
 
@@ -89,10 +89,9 @@ load templatetag.
 Render 4xx/500 pages with jinja
 -------------------------------
 
-Due to that django-jinja works as middleware that intercepts template rendering matching extension
-or regex defined on settings, standard django sepecial handlers (views) does not use jinja for
-render 404, 403 and 500 pages. For fix it, you can define your own views or use a django-jinja
-predefined ones.
+Because django-jinja works as middleware that intercepts template rendering, standard django
+sepecial handlers (views) do not use jinja to render 404, 403 or 500 pages. To fix this, you can
+define your own views or use django-jinja's predefined ones.
 
 Example:
 
