@@ -125,6 +125,16 @@ class Template(Template):
 
         return super(Template, self).render(new_context)
 
+    def stream(self, context={}):
+        new_context = dict_from_context(context)
+
+        if settings.TEMPLATE_DEBUG:
+            from django.test import signals
+            self.origin = Origin(self.filename)
+            signals.template_rendered.send(sender=self, template=self, context=context)
+
+        return super(Template, self).stream(new_context)
+
 
 class Environment(Environment):
     def __init__(self, *args, **kwargs):
