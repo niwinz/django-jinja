@@ -2,13 +2,13 @@
 
 from __future__ import print_function, unicode_literals
 
-from django.test import TestCase
+from django.test import signals, TestCase
 from django.test.client import RequestFactory
 from django.template.loader import render_to_string
-from django.template import RequestContext
+from django.template import RequestContext, Context
 from django.core.urlresolvers import reverse
 
-from django_jinja.base import env, dict_from_context
+from django_jinja.base import env, dict_from_context, Template
 
 import datetime
 import sys
@@ -128,3 +128,44 @@ class TemplateFunctionsTest(TestCase):
         response = self.client.get(reverse("page-500"))
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.content, "500")
+
+
+class TemplateDebugSignalsTest(TestCase):
+
+    def setUp(self):
+        signals.template_rendered.connect(self._listener)
+
+    def tearDown(self):
+        signals.template_rendered.disconnect(self._listener)
+        signals.template_rendered.disconnect(self._fail_listener)
+
+    def _listener(self, sender=None, template=None, **kwargs):
+        self.assertTrue(isinstance(sender, Template))
+        self.assertTrue(isinstance(template, Template))
+
+    def _fail_listener(self, *args, **kwargs):
+        self.fail("I shouldn't be called")
+
+    def test_render(self):
+        with self.settings(TEMPLATE_DEBUG=True):
+            tmpl = Template("OK")
+            tmpl.render()
+
+    def test_render_without_template_debug_setting(self):
+        signals.template_rendered.connect(self._fail_listener)
+
+        with self.settings(TEMPLATE_DEBUG=False):
+            tmpl = Template("OK")
+            tmpl.render()
+
+    def test_stream(self):
+        with self.settings(TEMPLATE_DEBUG=True):
+            tmpl = Template("OK")
+            tmpl.stream()
+
+    def test_stream_without_template_debug_setting(self):
+        signals.template_rendered.connect(self._fail_listener)
+
+        with self.settings(TEMPLATE_DEBUG=False):
+            tmpl = Template("OK")
+            tmpl.stream()
