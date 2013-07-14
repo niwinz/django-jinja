@@ -2,10 +2,11 @@
 
 from __future__ import print_function, unicode_literals
 
+from django.http import HttpResponse
 from django.test import signals, TestCase
 from django.test.client import RequestFactory
 from django.template.loader import render_to_string
-from django.template import RequestContext, Context
+from django.template import RequestContext
 from django.core.urlresolvers import reverse
 
 from django_jinja.base import env, dict_from_context, Template
@@ -169,3 +170,19 @@ class TemplateDebugSignalsTest(TestCase):
         with self.settings(TEMPLATE_DEBUG=False):
             tmpl = Template("OK")
             tmpl.stream()
+
+    def test_template_used(self):
+        """
+        Test TestCase.assertTemplateUsed with django-jinja template
+        """
+        template_name = 'test.jinja'
+
+        def view(request, template_name):
+            tmpl = Template("{{ test }}")
+            return HttpResponse(tmpl.stream({"test": "success"}))
+
+        with self.settings(TEMPLATE_DEBUG=True):
+            request = RequestFactory().get('/')
+            response = view(request, template_name=template_name)
+            self.assertTemplateUsed(response, template_name)
+            self.assertEqual(response.content, "success")
