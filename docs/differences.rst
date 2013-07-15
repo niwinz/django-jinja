@@ -36,7 +36,7 @@ On modern django apps we are accustomed to seeing a **static** template tag:
     {% static "js/lib/foo.js" %}
     {% static "js/lib/foo.js" as staticurl %}
 
-Jinja exposes a **static** global function which does the same thing:
+Jinja exposes a **static** global function or a **static** filter which does the same thing:
 
 .. code-block:: jinja
 
