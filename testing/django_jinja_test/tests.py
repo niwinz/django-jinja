@@ -23,6 +23,7 @@ class TemplateFunctionsTest(TestCase):
 
     def test_template_filters(self):
         filters_data = [
+            ("{{ 'test-static.css'|static }}", {}, '/static/test-static.css'),
             ("{{ 'test-1'|reverseurl }}", {}, '/test1/'),
             ("{{ 'test-1'|reverseurl(data=2) }}", {}, '/test1/2/'),
             ("{{ num|floatformat }}", {'num': 34.23234}, '34.2'),
