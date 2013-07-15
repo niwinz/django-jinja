@@ -40,6 +40,7 @@ Jinja exposes a **static** global function which does the same thing:
 
 .. code-block:: jinja
 
+    {{ "js/lib/foo.js"|static }}
     {{ static("js/lib/foo.js" ) }}
     {% set staticurl = static("js/lib/foo.js" ) %}
 

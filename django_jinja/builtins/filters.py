@@ -6,6 +6,7 @@ except ImportError:
     from django.utils.encoding import force_unicode as force_text
 
 from django.core.urlresolvers import reverse as django_reverse
+from django.contrib.staticfiles.storage import staticfiles_storage
 from jinja2 import Markup
 
 
@@ -22,6 +23,9 @@ def reverse(value, *args, **kwargs):
 
     """
     return django_reverse(value, args=args, kwargs=kwargs)
+
+def static(path):
+    return staticfiles_storage.url(path)
 
 
 from django.template.defaultfilters import addslashes

@@ -42,6 +42,7 @@ DEFAULT_EXTENSIONS = [
 
 
 JINJA2_FILTERS.update({
+    'static': "django_jinja.builtins.filters.static",
     'reverseurl': "django_jinja.builtins.filters.reverse",
     'addslashes': "django_jinja.builtins.filters.addslashes",
     'capfirst': "django_jinja.builtins.filters.capfirst",
