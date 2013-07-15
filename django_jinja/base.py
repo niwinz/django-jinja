@@ -199,32 +199,21 @@ class Environment(Environment):
         if self.autoescape:
             from django.utils import safestring
 
-            if hasattr(sys.version_info, 'major'):
-                if sys.version_info.major < 3:
-                    unicode_or_str = lambda self: unicode(self)
-                else:
-                    unicode_or_str = lambda self: str(self)
-            else:
-                if sys.version_info[0] < 3:
-                    unicode_or_str = lambda self: unicode(self)
-                else:
-                    unicode_or_str = lambda self: str(self)
-
             if hasattr(safestring, "SafeText"):
                 if not hasattr(safestring.SafeText, '__html__'):
-                    safestring.SafeText.__html__ = unicode_or_str
+                    safestring.SafeText.__html__ = lambda self: six.text_type(self)
 
             if hasattr(safestring, "SafeString"):
                 if not hasattr(safestring.SafeString, '__html__'):
-                    safestring.SafeString.__html__ = unicode_or_str
+                    safestring.SafeString.__html__ = lambda self: six.text_type(self)
 
             if hasattr(safestring, "SafeUnicode"):
                 if not hasattr(safestring.SafeUnicode, '__html__'):
-                    safestring.SafeUnicode.__html__ = unicode_or_str
+                    safestring.SafeUnicode.__html__ = lambda self: six.text_type(self)
 
             if hasattr(safestring, "SafeBytes"):
                 if not hasattr(safestring.SafeBytes, '__html__'):
-                    safestring.SafeBytes.__html__ = unicode_or_str
+                    safestring.SafeBytes.__html__ = lambda self: six.text_type(self)
 
 
 initial_params = {
