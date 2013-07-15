@@ -1,7 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from distutils.core import setup
+from setuptools import setup
+import sys
+
+
+INSTALL_REQUIRES = [  
+    "jinja2 >=2.5",
+    "django >=1.4",
+]
+
+if sys.version_info < (2, 7):
+    INSTALL_REQUIRES.append('importlib')
 
 setup(
     name = "django-jinja",
@@ -27,10 +37,7 @@ setup(
         "django_jinja.contrib.humanize.templatetags",
     ],
 
-    requires = [
-        "jinja2 (>=2.5)",
-        "django (>=1.4)",
-    ],
+    install_requires = INSTALL_REQUIRES,
 
     classifiers = [
         "Development Status :: 5 - Production/Stable",
