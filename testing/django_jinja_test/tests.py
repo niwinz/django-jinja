@@ -2,12 +2,14 @@
 
 from __future__ import print_function, unicode_literals
 
-from django.test import TestCase
+from django.http import HttpResponse
+from django.test import signals, TestCase
 from django.test.client import RequestFactory
 from django.template.loader import render_to_string
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
 
-from django_jinja.base import env, dict_from_context
+from django_jinja.base import env, dict_from_context, Template
 
 import datetime
 import sys
@@ -112,3 +114,75 @@ class TemplateFunctionsTest(TestCase):
         result = template.render(context)
 
         self.assertEqual(result, "foo bar")
+
+    def test_404_page(self):
+        response = self.client.get(reverse("page-404"))
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.content, "404")
+
+    def test_403_page(self):
+        response = self.client.get(reverse("page-403"))
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.content, "403")
+
+    def test_500_page(self):
+        response = self.client.get(reverse("page-500"))
+        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.content, "500")
+
+
+class TemplateDebugSignalsTest(TestCase):
+
+    def setUp(self):
+        signals.template_rendered.connect(self._listener)
+
+    def tearDown(self):
+        signals.template_rendered.disconnect(self._listener)
+        signals.template_rendered.disconnect(self._fail_listener)
+
+    def _listener(self, sender=None, template=None, **kwargs):
+        self.assertTrue(isinstance(sender, Template))
+        self.assertTrue(isinstance(template, Template))
+
+    def _fail_listener(self, *args, **kwargs):
+        self.fail("I shouldn't be called")
+
+    def test_render(self):
+        with self.settings(TEMPLATE_DEBUG=True):
+            tmpl = Template("OK")
+            tmpl.render()
+
+    def test_render_without_template_debug_setting(self):
+        signals.template_rendered.connect(self._fail_listener)
+
+        with self.settings(TEMPLATE_DEBUG=False):
+            tmpl = Template("OK")
+            tmpl.render()
+
+    def test_stream(self):
+        with self.settings(TEMPLATE_DEBUG=True):
+            tmpl = Template("OK")
+            tmpl.stream()
+
+    def test_stream_without_template_debug_setting(self):
+        signals.template_rendered.connect(self._fail_listener)
+
+        with self.settings(TEMPLATE_DEBUG=False):
+            tmpl = Template("OK")
+            tmpl.stream()
+
+    def test_template_used(self):
+        """
+        Test TestCase.assertTemplateUsed with django-jinja template
+        """
+        template_name = 'test.jinja'
+
+        def view(request, template_name):
+            tmpl = Template("{{ test }}")
+            return HttpResponse(tmpl.stream({"test": "success"}))
+
+        with self.settings(TEMPLATE_DEBUG=True):
+            request = RequestFactory().get('/')
+            response = view(request, template_name=template_name)
+            self.assertTemplateUsed(response, template_name)
+            self.assertEqual(response.content, "success")

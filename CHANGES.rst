@@ -1,6 +1,22 @@
 Changelog
 =========
 
+Version 0.18
+------------
+
+- Test singnal when stream template method is used.
+
+Version 0.17
+------------
+
+- Add 4xx/500 django special views.
+
+Version 0.16
+------------
+
+- Remove distribute dependency.
+
+
 Version 0.15
 ------------
 
