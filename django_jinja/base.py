@@ -198,33 +198,33 @@ class Environment(Environment):
 
         if self.autoescape:
             from django.utils import safestring
+
+            if hasattr(sys.version_info, 'major'):
+                if sys.version_info.major < 3:
+                    unicode_or_str = lambda self: unicode(self)
+                else:
+                    unicode_or_str = lambda self: str(self)
+            else:
+                if sys.version_info[0] < 3:
+                    unicode_or_str = lambda self: unicode(self)
+                else:
+                    unicode_or_str = lambda self: str(self)
+
             if hasattr(safestring, "SafeText"):
                 if not hasattr(safestring.SafeText, '__html__'):
-                    if sys.version_info.major < 3:
-                        safestring.SafeText.__html__ = lambda self: unicode(self)
-                    else:
-                        safestring.SafeText.__html__ = lambda self: str(self)
+                    safestring.SafeText.__html__ = unicode_or_str
 
             if hasattr(safestring, "SafeString"):
                 if not hasattr(safestring.SafeString, '__html__'):
-                    if sys.version_info.major < 3:
-                        safestring.SafeString.__html__ = lambda self: unicode(self)
-                    else:
-                        safestring.SafeString.__html__ = lambda self: str(self)
+                    safestring.SafeString.__html__ = unicode_or_str
 
             if hasattr(safestring, "SafeUnicode"):
                 if not hasattr(safestring.SafeUnicode, '__html__'):
-                    if sys.version_info.major < 3:
-                        safestring.SafeUnicode.__html__ = lambda self: unicode(self)
-                    else:
-                        safestring.SafeUnicode.__html__ = lambda self: str(self)
+                    safestring.SafeUnicode.__html__ = unicode_or_str
 
             if hasattr(safestring, "SafeBytes"):
                 if not hasattr(safestring.SafeBytes, '__html__'):
-                    if sys.version_info.major < 3:
-                        safestring.SafeBytes.__html__ = lambda self: unicode(self)
-                    else:
-                        safestring.SafeBytes.__html__ = lambda self: str(self)
+                    safestring.SafeBytes.__html__ = unicode_or_str
 
 
 initial_params = {

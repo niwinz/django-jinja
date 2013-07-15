@@ -93,7 +93,7 @@ class TemplateFunctionsTest(TestCase):
         template_content = "{% csrf_token %}"
 
         request = self.factory.get('/customer/details')
-        if sys.version_info.major < 3:
+        if sys.version_info[0] < 3:
             request.META["CSRF_COOKIE"] = b'1234123123'
         else:
             request.META["CSRF_COOKIE"] = '1234123123'
