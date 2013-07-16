@@ -17,11 +17,11 @@ In django you are accustomed to using the url tag:
 
     {% url 'ns:name' pk=obj.pk %}
 
-With jinja, you can use **reverse** filter or **url** global function. For example:
+With jinja, you can use **reverseurl** filter or **url** global function. For example:
 
 .. code-block:: jinja
 
-    {{ 'ns:name'|reverse(pk=obj.pk) }}
+    {{ 'ns:name'|reverseurl(pk=obj.pk) }}
     {{ url('ns:name', pk=obj.pk) }}
 
 
