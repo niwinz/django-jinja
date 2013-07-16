@@ -5,7 +5,7 @@ from setuptools import setup
 import sys
 
 
-INSTALL_REQUIRES = [  
+INSTALL_REQUIRES = [
     "jinja2 >=2.5",
     "django >=1.4",
 ]
@@ -15,7 +15,7 @@ if sys.version_info < (2, 7):
 
 setup(
     name = "django-jinja",
-    version = "0.18",
+    version = "0.19",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     keywords = "django, jinja2",
