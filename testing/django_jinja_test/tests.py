@@ -132,8 +132,21 @@ class TemplateFunctionsTest(TestCase):
         self.assertEqual(response.content, b"500")
 
 
-class TemplateDebugSignalsTest(TestCase):
+class DjangoPipelineTestTest(TestCase):
+    def test_pipeline_js_safe(self):
+        template = env.from_string("{{ compressed_js('test') }}")
+        result = template.render({})
+        self.assertEqual(result,
+            '<script   type="text/javascript" src="/static/script.2.js" charset="utf-8"></script>')
 
+    def test_pipeline_css_safe(self):
+        template = env.from_string("{{ compressed_css('test') }}")
+        result = template.render({})
+        self.assertEqual(result,
+            '<link href="/static/style.2.css" rel="stylesheet" type="text/css" />')
+
+
+class TemplateDebugSignalsTest(TestCase):
     def setUp(self):
         signals.template_rendered.connect(self._listener)
 

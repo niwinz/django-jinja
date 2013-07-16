@@ -9,12 +9,13 @@ from pipeline.conf import settings
 from pipeline.utils import guess_type
 from pipeline.packager import Packager, PackageNotFound
 
-from django_jinja import library
-
+from django_jinja import library, utils
 lib = library.Library()
 
 
+
 @lib.global_function
+@utils.safe
 def compressed_css(name):
     package = settings.PIPELINE_CSS.get(name, {})
     if package:
@@ -48,6 +49,7 @@ def compressed_css(name):
 
 
 @lib.global_function
+@utils.safe
 def compressed_js(name):
     package = settings.PIPELINE_JS.get(name, {})
     if package:
@@ -86,6 +88,3 @@ def compressed_js(name):
         tags.append(_render_inline(templates))
 
     return '\n'.join(tags)
-
-
-

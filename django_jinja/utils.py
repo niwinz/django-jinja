@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import functools
 from importlib import import_module
+
+from django.utils.safestring import mark_safe
 from django.core.exceptions import ImproperlyConfigured
 
 
@@ -21,3 +24,11 @@ def load_class(path):
         raise ImproperlyConfigured('Module "{0}" does not define a "{1}" class'.format(mod_name, klass_name))
 
     return klass
+
+
+def safe(function):
+    @functools.wraps(function)
+    def _decorator(*args, **kwargs):
+        return mark_safe(function(*args, **kwargs))
+    return _decorator
+

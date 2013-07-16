@@ -24,6 +24,8 @@ test_settings = {
         'django.contrib.messages',
         'django_jinja',
         'django_jinja_test',
+        'pipeline',
+        'django_jinja.contrib.pipeline',
     ],
     'ROOT_URLCONF':'django_jinja_test.urls',
     'STATIC_URL':'/static/',
@@ -46,7 +48,18 @@ test_settings = {
         'django_jinja.loaders.AppLoader',
         'django_jinja.loaders.FileSystemLoader',
     ],
-
+    'PIPELINE_CSS': {
+        'test': {
+            'source_filenames': ["style.css"],
+            'output_filename': "style.2.css",
+        }
+    },
+    'PIPELINE_JS': {
+        'test': {
+            'source_filenames': ['script.js'],
+            'output_filename': 'script.2.js',
+        }
+    }
 }
 
 
