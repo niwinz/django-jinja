@@ -12,7 +12,7 @@ Pipeline_ is an asset packaging library for Django (official description).
 
 .. _Pipeline: https://github.com/cyberdelia/django-pipeline
 
-To activate this plugin add ``django_jinja.contrib.pipeline`` to your ``INSTALLED_APPS`` tuple:
+To activate this plugin add ``django_jinja.contrib._pipeline`` to your ``INSTALLED_APPS`` tuple:
 
 .. code-block:: python
 

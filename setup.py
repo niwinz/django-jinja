@@ -15,7 +15,7 @@ if sys.version_info < (2, 7):
 
 setup(
     name = "django-jinja",
-    version = "0.19",
+    version = "0.20",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     keywords = "django, jinja2",
@@ -29,12 +29,12 @@ setup(
         "django_jinja.management",
         "django_jinja.management.commands",
         "django_jinja.contrib",
-        "django_jinja.contrib.pipeline",
-        "django_jinja.contrib.pipeline.templatetags",
-        "django_jinja.contrib.easy_thumbnails",
-        "django_jinja.contrib.easy_thumbnails.templatetags",
-        "django_jinja.contrib.humanize",
-        "django_jinja.contrib.humanize.templatetags",
+        "django_jinja.contrib._pipeline",
+        "django_jinja.contrib._pipeline.templatetags",
+        "django_jinja.contrib._easy_thumbnails",
+        "django_jinja.contrib._easy_thumbnails.templatetags",
+        "django_jinja.contrib._humanize",
+        "django_jinja.contrib._humanize.templatetags",
     ],
 
     install_requires = INSTALL_REQUIRES,

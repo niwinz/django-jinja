@@ -1,6 +1,18 @@
 Changelog
 =========
 
+Version 0.20
+------------
+
+- Introduce backward incompatible change: all contrib apps
+  are renamed (prepened _ on each module name) for avoid
+  name conflicts with the original package.
+
+Version 0.19
+------------
+
+- Bugfixes related to autoescape.
+
 Version 0.18
 ------------
 

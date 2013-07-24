@@ -25,7 +25,7 @@ test_settings = {
         'django_jinja',
         'django_jinja_test',
         'pipeline',
-        'django_jinja.contrib.pipeline',
+        'django_jinja.contrib._pipeline',
     ],
     'ROOT_URLCONF':'django_jinja_test.urls',
     'STATIC_URL':'/static/',
