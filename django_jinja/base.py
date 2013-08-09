@@ -30,6 +30,11 @@ JINJA2_TESTS = getattr(settings, 'JINJA2_TESTS', {})
 JINJA2_GLOBALS = getattr(settings, 'JINJA2_GLOBALS', {})
 JINJA2_AUTOESCAPE = getattr(settings, 'JINJA2_AUTOESCAPE', True)
 
+JINJA2_BYTECODE_CACHE_ENABLE = getattr(settings, 'JINJA2_BYTECODE_CACHE_ENABLE', False)
+JINJA2_BYTECODE_CACHE_NAME = getattr(settings, 'JINJA2_BYTECODE_CACHE_NAME', 'default')
+JINJA2_BYTECODE_CACHE_BACKEND = getattr(settings, 'JINJA2_BYTECODE_CACHE_BACKEND',
+                                        'django_jinja.cache.BytecodeCache')
+
 
 # Default jinja extension list
 DEFAULT_EXTENSIONS = [
@@ -149,6 +154,11 @@ class Environment(Environment):
             self.install_null_translations(newstyle=False)
 
         self.template_class = Template
+
+        # Install bytecode cache if is enabled
+        if JINJA2_BYTECODE_CACHE_ENABLE:
+            cls = utils.load_class(JINJA2_BYTECODE_CACHE_BACKEND)
+            self.bytecode_cache = cls(JINJA2_BYTECODE_CACHE_NAME)
 
         # Add filters defined on settings + builtins
         for name, value in JINJA2_FILTERS.items():
