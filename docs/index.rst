@@ -37,6 +37,9 @@ Features
     Regex template intercept (it gives a lot of flexibility with slighty
     performance decrease over a default intercept method).
 
+.. versionadded:: 0.21
+    Optional support for bytecode caching that uses Django's built-in cache framework by default.
+
 
 User guide
 ----------
