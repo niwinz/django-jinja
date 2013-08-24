@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 0.21
+------------
+
+- Remove obsolete __version__ variable from __init__.py file.
+- Add bytecode cache with django cache framework support.
+
 Version 0.20
 ------------
 
