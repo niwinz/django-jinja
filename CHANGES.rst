@@ -1,6 +1,11 @@
 Changelog
 =========
 
+Version 0.22
+------------
+
+- Change template order selection.
+
 Version 0.21
 ------------
 
