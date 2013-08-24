@@ -95,3 +95,28 @@ Low level kwargs parameters for a jinja2 ``Environment`` instance. Example usage
 **JINJA2_AUTOESCAPE**
 
 Boolean value that enables or disables template autoescape.
+
+
+Bytecode caching
+----------------
+
+**django-jinja** supports the use of Jinja2's template bytecode caching system to improve performance. It includes a default Jinja2 bytecode cache implementation that makes use of Django's built-in cache framework. This way, the template bytecode can be stored into a Django cache backend configured in your project via the CACHES_ setting. However, you can also use your own Jinja2 bytecode cache class.
+
+.. _CACHES: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-CACHES
+
+
+**JINJA2_BYTECODE_CACHE_ENABLE**
+
+A boolean value that enables or disables bytecode caching. Defaults to ``False``.
+
+
+**JINJA2_BYTECODE_CACHE_NAME**
+
+The name of the Django cache backend to use for storing the template bytecode, as defined in your CACHES setting. Defaults to ``'default'``.
+
+
+**JINJA2_BYTECODE_CACHE_BACKEND**
+
+A dotted path to a Jinja2 bytecode cache class. See the Jinja2 docs_ for reference if you want to implement your own cache class. Defaults to the backend built in to **django-jinja** (``'django_jinja.cache.BytecodeCache'``).
+
+.. _docs: http://jinja.pocoo.org/docs/api/#bytecode-cache
