@@ -229,7 +229,8 @@ class Environment(Environment):
 
 initial_params = {
     'autoescape': JINJA2_AUTOESCAPE,
-    'loader': FileSystemLoader(app_directories.app_template_dirs + tuple(settings.TEMPLATE_DIRS)),
+    'loader': FileSystemLoader(tuple(settings.TEMPLATE_DIRS) +
+                               app_directories.app_template_dirs),
     'extensions': list(set(list(JINJA2_EXTENSIONS) + DEFAULT_EXTENSIONS)),
 }
 
