@@ -14,24 +14,24 @@ django-jinja is a :ref:`BSD Licensed`, simple and nonobstructive jinja2 integrat
 Introduction
 ------------
 
-Jinja2 provides certain advantages over the native system of django, for example, explicit calls to
-callable from templates, has more performance and has a plugin system, etc ...
+Jinja2 provides certain advantages over the native system of Django, for example, explicit calls to
+callable from templates, has better performance and has a plugin system, etc ...
 
-There are another projects that attempt do same think: Djinja, Coffin, etc... Why one more?
+There are other projects that attempt do same thing: Djinja, Coffin, etc... Why one more?
 
-- Unline djinja, **django-jinja** is not intended to replace a django template engine, but rather, it complements the django template engine, giving the possibility to use both.
-- Unlike coffin, the django-jinja codebase is much smaller and more modern. This way is much more maintainable and easily understandable how the library works.
+- Unlike Djinja, **django-jinja** is not intended to replace a Django template engine, but rather, it complements the Django's template engine, giving the possibility to use both.
+- Unlike Coffin, the django-jinja codebase is much smaller and more modern. This way is much more maintainable and easily understandable how the library works.
 
 
 Features
 --------
 
-- Auto load templatetags compatible with jinja2 on same way as django.
-- Django templates can coexists with jinja2 templates without any problems.
-  It works as middleware, intercepts a jinja templates by extension or regex.
-- Django template filters and tags mostly can be used on jinja2 templates.
-- I18n subsystem adapted for jinja2 (makemessages now collects messages from jinja templates)
-- Compatible with python2 and python3 with same codebase.
+- Auto-load templatetags compatible with Jinja2 on same way as Django.
+- Django templates can coexist with Jinja2 templates without any problems.
+  It works as middleware, intercepts Jinja templates by file path pattern.
+- Django template filters and tags can mostly be used in Jinja2 templates.
+- I18n subsystem adapted for Jinja2 (makemessages now collects messages from Jinja templates)
+- Compatible with python2 and python3 using same codebase.
 
 .. versionadded:: 0.13
     Regex template intercept (it gives a lot of flexibility with slighty
