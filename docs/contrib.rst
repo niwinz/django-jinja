@@ -16,7 +16,7 @@ To activate this plugin add ``django_jinja.contrib._pipeline`` to your ``INSTALL
 
 .. code-block:: python
 
-    INSTALLED_APPS += ('django_jinja.contrib.pipeline',)
+    INSTALLED_APPS += ('django_jinja.contrib._pipeline',)
 
 Now, you can use ``compressed_css`` and ``compressed_js`` as global functions:
 
