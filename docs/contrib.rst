@@ -32,3 +32,29 @@ Now, you can use ``compressed_css`` and ``compressed_js`` as global functions:
             <!-- body -->
         </body>
     </html>
+
+
+easy_thumbnails
+---------------
+
+Easy Thumbnails is a thumbnail generation library for Django.
+
+To activate this plugin add ``django_jinja.contrib._easy_thumbnails`` to your ``INSTALLED_APPS`` tuple:
+
+.. code-block:: python
+
+    INSTALLED_APPS += ('django_jinja.contrib._easy_thumbnails',)
+
+Now, you can use the ``thumbnail`` global function:
+
+.. code-block:: jinja
+
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Foo</title>
+        </head>
+        <body>
+            <img src="{{ thumbnail(file, size=(400, 400)) }}">
+        </body>
+    </html>
