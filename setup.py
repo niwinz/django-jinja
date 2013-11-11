@@ -35,6 +35,8 @@ setup(
         "django_jinja.contrib._easy_thumbnails.templatetags",
         "django_jinja.contrib._humanize",
         "django_jinja.contrib._humanize.templatetags",
+        "django_jinja.contrib._subdomains",
+        "django_jinja.contrib._subdomains.templatetags",
     ],
 
     install_requires = INSTALL_REQUIRES,
