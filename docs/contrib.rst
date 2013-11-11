@@ -58,3 +58,29 @@ Now, you can use the ``thumbnail`` global function:
             <img src="{{ thumbnail(file, size=(400, 400)) }}">
         </body>
     </html>
+
+
+django-subdomains
+-----------------
+
+Subdomain helpers for the Django framework, including subdomain-based URL routing.
+
+To activate this plugin add ``django_jinja.contrib._subdomains`` to your ``INSTALLED_APPS`` tuple:
+
+.. code-block:: python
+
+    INSTALLED_APPS += ('django_jinja.contrib._subdomains',)
+
+Now you can use the ``url`` global function with the subdomain parameter:
+
+.. code-block:: jinja
+
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Foo</title>
+        </head>
+        <body>
+            <img src="{{ url('homepage', subdomain='wildcard') }}">
+        </body>
+    </html>
