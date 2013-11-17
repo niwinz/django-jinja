@@ -190,6 +190,9 @@ class Environment(Environment):
                 pass
 
         for app_path, mod_path in mod_list:
+            if not os.path.isdir(mod_path):
+                continue
+                
             for filename in filter(lambda x: x.endswith(".py"), os.listdir(mod_path)):
                 if filename == '__init__.py':
                     continue
