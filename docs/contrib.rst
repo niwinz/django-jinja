@@ -84,3 +84,33 @@ Now you can use the ``url`` global function with the subdomain parameter:
             <img src="{{ url('homepage', subdomain='wildcard') }}">
         </body>
     </html>
+
+
+dajax-ice
+---------
+
+Easy to use AJAX library for django.
+
+To activate this plugin add ``django_jinja.contrib._dajaxice`` to your ``INSTALLED_APPS`` tuple:
+
+.. code-block:: python
+
+    INSTALLED_APPS += ('django_jinja.contrib._dajaxice',)
+
+Now you can use the ``dajaxice_js_import`` global context function:
+
+.. code-block:: jinja
+
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Foo</title>
+            {{ dajaxice_js_import() }}            
+        </head>
+        <body>
+            ...
+        </body>
+    </html>
+
+Be sure to follow the additional install instructions for in the
+its `Dajaxice Quickstart <http://django-dajaxice.readthedocs.org/en/latest/index.html#>`_.    
