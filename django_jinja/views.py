@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from django.conf import settings
 from django.views.generic import View
 from django.template import loader, RequestContext
 from django import http
@@ -22,15 +23,15 @@ class GenericView(View):
 
 
 class PageNotFound(GenericView):
-    tmpl_name = "404.jinja"
+    tmpl_name = "404" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
     response_cls = http.HttpResponseNotFound
 
 
 class PermissionDenied(GenericView):
-    tmpl_name = "403.jinja"
+    tmpl_name = "403" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
     response_cls = http.HttpResponseForbidden
 
 
 class ServerError(GenericView):
-    tmpl_name = "500.jinja"
+    tmpl_name = "500" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
     response_cls = http.HttpResponseServerError
