@@ -29,6 +29,8 @@ setup(
         "django_jinja.management",
         "django_jinja.management.commands",
         "django_jinja.contrib",
+        "django_jinja.contrib._dajaxice",
+        "django_jinja.contrib._dajaxice.templatetags",
         "django_jinja.contrib._pipeline",
         "django_jinja.contrib._pipeline.templatetags",
         "django_jinja.contrib._easy_thumbnails",
