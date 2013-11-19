@@ -91,12 +91,23 @@ dajax-ice
 
 Easy to use AJAX library for django.
 
-To activate this plugin add ``django_jinja.contrib._dajaxice`` to your ``INSTALLED_APPS`` tuple:
+First, follow the install instructions in
+`Dajaxice Quickstart <http://django-dajaxice.readthedocs.org/en/latest/index.html#>`_.    
+
+Then, activate this plugin by adding ``django_jinja.contrib._dajaxice`` to your ``INSTALLED_APPS`` tuple:
 
 .. code-block:: python
 
-    INSTALLED_APPS += ('django_jinja.contrib._dajaxice',)
-
+    INSTALLED_APPS = (
+    #...,
+    #...,
+    #...,
+    'django_jinja',
+    'django_jinja.contrib._pipeline', 
+    'django_jinja.contrib._dajaxice', 
+    'dajaxice',
+    )
+    
 Now you can use the ``dajaxice_js_import`` global context function:
 
 .. code-block:: jinja
@@ -112,5 +123,9 @@ Now you can use the ``dajaxice_js_import`` global context function:
         </body>
     </html>
 
-Be sure to follow the additional install instructions for in the
-its `Dajaxice Quickstart <http://django-dajaxice.readthedocs.org/en/latest/index.html#>`_.    
+Troubleshooting
+
+* ImportError: No module named defaults
+
+  * try downgrading to Django 1.5.x
+  
