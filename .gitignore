@@ -6,3 +6,6 @@ superview.egg-info/
 django_superview.egg-info
 versiontools-*.egg
 *.egg-info
+.project
+.pydevproject
+.settings

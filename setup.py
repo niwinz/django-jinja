@@ -15,7 +15,7 @@ if sys.version_info < (2, 7):
 
 setup(
     name = "django-jinja",
-    version = "0.21",
+    version = "0.22",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     keywords = "django, jinja2",
@@ -29,6 +29,7 @@ setup(
         "django_jinja.management",
         "django_jinja.management.commands",
         "django_jinja.contrib",
+        "django_jinja.contrib._dajaxice",
         "django_jinja.contrib._pipeline",
         "django_jinja.contrib._pipeline.templatetags",
         "django_jinja.contrib._easy_thumbnails",
