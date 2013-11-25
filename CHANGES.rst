@@ -5,6 +5,10 @@ Version 0.22
 ------------
 
 - Change template order selection.
+- New contrib: subdomains
+- New contrib: dajax-ice
+- Documentation fixes.
+- Minor improvements.
 
 Version 0.21
 ------------
