@@ -8,6 +8,7 @@ from django.test.client import RequestFactory
 from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
+from django.core.urlresolvers import NoReverseMatch
 
 from django_jinja.base import env, dict_from_context, Template
 
@@ -51,6 +52,10 @@ class TemplateFunctionsTest(TestCase):
             template = env.from_string(template_str)
             _result = template.render(kwargs)
             self.assertEqual(_result, result)
+
+    def test_urlresolve_exceptions(self):
+        template = env.from_string("{{ url('adads') }}")
+        template.render({})
 
     def test_custom_addons_01(self):
         template = env.from_string("{{ 'Hello'|replace('H','M') }}")

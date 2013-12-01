@@ -59,7 +59,8 @@ test_settings = {
             'source_filenames': ['script.js'],
             'output_filename': 'script.2.js',
         }
-    }
+    },
+    'JINJA2_MUTE_URLRESOLVE_EXCEPTIONS': True,
 }
 
 

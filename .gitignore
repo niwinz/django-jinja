@@ -8,4 +8,5 @@ versiontools-*.egg
 *.egg-info
 .project
 .pydevproject
+.idea
 .settings
