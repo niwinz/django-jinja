@@ -1,0 +1,13 @@
+{% extends "base.jinja" %}
+
+{% block body %}
+    <div class="header">Test function url()</div>
+    <ul>
+        <li>
+            <a href="{{ url('test-1') }}">Exist URL: {{ url('test-1') }}</a>
+        </li>
+        <li>
+            <a href="{{ url('test-miss') }}">Miss URL: {{ url('test-miss') }}</a>
+        </li>
+    </ul>
+{% endblock %}

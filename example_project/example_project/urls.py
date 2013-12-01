@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.views.generic.base import TemplateView
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -18,4 +19,5 @@ urlpatterns = patterns('',
     # url(r'^admin/', include(admin.site.urls)),
     url(r'^test1/$', Test1.as_view(), name='test-1'),
     url(r'^test2/$', Test2.as_view(), name='test-2'),
+    url(r'^test3/$', TemplateView.as_view(template_name='test3.jinja'), name='test-3')
 )
