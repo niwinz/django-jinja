@@ -26,6 +26,7 @@ from .library import Library
 JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, 'JINJA2_ENVIRONMENT_OPTIONS', {})
 JINJA2_EXTENSIONS = getattr(settings, 'JINJA2_EXTENSIONS', [])
 JINJA2_FILTERS = getattr(settings, 'JINJA2_FILTERS', {})
+JINJA2_FILTERS_REPLACE_FROM_DJANGO = getattr(settings, 'JINJA2_FILTERS_REPLACE_FROM_DJANGO', True)
 JINJA2_TESTS = getattr(settings, 'JINJA2_TESTS', {})
 JINJA2_GLOBALS = getattr(settings, 'JINJA2_GLOBALS', {})
 JINJA2_AUTOESCAPE = getattr(settings, 'JINJA2_AUTOESCAPE', True)
@@ -59,41 +60,45 @@ JINJA2_FILTERS.update({
     'make_list': "django_jinja.builtins.filters.make_list",
     'slugify': "django_jinja.builtins.filters.slugify",
     'stringformat': "django_jinja.builtins.filters.stringformat",
-    'title': "django_jinja.builtins.filters.title",
     'truncatechars': "django_jinja.builtins.filters.truncatechars",
     'truncatewords': "django_jinja.builtins.filters.truncatewords",
     'truncatewords_html': "django_jinja.builtins.filters.truncatewords_html",
-    'upper': "django_jinja.builtins.filters.upper",
-    'lower': "django_jinja.builtins.filters.lower",
-    'urlencode': "django_jinja.builtins.filters.urlencode",
-    'urlize': "django_jinja.builtins.filters.urlize",
     'urlizetrunc': "django_jinja.builtins.filters.urlizetrunc",
-    'wordcount': "django_jinja.builtins.filters.wordcount",
-    'wordwrap': "django_jinja.builtins.filters.wordwrap",
     'ljust': "django_jinja.builtins.filters.ljust",
     'rjust': "django_jinja.builtins.filters.rjust",
-    'center': "django_jinja.builtins.filters.center",
     'cut': "django_jinja.builtins.filters.cut",
     'linebreaksbr': "django_jinja.builtins.filters.linebreaksbr",
     'linebreaks': "django_jinja.builtins.filters.linebreaks_filter",
     'removetags': "django_jinja.builtins.filters.removetags",
     'striptags': "django_jinja.builtins.filters.striptags",
-    'join': "django_jinja.builtins.filters.join",
-    'length': "django_jinja.builtins.filters.length",
-    'random': "django_jinja.builtins.filters.random",
     'add': "django_jinja.builtins.filters.add",
     'date': "django_jinja.builtins.filters.date",
     'time': "django_jinja.builtins.filters.time",
     'timesince': "django_jinja.builtins.filters.timesince_filter",
     'timeuntil': "django_jinja.builtins.filters.timeuntil_filter",
-    'default': "django_jinja.builtins.filters.default",
     'default_if_none': "django_jinja.builtins.filters.default_if_none",
     'divisibleby': "django_jinja.builtins.filters.divisibleby",
     'yesno': "django_jinja.builtins.filters.yesno",
-    'filesizeformat': "django_jinja.builtins.filters.filesizeformat",
-    'pprint': "django_jinja.builtins.filters.pprint",
     'pluralize': "django_jinja.builtins.filters.pluralize",
 })
+
+if JINJA2_FILTERS_REPLACE_FROM_DJANGO:
+    JINJA2_FILTERS.update({
+        'title': "django_jinja.builtins.filters.title",
+        'upper': "django_jinja.builtins.filters.upper",
+        'lower': "django_jinja.builtins.filters.lower",
+        'urlencode': "django_jinja.builtins.filters.urlencode",
+        'urlize': "django_jinja.builtins.filters.urlize",
+        'wordcount': "django_jinja.builtins.filters.wordcount",
+        'wordwrap': "django_jinja.builtins.filters.wordwrap",
+        'center': "django_jinja.builtins.filters.center",
+        'join': "django_jinja.builtins.filters.join",
+        'length': "django_jinja.builtins.filters.length",
+        'random': "django_jinja.builtins.filters.random",
+        'default': "django_jinja.builtins.filters.default",
+        'filesizeformat': "django_jinja.builtins.filters.filesizeformat",
+        'pprint': "django_jinja.builtins.filters.pprint",
+    })
 
 JINJA2_GLOBALS.update({
     'url': "django_jinja.builtins.global_context.url",
@@ -185,14 +190,14 @@ class Environment(Environment):
         for app_path in settings.INSTALLED_APPS:
             try:
                 mod = import_module(app_path + '.templatetags')
-                mod_list.append((app_path,os.path.dirname(mod.__file__)))
+                mod_list.append((app_path, os.path.dirname(mod.__file__)))
             except ImportError:
                 pass
 
         for app_path, mod_path in mod_list:
             if not os.path.isdir(mod_path):
                 continue
-                
+
             for filename in filter(lambda x: x.endswith(".py"), os.listdir(mod_path)):
                 if filename == '__init__.py':
                     continue
