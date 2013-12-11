@@ -2,13 +2,13 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.core.cache import cache
-from django.utils.http import urlquote
+from django.core.cache.utils import make_template_fragment_key
 
 from jinja2.ext import Extension
 from jinja2 import nodes
 from jinja2 import Markup
+from jinja2 import TemplateSyntaxError
 
-import hashlib
 import traceback
 
 
@@ -21,7 +21,7 @@ class CsrfExtension(Extension):
     def parse(self, parser):
         try:
             token = next(parser.stream)
-            call_res = self.call_method('_render', [nodes.Name('csrf_token','load')])
+            call_res = self.call_method('_render', [nodes.Name('csrf_token', 'load')])
             return nodes.Output([call_res]).set_lineno(token.lineno)
         except Exception:
             traceback.print_exc()
@@ -89,18 +89,10 @@ class CacheExtension(Extension):
             raise TemplateSyntaxError('"%s" tag got a non-integer timeout '
                 'value: %r' % (list(self.tags)[0], expire_time), lineno)
 
-        args_map = map(urlquote, vary_on)
-        args_map = map(lambda x: x.encode('utf-8'), args_map)
-
-        args_string = b':'.join(args_map)
-        args_hash = hashlib.md5(args_string).hexdigest()
-
-        cache_key = 'template.cache.{0}.{1}'.format(fragm_name, args_hash)
+        cache_key = make_template_fragment_key(fragm_name, vary_on)
 
         value = cache.get(cache_key)
-        if value is not None:
-            return value.decode('utf-8')
-
-        value = caller()
-        cache.set(cache_key, value.encode('utf-8'), expire_time)
+        if value is None:
+            value = caller()
+            cache.set(cache_key, value, expire_time)
         return value
