@@ -13,7 +13,6 @@ from django_jinja import library, utils
 lib = library.Library()
 
 
-
 @lib.global_function
 @utils.safe
 def compressed_css(name):
@@ -39,7 +38,7 @@ def compressed_css(name):
 
         return render_to_string(template_name, context)
 
-    if not settings.DEBUG:
+    if settings.PIPELINE_ENABLED:
         return _render_css(package.output_filename)
 
     paths = packager.compile(package.paths)
@@ -77,7 +76,7 @@ def compressed_js(name):
         })
         return render_to_string("pipeline/inline_js.jinja", context)
 
-    if not settings.DEBUG:
+    if settings.PIPELINE_ENABLED:
         return _render_js(package.output_filename)
 
     paths = packager.compile(package.paths)
@@ -85,6 +84,6 @@ def compressed_js(name):
     tags = [_render_js(js) for js in paths]
 
     if templates:
-        tags.append(_render_inline(templates))
+        tags.append(_render_inline_js(templates))
 
     return '\n'.join(tags)
