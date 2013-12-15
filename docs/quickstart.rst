@@ -56,7 +56,6 @@ intercept templates, using regex for matching.
 Note: this method has worse perfomance that the default intercept
 method (by extension):
 
-
 .. code-block:: python
 
     # Same behavior of default intercept method
@@ -99,6 +98,10 @@ Boolean value that enables or disables template autoescape. Default value is ``T
 **JINJA2_MUTE_URLRESOLVE_EXCEPTIONS**
 
 Boolean value that mute reverse url exceptions produced by url tag. Defaul value is ``False``
+
+**JINJA2_FILTERS_REPLACE_FROM_DJANGO**
+
+Boolean value that enables overwrite some jinja filters with django filters. Defaulg value is ``True``
 
 
 Bytecode caching
