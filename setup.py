@@ -15,7 +15,7 @@ if sys.version_info < (2, 7):
 
 setup(
     name = "django-jinja",
-    version = "0.22.1",
+    version = "0.23",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     keywords = "django, jinja2",
