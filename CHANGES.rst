@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 0.23
+------------
+
+- Add settings JINJA2_FILTERS_REPLACE_FROM_DJANGO
+- Add settings JINJA2_MUTE_URLRESOLVE_EXCEPTIONS
+- Improvements on cache tag.
+- Other bugfixes.
+
+
 Version 0.22
 ------------
 
