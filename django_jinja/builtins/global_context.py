@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-
-from django.core.urlresolvers import reverse as django_reverse
+import logging
+from django.core.urlresolvers import reverse as django_reverse, NoReverseMatch
 from django.contrib.staticfiles.storage import staticfiles_storage
+
 
 def url(name, *args, **kwargs):
     """
@@ -15,7 +16,11 @@ def url(name, *args, **kwargs):
         {% url 'web:timeline' userid=2 %}
 
     """
-    return django_reverse(name, args=args, kwargs=kwargs)
+    try:
+        return django_reverse(name, args=args, kwargs=kwargs)
+    except NoReverseMatch as exc:
+        logging.error('Error: %s', exc.message)
+        return ''
 
 
 def static(path):
