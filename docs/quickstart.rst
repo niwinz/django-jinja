@@ -94,7 +94,11 @@ Low level kwargs parameters for a jinja2 ``Environment`` instance. Example usage
 
 **JINJA2_AUTOESCAPE**
 
-Boolean value that enables or disables template autoescape.
+Boolean value that enables or disables template autoescape. Default value is ``True``
+
+**JINJA2_MUTE_URLRESOLVE_EXCEPTIONS**
+
+Boolean value that mute reverse url exceptions produced by url tag. Defaul value is ``False``
 
 
 Bytecode caching
