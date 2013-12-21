@@ -32,6 +32,7 @@ Features
 - Django template filters and tags can mostly be used in Jinja2 templates.
 - I18n subsystem adapted for Jinja2 (makemessages now collects messages from Jinja templates)
 - Compatible with python2 and python3 using same codebase.
+- Supported django versions: 1.4, 1.5, 1.6+
 
 .. versionadded:: 0.13
     Regex template intercept (it gives a lot of flexibility with slighty
