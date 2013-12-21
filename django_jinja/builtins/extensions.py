@@ -1,15 +1,40 @@
 from __future__ import unicode_literals
 
+import traceback
+
 from django.conf import settings
 from django.core.cache import cache
-from django.core.cache.utils import make_template_fragment_key
+import django
 
 from jinja2.ext import Extension
 from jinja2 import nodes
 from jinja2 import Markup
 from jinja2 import TemplateSyntaxError
 
-import traceback
+
+try:
+    from django.utils.encoding import force_text
+    from django.utils.encoding import force_bytes
+except ImportError:
+    from django.utils.encoding import force_unicode as force_text
+    from django.utils.encoding import smart_str as force_bytes
+
+# Compatibility with django <= 1.5
+
+if django.VERSION[:2] <= (1, 5):
+    import hashlib
+    from django.utils.http import urlquote
+
+    def make_template_fragment_key(fragm_name, vary_on):
+        args_map = map(urlquote, vary_on)
+        args_map = map(lambda x: force_bytes(x), args_map)
+
+        args_string = b':'.join(args_map)
+        args_hash = hashlib.md5(args_string).hexdigest()
+
+        return 'template.cache.{0}.{1}'.format(fragm_name, args_hash)
+else:
+    from django.core.cache.utils import make_template_fragment_key
 
 
 class CsrfExtension(Extension):
@@ -94,5 +119,6 @@ class CacheExtension(Extension):
         value = cache.get(cache_key)
         if value is None:
             value = caller()
-            cache.set(cache_key, value, expire_time)
+            cache.set(cache_key, force_text(value), expire_time)
+
         return value

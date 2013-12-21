@@ -112,7 +112,7 @@ class TemplateFunctionsTest(TestCase):
         self.assertEqual(result, "<input type='hidden' name='csrfmiddlewaretoken' value='1234123123' />")
 
     def test_cache_01(self):
-        template_content = "{% cache 200 'fooo' %}foo bar{% endcache %}"
+        template_content = "{% cache 200 'fooo' %}fóäo bar{% endcache %}"
 
         request = self.factory.get('/customer/details')
         context = dict_from_context(RequestContext(request))
@@ -120,7 +120,7 @@ class TemplateFunctionsTest(TestCase):
         template = env.from_string(template_content)
         result = template.render(context)
 
-        self.assertEqual(result, "foo bar")
+        self.assertEqual(result, "fóäo bar")
 
     def test_404_page(self):
         response = self.client.get(reverse("page-404"))
