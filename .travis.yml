@@ -1,0 +1,18 @@
+language: python
+python:
+  - "2.7"
+env:
+  - DJANGO_VERSION=1.4.10
+  - DJANGO_VERSION=1.5.5
+  - DJANGO_VERSION=1.6.1
+install:
+  - pip install django==$DJANGO_VERSION --use-mirrors
+  - pip install jinja2 django-pipeline --use-mirrors
+script:
+  - python testing/runtests.py
+notifications:
+  email:
+    recipients:
+      - niwi@niwi.be
+    on_success: change
+    on_failure: change
