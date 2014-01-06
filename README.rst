@@ -27,3 +27,9 @@ You can install it with pip:
 
     pip install django-jinja
 
+
+
+.. image:: https://d2weczhvl823v0.cloudfront.net/niwibe/django-jinja/trend.png
+   :alt: Bitdeli badge
+   :target: https://bitdeli.com/free
+
