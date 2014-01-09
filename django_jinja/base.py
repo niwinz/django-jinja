@@ -202,8 +202,8 @@ class Environment(Environment):
             if not os.path.isdir(mod_path):
                 continue
 
-            for filename in filter(lambda x: x.endswith(".py"), os.listdir(mod_path)):
-                if filename == '__init__.py':
+            for filename in filter(lambda x: x.endswith(".py") or x.endswith(".pyc"), os.listdir(mod_path)):
+                if filename == '__init__.py' or filename == '__init__.pyc':
                     continue
 
                 file_mod_path = "%s.templatetags.%s" % (app_path, filename.rsplit(".", 1)[0])
