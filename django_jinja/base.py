@@ -28,6 +28,8 @@ from .library import Library
 
 
 JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, 'JINJA2_ENVIRONMENT_OPTIONS', {})
+JINJA2_LOADER = getattr(settings, 'JINJA2_LOADER',
+                        FileSystemLoader(app_directories.app_template_dirs + tuple(settings.TEMPLATE_DIRS)))
 JINJA2_EXTENSIONS = getattr(settings, 'JINJA2_EXTENSIONS', [])
 JINJA2_FILTERS = getattr(settings, 'JINJA2_FILTERS', {})
 JINJA2_FILTERS_REPLACE_FROM_DJANGO = getattr(settings, 'JINJA2_FILTERS_REPLACE_FROM_DJANGO', True)
@@ -169,6 +171,13 @@ class Environment(Environment):
             cls = utils.load_class(JINJA2_BYTECODE_CACHE_BACKEND)
             self.bytecode_cache = cls(JINJA2_BYTECODE_CACHE_NAME)
 
+        # Setup template loader
+        if isinstance(JINJA2_LOADER, six.string_types):
+            cls = utils.load_class(JINJA2_LOADER)
+            self.loader = cls()
+        else:
+            self.loader = JINJA2_LOADER
+
         # Add filters defined on settings + builtins
         for name, value in JINJA2_FILTERS.items():
             if isinstance(value, six.string_types):
@@ -241,8 +250,6 @@ class Environment(Environment):
 
 initial_params = {
     'autoescape': JINJA2_AUTOESCAPE,
-    'loader': FileSystemLoader(tuple(settings.TEMPLATE_DIRS) +
-                               app_directories.app_template_dirs),
     'extensions': list(set(list(JINJA2_EXTENSIONS) + DEFAULT_EXTENSIONS)),
 }
 
