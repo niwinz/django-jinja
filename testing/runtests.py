@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import sys, os
+import django
+
 from django.conf import settings
 from django.core.management import call_command
 
@@ -63,14 +65,17 @@ test_settings = {
     'JINJA2_MUTE_URLRESOLVE_EXCEPTIONS': True,
 }
 
+if django.VERSION[:2] >= (1, 6):
+    test_settings["TEST_RUNNER"] = "django.test.runner.DiscoverRunner"
 
-if __name__ == '__main__':
-    test_args = sys.argv[1:]
+
+if __name__ == "__main__":
+    from django.core.management import execute_from_command_line
 
     if not settings.configured:
         settings.configure(**test_settings)
 
-    if not test_args:
-        test_args = ['django_jinja_test']
+    args = sys.argv
+    args.insert(1, "test")
 
-    call_command("test", *test_args, verbosity=2)
+    execute_from_command_line(args)
