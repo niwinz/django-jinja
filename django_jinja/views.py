@@ -18,20 +18,39 @@ class GenericView(View):
         context = self.get_context_data()
         output = loader.render_to_string(self.tmpl_name, context,
                                          context_instance=RequestContext(request))
-
         return self.response_cls(output, content_type=self.content_type)
 
 
-class PageNotFound(GenericView):
+class ErrorView(GenericView):
+    def head(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
+
+    def options(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
+
+    def patch(self, request, *args, **kwargs):
+        return self.get(request, *args, **kwargs)
+
+
+class PageNotFound(ErrorView):
     tmpl_name = "404" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
     response_cls = http.HttpResponseNotFound
 
 
-class PermissionDenied(GenericView):
+class PermissionDenied(ErrorView):
     tmpl_name = "403" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
     response_cls = http.HttpResponseForbidden
 
 
-class ServerError(GenericView):
+class ServerError(ErrorView):
     tmpl_name = "500" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
     response_cls = http.HttpResponseServerError
