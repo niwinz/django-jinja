@@ -126,6 +126,15 @@ class TemplateFunctionsTest(TestCase):
         response = self.client.get(reverse("page-404"))
         self.assertEqual(response.status_code, 404)
         self.assertEqual(response.content, b"404")
+        response = self.client.post(reverse("page-404"))
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.content, b"404")
+        response = self.client.put(reverse("page-404"))
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.content, b"404")
+        response = self.client.delete(reverse("page-404"))
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.content, b"404")
 
     def test_403_page(self):
         response = self.client.get(reverse("page-403"))
