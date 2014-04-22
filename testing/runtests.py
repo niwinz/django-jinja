@@ -78,4 +78,7 @@ if __name__ == "__main__":
     args = sys.argv
     args.insert(1, "test")
 
+    if django.VERSION[:2] < (1, 6):
+        args.insert(2, "django_jinja_test")
+
     execute_from_command_line(args)
