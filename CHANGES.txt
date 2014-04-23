@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 0.24
+------------
+
+- Fix django 1.7 warnings on run tests.
+- Add all rest methods to error views (403, 404, 500).
+
 Version 0.23
 ------------
 
