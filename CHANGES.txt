@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.0.0
+-------------
+
+- Major code cleanup.
+- Full django 1.7+ support
+
+
 Version 0.25
 ------------
 
