@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 0.25
+------------
+
+- Enable newstyle gettext by default.
+- Add settings for easy disable newstyle gettext.
+
+
 Version 0.24
 ------------
 
