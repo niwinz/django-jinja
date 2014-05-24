@@ -10,3 +10,5 @@ versiontools-*.egg
 .pydevproject
 .idea
 .settings
+
+doc/index.html

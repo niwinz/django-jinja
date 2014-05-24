@@ -1,66 +1,75 @@
 # -*- coding: utf-8 -*-
 
-class Library(object):
-    instance = None
+import warnings
 
-    _globals = {}
-    _tests = {}
-    _filters = {}
 
-    def __new__(cls, *args, **kwargs):
-        if cls.instance == None:
-            cls.instance = super(Library, cls).__new__(cls, *args, **kwargs)
-        return cls.instance
+def _get_env():
+    from django_jinja.base import env
+    return env
 
-    @classmethod
-    def get_instance(cls):
-        return cls.instance
 
-    def _update_env(self, env):
-        env.filters.update(self._filters)
-        env.globals.update(self._globals)
-        env.tests.update(self._tests)
+def _attach_function(attr, func, name=None):
+    _env = _get_env()
+    _attr = getattr(_env, attr)
 
-    def _new_function(self, attr, func, name=None):
-        _attr = getattr(self, attr)
-        if name is None:
-            name = func.__name__
+    if name is None:
+        name = func.__name__
 
-        _attr[name] = func
-        return func
+    _attr[name] = func
+    return func
 
-    def _function(self, attr, name=None, _function=None):
-        if name is None and _function is None:
+
+def _register_function(attr, name=None, fn=None):
+    if name is None and fn is None:
+        def dec(func):
+            return _attach_function(attr, func)
+        return dec
+
+    elif name is not None and fn is None:
+        if callable(name):
+            return _attach_function(attr, name)
+        else:
             def dec(func):
-                return self._new_function(attr, func)
+                return _register_function(attr, name, func)
             return dec
 
-        elif name is not None and _function is None:
-            if callable(name):
-                return self._new_function(attr, name)
+    elif name is not None and fn is not None:
+        return _attach_function(attr, fn, name)
 
-            else:
-                def dec(func):
-                    return self._function(attr, name, func)
+    raise RuntimeError("Invalid parameters")
 
-                return dec
 
-        elif name is not None and _function is not None:
-            return self._new_function(attr, _function, name)
 
-        raise RuntimeError("Invalid parameters")
+def global_function(*args, **kwargs):
+    return _register_function("globals", *args, **kwargs)
+
+
+def test(*args, **kwargs):
+    return _register_function("tests", *args, **kwargs)
+
+
+def filter(*args, **kwargs):
+    return _register_function("filters", *args, **kwargs)
+
+
+class Library(object):
+    def __init__(self):
+        warnings.warn("Use Library class is deprecated and will be removed "
+                      "in future versions", DeprecationWarning, stacklevel=2)
 
     def global_function(self, *args, **kwargs):
-        return self._function("_globals", *args, **kwargs)
+        return _register_function("globals", *args, **kwargs)
 
     def test(self, *args, **kwargs):
-        return self._function("_tests", *args, **kwargs)
+        return _register_function("tests", *args, **kwargs)
 
     def filter(self, *args, **kwargs):
-        return self._function("_filters", *args, **kwargs)
+        return _register_function("filters", *args, **kwargs)
 
     def __setitem__(self, item, value):
-        self._globals[item] = value
+        _env = _get_env()
+        _env.globals[item] = value
 
-    def __getitem__(self, item, value): #for reciprocity with __setitem__
-        return self._globals[item]
+    def __getitem__(self, item, value):
+        _env = _get_env()
+        return _env.globals[item]

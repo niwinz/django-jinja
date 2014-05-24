@@ -4,15 +4,14 @@ django-jinja
 Simple and nonobstructive jinja2 integration with Django.
 
 
-.. image:: https://travis-ci.org/niwibe/django-jinja.png?branch=master
+.. image:: https://img.shields.io/travis/niwibe/django-jinja.svg?style=flat
     :target: https://travis-ci.org/niwibe/django-jinja
 
-.. image:: https://pypip.in/v/django-jinja/badge.png
-    :target: https://crate.io/packages/django-jinja
+.. image:: https://img.shields.io/pypi/v/django-jinja.svg?style=flat
+    :target: https://pypi.python.org/pypi/django-jinja
 
-.. image:: https://pypip.in/d/django-jinja/badge.png
-    :target: https://crate.io/packages/django-jinja
-
+.. image:: https://img.shields.io/pypi/dm/django-jinja.svg?style=flat
+    :target: https://pypi.python.org/pypi/django-jinja
 
 
 **Documentation:** https://django-jinja.readthedocs.org/

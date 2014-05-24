@@ -1,36 +1,21 @@
 # -*- coding: utf-8 -*-
 
 import os
-import sys
-import copy
 
 from jinja2 import Environment
 from jinja2 import Template
-from jinja2 import loaders
-from jinja2 import TemplateSyntaxError
 from jinja2 import FileSystemLoader
 
 from django.conf import settings
 from django.template import Origin
-from django.template import TemplateDoesNotExist
-from django.template import InvalidTemplateLibrary
 from django.template.context import BaseContext
-from django.template.loaders import app_directories
 from django.utils.importlib import import_module
-
-try:
-    from django.utils import six
-except ImportError:
-    import six
+from django.utils import six
 
 from . import builtins, utils
-from .library import Library
 
 
 JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, "JINJA2_ENVIRONMENT_OPTIONS", {})
-JINJA2_LOADER = getattr(settings, "JINJA2_LOADER",
-                        FileSystemLoader(app_directories.app_template_dirs + tuple(settings.TEMPLATE_DIRS)))
-JINJA2_LOADER_SETTINGS = getattr(settings, "JINJA2_LOADER_SETTINGS", {})
 JINJA2_EXTENSIONS = getattr(settings, "JINJA2_EXTENSIONS", [])
 JINJA2_FILTERS = getattr(settings, "JINJA2_FILTERS", {})
 JINJA2_FILTERS_REPLACE_FROM_DJANGO = getattr(settings, "JINJA2_FILTERS_REPLACE_FROM_DJANGO", True)
@@ -156,9 +141,13 @@ class Template(Template):
 
 
 class Environment(Environment):
-    def __init__(self, *args, **kwargs):
-        super(Environment, self).__init__(*args, **kwargs)
+    def initialize(self):
+        self.initialize_i18n()
+        self.initialize_bytecode_cache()
+        self.initialize_template_loader()
+        self.initialize_autoescape()
 
+    def initialize_i18n(self):
         # install translations
         if settings.USE_I18N:
             from django.utils import translation
@@ -166,88 +155,118 @@ class Environment(Environment):
         else:
             self.install_null_translations(newstyle=JINJA2_NEWSTYLE_GETTEXT)
 
-        self.template_class = Template
-
+    def initialize_bytecode_cache(self):
         # Install bytecode cache if is enabled
         if JINJA2_BYTECODE_CACHE_ENABLE:
             cls = utils.load_class(JINJA2_BYTECODE_CACHE_BACKEND)
             self.bytecode_cache = cls(JINJA2_BYTECODE_CACHE_NAME)
 
-        # Setup template loader
-        if isinstance(JINJA2_LOADER, six.string_types):
-            cls = utils.load_class(JINJA2_LOADER)
-            self.loader = cls(**JINJA2_LOADER_SETTINGS)
+    def initialize_template_loader(self):
+        self.template_class = Template
+
+        loader = getattr(settings, "JINJA2_LOADER", None)
+        if loader is None:
+            from django.template.loaders import app_directories
+            default_loader_dirs = (app_directories.app_template_dirs +
+                                   tuple(settings.TEMPLATE_DIRS))
+
+            self.loader = FileSystemLoader(default_loader_dirs)
+        elif isinstance(loader, six.string_types):
+            loader_params = getattr(settings, "JINJA2_LOADER_SETTINGS", {})
+            cls = utils.load_class(loader)
+            self.loader = cls(**loader_params)
         else:
-            self.loader = JINJA2_LOADER
+            self.loader = loader
 
-        # Add filters defined on settings + builtins
-        for name, value in JINJA2_FILTERS.items():
-            if isinstance(value, six.string_types):
-                self.filters[name] = utils.load_class(value)
-            else:
-                self.filters[name] = value
+    def initialize_autoescape(self):
+        if not self.autoescape:
+            return
 
-        # Add tests defined on settings + builtins
-        for name, value in JINJA2_TESTS.items():
-            if isinstance(value, six.string_types):
-                self.tests[name] = utils.load_class(value)
-            else:
-                self.tests[name] = value
+        from django.utils import safestring
 
-        # Add globals defined on settings + builtins
-        for name, value in JINJA2_GLOBALS.items():
-            if isinstance(value, six.string_types):
-                self.globals[name] = utils.load_class(value)
-            else:
-                self.globals[name] = value
+        if hasattr(safestring, "SafeText"):
+            if not hasattr(safestring.SafeText, "__html__"):
+                safestring.SafeText.__html__ = lambda self: six.text_type(self)
 
-        mod_list = []
-        for app_path in settings.INSTALLED_APPS:
-            try:
-                mod = import_module(app_path + ".templatetags")
-                mod_list.append((app_path, os.path.dirname(mod.__file__)))
-            except ImportError:
-                pass
+        if hasattr(safestring, "SafeString"):
+            if not hasattr(safestring.SafeString, "__html__"):
+                safestring.SafeString.__html__ = lambda self: six.text_type(self)
 
-        for app_path, mod_path in mod_list:
-            if not os.path.isdir(mod_path):
+        if hasattr(safestring, "SafeUnicode"):
+            if not hasattr(safestring.SafeUnicode, "__html__"):
+                safestring.SafeUnicode.__html__ = lambda self: six.text_type(self)
+
+        if hasattr(safestring, "SafeBytes"):
+            if not hasattr(safestring.SafeBytes, "__html__"):
+                safestring.SafeBytes.__html__ = lambda self: six.text_type(self)
+
+
+def get_templatetags_modules_list():
+    """
+    Get list of modules that contains templatetags
+    submodule.
+    """
+    # Django 1.7 compatibility imports
+    try:
+        from django.apps import apps
+        all_modules = [x.name for x in apps.get_app_configs()]
+    except ImportError:
+        all_modules = settings.INSTALLED_APPS
+
+    mod_list = []
+    for app_path in all_modules:
+        try:
+            mod = import_module(app_path + ".templatetags")
+            mod_list.append((app_path, os.path.dirname(mod.__file__)))
+        except ImportError:
+            pass
+
+    return mod_list
+
+
+def load_builtins(env):
+    for name, value in JINJA2_FILTERS.items():
+        if isinstance(value, six.string_types):
+            env.filters[name] = utils.load_class(value)
+        else:
+            env.filters[name] = value
+
+    for name, value in JINJA2_TESTS.items():
+        if isinstance(value, six.string_types):
+            env.tests[name] = utils.load_class(value)
+        else:
+            env.tests[name] = value
+
+    for name, value in JINJA2_GLOBALS.items():
+        if isinstance(value, six.string_types):
+            env.globals[name] = utils.load_class(value)
+        else:
+            env.globals[name] = value
+
+    env.add_extension(builtins.extensions.CsrfExtension)
+    env.add_extension(builtins.extensions.CacheExtension)
+
+
+def load_django_templatetags():
+    """
+    Given a ready modules list, try import all modules
+    related to templatetags for populate a library.
+    """
+
+    for app_path, mod_path in get_templatetags_modules_list():
+        if not os.path.isdir(mod_path):
+            continue
+
+        for filename in filter(lambda x: x.endswith(".py") or x.endswith(".pyc"), os.listdir(mod_path)):
+            # Exclude __init__.py files
+            if filename == "__init__.py" or filename == "__init__.pyc":
                 continue
 
-            for filename in filter(lambda x: x.endswith(".py") or x.endswith(".pyc"), os.listdir(mod_path)):
-                if filename == "__init__.py" or filename == "__init__.pyc":
-                    continue
-
-                file_mod_path = "%s.templatetags.%s" % (app_path, filename.rsplit(".", 1)[0])
-                try:
-                    filemod = import_module(file_mod_path)
-                except ImportError:
-                    pass
-
-        # Update current environment with app filters
-        Library()._update_env(self)
-
-        # Add builtin extensions.
-        self.add_extension(builtins.extensions.CsrfExtension)
-        self.add_extension(builtins.extensions.CacheExtension)
-
-        if self.autoescape:
-            from django.utils import safestring
-
-            if hasattr(safestring, "SafeText"):
-                if not hasattr(safestring.SafeText, "__html__"):
-                    safestring.SafeText.__html__ = lambda self: six.text_type(self)
-
-            if hasattr(safestring, "SafeString"):
-                if not hasattr(safestring.SafeString, "__html__"):
-                    safestring.SafeString.__html__ = lambda self: six.text_type(self)
-
-            if hasattr(safestring, "SafeUnicode"):
-                if not hasattr(safestring.SafeUnicode, "__html__"):
-                    safestring.SafeUnicode.__html__ = lambda self: six.text_type(self)
-
-            if hasattr(safestring, "SafeBytes"):
-                if not hasattr(safestring.SafeBytes, "__html__"):
-                    safestring.SafeBytes.__html__ = lambda self: six.text_type(self)
+            file_mod_path = "%s.templatetags.%s" % (app_path, filename.rsplit(".", 1)[0])
+            try:
+                import_module(file_mod_path)
+            except ImportError:
+                pass
 
 
 initial_params = {
@@ -257,3 +276,13 @@ initial_params = {
 
 initial_params.update(JINJA2_ENVIRONMENT_OPTIONS)
 env = Environment(**initial_params)
+
+
+def initialize_environment():
+    env.initialize()
+
+    load_django_templatetags()
+    load_builtins(env)
+
+
+__all__ = ["env", "initialize_environment"]
