@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="generator" content="AsciiDoc 8.6.9">
+<title>django-jinja documentation</title>
+<link rel="stylesheet" href="static/niwi.css" type="text/css">
+<link rel="stylesheet" href="static/pygments.css" type="text/css">
+
+
+<script type="text/javascript" src="static/asciidoc.js"></script>
+<script type="text/javascript" src="static/niwi.js"></script>
+<script type="text/javascript">
+/*<![CDATA[*/
+asciidoc.install(2);
+/*]]>*/
+</script>
+</head>
+<body class="article" style="max-width:800px">
+<div id="header">
+<h1>django-jinja documentation</h1>
+<span id="author">Andrey Antukh,</span><br>
+<span id="email" class="monospaced">&lt;<a href="mailto:niwi@niwi.be">niwi@niwi.be</a>&gt;</span><br>
+<span id="revnumber">version 1.0.0,</span>
+<span id="revdate">2014-05-24</span>
+<div id="toc">
+  <div id="toctitle">Table of Contents</div>
+  <noscript><p><b>JavaScript must be enabled in your browser to display the table of contents.</b></p></noscript>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_introduction">1. Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph"><p>django-jinja is a <a href="#license">BSD Licensed</a>, simple and nonobstructive jinja2 integration with Django.</p></div>
+<div class="paragraph"><p>Jinja2 provides certain advantages over the native system of Django, for example, explicit calls to
+callable from templates, has better performance and has a plugin system, etc &#8230;</p></div>
+<div class="paragraph"><p>There are other projects that attempt do same thing: Djinja, Coffin, etc&#8230; Why one more?</p></div>
+<div class="ulist"><ul>
+<li>
+<p>
+Unlike Djinja, <strong>django-jinja</strong> is not intended to replace a Django template engine, but rather,
+  it complements the Django&#8217;s template engine, giving the possibility to use both.
+</p>
+</li>
+<li>
+<p>
+Unlike Coffin, the django-jinja codebase is much smaller and more modern. This way is much more
+  maintainable and easily understandable how the library works.
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_supported_versions">2. Supported versions</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+Latest stable version: <strong>1.0.0</strong>
+</p>
+</li>
+<li>
+<p>
+Previous stable version: <strong>0.25.0</strong>
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_requirements">3. Requirements</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+Python 2.7, 3.3 or 3.4
+</p>
+</li>
+<li>
+<p>
+Django 1.4, 1.5, 1.6 and 1.7
+</p>
+</li>
+<li>
+<p>
+jinja2 &gt;= 2.7.0
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_features">4. Features</h2>
+<div class="sectionbody">
+<div class="ulist"><ul>
+<li>
+<p>
+Auto-load templatetags compatible with Jinja2 on same way as Django.
+</p>
+</li>
+<li>
+<p>
+Django templates can coexist with Jinja2 templates without any problems.
+  It works as middleware, intercepts Jinja templates by file path pattern.
+</p>
+</li>
+<li>
+<p>
+Django template filters and tags can mostly be used in Jinja2 templates.
+</p>
+</li>
+<li>
+<p>
+I18n subsystem adapted for Jinja2 (makemessages now collects messages from Jinja templates)
+</p>
+</li>
+<li>
+<p>
+Compatible with python2 and python3 using same codebase.
+</p>
+</li>
+<li>
+<p>
+jinja2 bytecode cache adapted for use django cache subsystem.
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_user_guide">5. User guide</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_installation">5.1. Installation</h3>
+<div class="paragraph"><p>The simplest way to install <strong>django-redis</strong> is using <strong>pip</strong>:</p></div>
+<div class="listingblock">
+<div class="content"><div class="highlight"><pre>pip install django-jinja
+</pre></div></div></div>
+</div>
+<div class="sect2">
+<h3 id="_configure">5.2. Configure</h3>
+<div class="paragraph"><p>The first step for configure <em>django-jinja</em> is replace default
+django template loaders:</p></div>
+<div class="listingblock">
+<div class="content"><div class="highlight"><pre><span class="n">TEMPLATE_LOADERS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">&#39;django_jinja.loaders.AppLoader&#39;</span><span class="p">,</span>
+    <span class="s">&#39;django_jinja.loaders.FileSystemLoader&#39;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div></div></div>
+<div class="paragraph"><p>Add add it to django installed apps list:</p></div>
+<div class="listingblock">
+<div class="content"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;django_jinja&#39;</span><span class="p">,)</span>
+</pre></div></div></div>
+<div class="paragraph"><p>django-jinja template loaders inherit&#8217;s from a django template loaders and works like middleware, intercepts
+by predefined condition templates for render with jinja2 engine.</p></div>
+<div class="paragraph"><p>The simplest condition is using file extensions:</p></div>
+<div class="listingblock">
+<div class="content"><div class="highlight"><pre><span class="n">DEFAULT_JINJA2_TEMPLATE_EXTENSION</span> <span class="o">=</span> <span class="s">&#39;.jinja&#39;</span>
+</pre></div></div></div>
+<div class="paragraph"><p>With this settings, django-jinja intercepts all templates with <span class="monospaced">.jinja</span> extension and render them with jinja2
+engine and templates that not matches the <span class="monospaced">.jinja</span> extension are forwarded to django templates engine.</p></div>
+<div class="paragraph"><p>Additionaly, <strong>django-jinja</strong> exposes, more advanced matcher, using regular exceptions:</p></div>
+<div class="listingblock">
+<div class="content"><div class="highlight"><pre><span class="c"># Same behavior of default intercept method</span>
+<span class="c"># by extension but using regex (not recommended)</span>
+<span class="n">DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE</span> <span class="o">=</span> <span class="s">r&#39;.*jinja$&#39;</span>
+
+<span class="c"># More advanced method. Intercept all templates</span>
+<span class="c"># except from django admin.</span>
+<span class="n">DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE</span> <span class="o">=</span> <span class="s">r&quot;^(?!admin/).*&quot;</span>
+</pre></div></div></div>
+</div>
+<div class="sect2">
+<h3 id="_additional_settings">5.3. Additional settings</h3>
+<div class="paragraph"><p>If you need more low level customizations for jinja2 engine, <strong>django-jinja</strong> exposes
+<span class="monospaced">JINJA2_ENVIRONMENT_OPTIONS</span> settings for it:</p></div>
+<div class="listingblock">
+<div class="content"><div class="highlight"><pre><span class="n">JINJA2_ENVIRONMENT_OPTIONS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;block_start_string&#39;</span> <span class="p">:</span> <span class="s">&#39;\BLOCK{&#39;</span><span class="p">,</span>
+    <span class="s">&#39;block_end_string&#39;</span> <span class="p">:</span> <span class="s">&#39;}&#39;</span><span class="p">,</span>
+    <span class="s">&#39;variable_start_string&#39;</span> <span class="p">:</span> <span class="s">&#39;\VAR{&#39;</span><span class="p">,</span>
+    <span class="s">&#39;variable_end_string&#39;</span> <span class="p">:</span> <span class="s">&#39;}&#39;</span><span class="p">,</span>
+    <span class="s">&#39;comment_start_string&#39;</span> <span class="p">:</span> <span class="s">&#39;\#{&#39;</span><span class="p">,</span>
+    <span class="s">&#39;comment_end_string&#39;</span> <span class="p">:</span> <span class="s">&#39;}&#39;</span><span class="p">,</span>
+    <span class="s">&#39;line_statement_prefix&#39;</span> <span class="p">:</span> <span class="s">&#39;%-&#39;</span><span class="p">,</span>
+    <span class="s">&#39;line_comment_prefix&#39;</span> <span class="p">:</span> <span class="s">&#39;%#&#39;</span><span class="p">,</span>
+    <span class="s">&#39;trim_blocks&#39;</span> <span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+    <span class="s">&#39;autoescape&#39;</span> <span class="p">:</span> <span class="bp">False</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div></div></div>
+<div class="paragraph"><p>In any case, this settings may be never should be used, because for most used options,
+<strong>django-jinja</strong> exposes specific settings:</p></div>
+<div class="listingblock">
+<div class="content"><div class="highlight"><pre><span class="c"># Enable/Disable autoescaping (default: True)</span>
+<span class="n">JINJA2_AUTOESCAPE</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="c"># Mute reverse url exceptions (default: False)</span>
+<span class="n">JINJA2_MUTE_URLRESOLVE_EXCEPTIONS</span> <span class="o">=</span> <span class="bp">True</span>
+
+<span class="c"># Replace small subset of jinja2 filters with</span>
+<span class="c"># django filters (default: True)</span>
+<span class="n">JINJA2_FILTERS_REPLACE_FROM_DJANGO</span> <span class="o">=</span> <span class="bp">True</span>
+</pre></div></div></div>
+</div>
+<div class="sect2">
+<h3 id="_bytecode_cache">5.4. Bytecode Cache</h3>
+<div class="paragraph"><p><strong>django-jinja</strong> supports the Jinja2&#8217;s template bytecode caching system. Including an implementation
+for makes use of Django&#8217;s built-in cache framework.</p></div>
+<div class="listingblock">
+<div class="content"><div class="highlight"><pre><span class="c"># Enable bytecode cache (default: False)</span>
+<span class="n">JINJA2_BYTECODE_CACHE_ENABLE</span> <span class="o">=</span> <span class="bp">False</span>
+
+
+<span class="c"># Cache backend name for bytecode cache (default: &quot;default&quot;)</span>
+<span class="n">JINJA2_BYTECODE_CACHE_NAME</span> <span class="o">=</span> <span class="s">&quot;default&quot;</span>
+
+<span class="c"># Specify custom bytecode cache subclass (default: None)</span>
+<span class="n">JINJA2_BYTECODE_CACHE_BACKEND</span> <span class="o">=</span> <span class="s">&quot;path.to.you.cache.class&quot;</span>
+</pre></div></div></div>
+<div class="paragraph"><p><a href="http://jinja.pocoo.org/docs/api/#bytecode-cache">More documentation about bytecode cache</a></p></div>
+</div>
+<div class="sect2">
+<h3 id="_differences">5.5. Differences</h3>
+<div class="listingblock">
+<div class="title">Reverse urls in templates</div>
+<div class="content"><div class="highlight"><pre><span class="cp">{{</span> <span class="nv">url</span><span class="o">(</span><span class="s1">&#39;ns:name&#39;</span><span class="o">,</span> <span class="nv">pk</span><span class="o">=</span><span class="nv">obj.pk</span><span class="o">)</span> <span class="cp">}}</span>
+</pre></div></div></div>
+<div class="listingblock">
+<div class="title">Static files urls</div>
+<div class="content"><div class="highlight"><pre><span class="cp">{{</span> <span class="nv">static</span><span class="o">(</span><span class="s2">&quot;js/lib/foo.js&quot;</span><span class="o">)</span> <span class="cp">}}</span>
+</pre></div></div></div>
+<div class="listingblock">
+<div class="title">I18n support</div>
+<div class="content"><div class="highlight"><pre><span class="cp">{{</span> <span class="kp">_</span><span class="o">(</span><span class="s1">&#39;Hello %(name)s&#39;</span><span class="o">,</span> <span class="nv">name</span><span class="o">=</span><span class="nv">user.name</span><span class="o">)</span> <span class="cp">}}</span>
+
+<span class="cp">{%</span> <span class="k">trans</span> <span class="nv">name</span><span class="o">=</span><span class="nv">user.name</span> <span class="cp">%}</span>
+  Hello <span class="cp">{{</span> <span class="nv">name</span> <span class="cp">}}</span>
+<span class="cp">{%</span> <span class="k">endtrans</span> <span class="cp">%}</span>
+</pre></div></div></div>
+<div class="listingblock">
+<div class="title">Registring own functions</div>
+<div class="content"><div class="highlight"><pre><span class="c"># &lt;someapp&gt;/templatetags/&lt;anyfile&gt;.py</span>
+<span class="kn">from</span> <span class="nn">django_jinja</span> <span class="kn">import</span> <span class="n">library</span>
+
+<span class="nd">@library.global_function</span>
+<span class="k">def</span> <span class="nf">myupper</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+
+<span class="nd">@library.filter</span>
+<span class="k">def</span> <span class="nf">mylower</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+</pre></div></div></div>
+<div class="listingblock">
+<div class="title">Render 4xx/500 pages with jinja</div>
+<div class="content"><div class="highlight"><pre><span class="c"># yourproject/urls.py</span>
+<span class="kn">from</span> <span class="nn">django_jinja</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">handler403</span> <span class="o">=</span> <span class="n">views</span><span class="o">.</span><span class="n">PermissionDenied</span><span class="o">.</span><span class="n">as_view</span><span class="p">()</span>
+<span class="n">handler404</span> <span class="o">=</span> <span class="n">views</span><span class="o">.</span><span class="n">PageNotFound</span><span class="o">.</span><span class="n">as_view</span><span class="p">()</span>
+<span class="n">handler500</span> <span class="o">=</span> <span class="n">views</span><span class="o">.</span><span class="n">ServerError</span><span class="o">.</span><span class="n">as_view</span><span class="p">()</span>
+</pre></div></div></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_builtin_contrib_modules">6. Builtin contrib modules</h2>
+<div class="sectionbody">
+<div class="paragraph"><p><strong>django-jinja</strong> comes with some additional contrib modules that adapts limited set of external
+django apps for use it easy from jinja templates.</p></div>
+<div class="admonitionblock">
+<table><tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph"><p>In django, creating new tags is simpler than in Jinja2. You should remember that
+in jinja tags are really extensions and have a different purpose than the django template tags.</p></div>
+<div class="paragraph"><p>Thus for many things that the django template system uses tags, django-jinja will provide
+functions with the same functionality.</p></div>
+</td>
+</tr></table>
+</div>
+<div class="sect2">
+<h3 id="_django_pipeline">6.1. django-pipeline</h3>
+<div class="paragraph"><p><a href="https://github.com/cyberdelia/django-pipeline">Pipeline</a> is an asset packaging
+library for Django (official description).</p></div>
+<div class="listingblock">
+<div class="title">Activate plugin (settings.py)</div>
+<div class="content"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;django_jinja.contrib._pipeline&#39;</span><span class="p">,)</span>
+</pre></div></div></div>
+<div class="listingblock">
+<div class="title">Usage</div>
+<div class="content"><div class="highlight"><pre><span class="cp">{{</span> <span class="nv">compressed_css</span><span class="o">(</span><span class="s2">&quot;alias&quot;</span><span class="o">)</span> <span class="cp">}}</span>
+<span class="cp">{{</span> <span class="nv">compressed_js</span><span class="o">(</span><span class="s2">&quot;alias&quot;</span><span class="o">)</span> <span class="cp">}}</span>
+</pre></div></div></div>
+</div>
+<div class="sect2">
+<h3 id="_easy_thumbnails">6.2. easy-thumbnails</h3>
+<div class="paragraph"><p>Easy Thumbnails is a thumbnail generation library for Django.</p></div>
+<div class="listingblock">
+<div class="title">Activate plugin (settings.py)</div>
+<div class="content"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;django_jinja.contrib._easy_thumbnails&#39;</span><span class="p">,)</span>
+</pre></div></div></div>
+<div class="listingblock">
+<div class="title">Usage</div>
+<div class="content"><div class="highlight"><pre><span class="cp">{{</span> <span class="nv">thumbnail</span><span class="o">(</span><span class="nv">file</span><span class="o">,</span> <span class="nv">size</span><span class="o">=(</span><span class="m">400</span><span class="o">,</span> <span class="m">400</span><span class="o">))</span> <span class="cp">}}</span>
+<span class="cp">{{</span> <span class="nv">user.avatar</span><span class="o">|</span><span class="nf">thumbnail_url</span><span class="o">(</span><span class="s2">&quot;alias&quot;</span><span class="o">)</span> <span class="cp">}}</span>
+</pre></div></div></div>
+</div>
+<div class="sect2">
+<h3 id="_django_subdomains">6.3. django-subdomains</h3>
+<div class="paragraph"><p>Subdomain helpers for the Django framework, including subdomain-based URL routing.</p></div>
+<div class="listingblock">
+<div class="title">Activate plugin (settings.py)</div>
+<div class="content"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;django_jinja.contrib._subdomains&#39;</span><span class="p">,)</span>
+</pre></div></div></div>
+<div class="listingblock">
+<div class="title">Usage</div>
+<div class="content"><div class="highlight"><pre><span class="cp">{{</span> <span class="nv">url</span><span class="o">(</span><span class="s1">&#39;homepage&#39;</span><span class="o">,</span> <span class="nv">subdomain</span><span class="o">=</span><span class="s1">&#39;wildcard&#39;</span><span class="o">)</span> <span class="cp">}}</span>
+</pre></div></div></div>
+</div>
+<div class="sect2">
+<h3 id="_humanize">6.4. humanize</h3>
+<div class="paragraph"><p>Django comes with humanize library that exposes some useful template filters.</p></div>
+<div class="listingblock">
+<div class="title">Activate plugin (settings.py)</div>
+<div class="content"><div class="highlight"><pre><span class="n">INSTALLED_APPS</span> <span class="o">+=</span> <span class="p">(</span><span class="s">&#39;django_jinja.contrib._humanize&#39;</span><span class="p">,)</span>
+</pre></div></div></div>
+<div class="paragraph"><p><a href="https://docs.djangoproject.com/en/dev/ref/contrib/humanize/">Complete list of available filters</a></p></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_license">7. License</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="title"><a id="license"></a></div>
+<div class="content"><div class="highlight"><pre>Copyright (c) 2011-2014 Andrei Antoukh &lt;niwi@niwi.be&gt;
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of the author may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS&#39;&#39; AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+</pre></div></div></div>
+</div>
+</div>
+</div>
+<div id="footnotes"><hr></div>
+<div id="footer">
+<div id="footer-text">
+Version 1.0.0<br>
+Last updated 2014-05-25 00:07:12 CEST
+</div>
+</div>
+</body>
+</html>
