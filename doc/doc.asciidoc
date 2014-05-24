@@ -1,0 +1,351 @@
+django-jinja documentation
+==========================
+Andrey Antukh, <niwi@niwi.be>
+1.0.0, 2014-05-24
+
+:toc:
+:numbered:
+
+
+Introduction
+------------
+
+django-jinja is a xref:license[BSD Licensed], simple and nonobstructive jinja2 integration with Django.
+
+
+Jinja2 provides certain advantages over the native system of Django, for example, explicit calls to
+callable from templates, has better performance and has a plugin system, etc ...
+
+There are other projects that attempt do same thing: Djinja, Coffin, etc... Why one more?
+
+- Unlike Djinja, **django-jinja** is not intended to replace a Django template engine, but rather,
+  it complements the Django's template engine, giving the possibility to use both.
+- Unlike Coffin, the django-jinja codebase is much smaller and more modern. This way is much more
+  maintainable and easily understandable how the library works.
+
+
+Supported versions
+------------------
+
+- Latest stable version: *1.0.0*
+- Previous stable version: *0.25.0*
+
+
+Requirements
+------------
+
+- Python 2.7, 3.3 or 3.4
+- Django 1.4, 1.5, 1.6 and 1.7
+- jinja2 >= 2.7.0
+
+
+Features
+--------
+
+- Auto-load templatetags compatible with Jinja2 on same way as Django.
+- Django templates can coexist with Jinja2 templates without any problems.
+  It works as middleware, intercepts Jinja templates by file path pattern.
+- Django template filters and tags can mostly be used in Jinja2 templates.
+- I18n subsystem adapted for Jinja2 (makemessages now collects messages from Jinja templates)
+- Compatible with python2 and python3 using same codebase.
+- jinja2 bytecode cache adapted for use django cache subsystem.
+
+
+
+User guide
+----------
+
+Installation
+~~~~~~~~~~~~
+
+The simplest way to install **django-jinja** is using **pip**:
+
+[source, bash]
+----
+pip install django-jinja
+----
+
+
+Configure
+~~~~~~~~~
+
+The first step for configure _django-jinja_ is replace default
+django template loaders:
+
+[source, python]
+----
+TEMPLATE_LOADERS = (
+    'django_jinja.loaders.AppLoader',
+    'django_jinja.loaders.FileSystemLoader',
+)
+----
+
+Add add it to django installed apps list:
+
+[source, python]
+----
+INSTALLED_APPS += ('django_jinja',)
+----
+
+django-jinja template loaders inherit's from a django template loaders and works like middleware, intercepts
+by predefined condition templates for render with jinja2 engine.
+
+The simplest condition is using file extensions:
+
+[source, python]
+----
+DEFAULT_JINJA2_TEMPLATE_EXTENSION = '.jinja'
+----
+
+With this settings, django-jinja intercepts all templates with `.jinja` extension and render them with jinja2
+engine and templates that not matches the `.jinja` extension are forwarded to django templates engine.
+
+
+Additionaly, *django-jinja* exposes, more advanced matcher, using regular exceptions:
+
+[source, python]
+----
+# Same behavior of default intercept method
+# by extension but using regex (not recommended)
+DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE = r'.*jinja$'
+
+# More advanced method. Intercept all templates
+# except from django admin.
+DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE = r"^(?!admin/).*"
+----
+
+
+Additional settings
+~~~~~~~~~~~~~~~~~~~
+
+If you need more low level customizations for jinja2 engine, *django-jinja* exposes
+`JINJA2_ENVIRONMENT_OPTIONS` settings for it:
+
+[source, python]
+----
+JINJA2_ENVIRONMENT_OPTIONS = {
+    'block_start_string' : '\BLOCK{',
+    'block_end_string' : '}',
+    'variable_start_string' : '\VAR{',
+    'variable_end_string' : '}',
+    'comment_start_string' : '\#{',
+    'comment_end_string' : '}',
+    'line_statement_prefix' : '%-',
+    'line_comment_prefix' : '%#',
+    'trim_blocks' : True,
+    'autoescape' : False,
+}
+----
+
+In any case, this settings may be never should be used, because for most used options,
+*django-jinja* exposes specific settings:
+
+[source, python]
+----
+# Enable/Disable autoescaping (default: True)
+JINJA2_AUTOESCAPE = True
+
+# Mute reverse url exceptions (default: False)
+JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
+
+# Replace small subset of jinja2 filters with
+# django filters (default: True)
+JINJA2_FILTERS_REPLACE_FROM_DJANGO = True
+----
+
+
+Bytecode Cache
+~~~~~~~~~~~~~~
+
+*django-jinja* supports the Jinja2's template bytecode caching system. Including an implementation
+for makes use of Django's built-in cache framework.
+
+[source, python]
+----
+# Enable bytecode cache (default: False)
+JINJA2_BYTECODE_CACHE_ENABLE = False
+
+# Cache backend name for bytecode cache (default: "default")
+JINJA2_BYTECODE_CACHE_NAME = "default"
+
+# Specify custom bytecode cache subclass (default: None)
+JINJA2_BYTECODE_CACHE_BACKEND = "path.to.you.cache.class"
+----
+
+link:http://jinja.pocoo.org/docs/api/#bytecode-cache[More documentation about bytecode cache]
+
+
+Differences
+~~~~~~~~~~~
+
+.Reverse urls in templates
+[source, html+jinja]
+----
+{{ url('ns:name', pk=obj.pk) }}
+----
+
+
+.Static files urls
+[source, html+jinja]
+----
+{{ static("js/lib/foo.js") }}
+----
+
+
+.I18n support
+[source, html+jinja]
+----
+{{ _('Hello %(name)s', name=user.name) }}
+
+{% trans name=user.name %}
+  Hello {{ name }}
+{% endtrans %}
+----
+
+.Registring own functions
+[source, python]
+----
+# <someapp>/templatetags/<anyfile>.py
+from django_jinja import library
+
+@library.global_function
+def myupper(name):
+    return name.upper()
+
+
+@library.filter
+def mylower(name):
+    return name.lower()
+----
+
+
+.Render 4xx/500 pages with jinja
+[source, python]
+----
+# yourproject/urls.py
+from django_jinja import views
+
+handler403 = views.PermissionDenied.as_view()
+handler404 = views.PageNotFound.as_view()
+handler500 = views.ServerError.as_view()
+----
+
+
+Builtin contrib modules
+-----------------------
+
+*django-jinja* comes with some additional contrib modules that adapts limited set of external
+django apps for use it easy from jinja templates.
+
+
+[NOTE]
+====
+In django, creating new tags is simpler than in Jinja2. You should remember that
+in jinja tags are really extensions and have a different purpose than the django template tags.
+
+Thus for many things that the django template system uses tags, django-jinja will provide
+functions with the same functionality.
+====
+
+
+django-pipeline
+~~~~~~~~~~~~~~~
+
+link:https://github.com/cyberdelia/django-pipeline[Pipeline] is an asset packaging
+library for Django (official description).
+
+.Activate plugin (settings.py)
+[source, python]
+----
+INSTALLED_APPS += ('django_jinja.contrib._pipeline',)
+----
+
+.Usage
+[source, html+jinja]
+----
+{{ compressed_css("alias") }}
+{{ compressed_js("alias") }}
+----
+
+
+easy-thumbnails
+~~~~~~~~~~~~~~~
+
+Easy Thumbnails is a thumbnail generation library for Django.
+
+.Activate plugin (settings.py)
+[source, python]
+----
+INSTALLED_APPS += ('django_jinja.contrib._easy_thumbnails',)
+----
+
+.Usage
+[source, html+jinja]
+----
+{{ thumbnail(file, size=(400, 400)) }}
+{{ user.avatar|thumbnail_url("alias") }}
+----
+
+django-subdomains
+~~~~~~~~~~~~~~~~~
+
+Subdomain helpers for the Django framework, including subdomain-based URL routing.
+
+.Activate plugin (settings.py)
+[source, python]
+----
+INSTALLED_APPS += ('django_jinja.contrib._subdomains',)
+----
+
+.Usage
+[source, html+jinja]
+----
+{{ url('homepage', subdomain='wildcard') }}
+----
+
+humanize
+~~~~~~~~
+
+Django comes with humanize library that exposes some useful template filters. 
+
+.Activate plugin (settings.py)
+[source, python]
+----
+INSTALLED_APPS += ('django_jinja.contrib._humanize',)
+----
+
+link:https://docs.djangoproject.com/en/dev/ref/contrib/humanize/[Complete list of available filters]
+
+
+.[[license]]
+License
+-------
+
+[source,text]
+----
+Copyright (c) 2011-2014 Andrei Antoukh <niwi@niwi.be>
+
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
+3. The name of the author may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+----
