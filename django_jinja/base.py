@@ -27,90 +27,90 @@ from . import builtins, utils
 from .library import Library
 
 
-JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, 'JINJA2_ENVIRONMENT_OPTIONS', {})
-JINJA2_LOADER = getattr(settings, 'JINJA2_LOADER',
+JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, "JINJA2_ENVIRONMENT_OPTIONS", {})
+JINJA2_LOADER = getattr(settings, "JINJA2_LOADER",
                         FileSystemLoader(app_directories.app_template_dirs + tuple(settings.TEMPLATE_DIRS)))
-JINJA2_LOADER_SETTINGS = getattr(settings, 'JINJA2_LOADER_SETTINGS', {})
-JINJA2_EXTENSIONS = getattr(settings, 'JINJA2_EXTENSIONS', [])
-JINJA2_FILTERS = getattr(settings, 'JINJA2_FILTERS', {})
-JINJA2_FILTERS_REPLACE_FROM_DJANGO = getattr(settings, 'JINJA2_FILTERS_REPLACE_FROM_DJANGO', True)
-JINJA2_TESTS = getattr(settings, 'JINJA2_TESTS', {})
-JINJA2_GLOBALS = getattr(settings, 'JINJA2_GLOBALS', {})
-JINJA2_AUTOESCAPE = getattr(settings, 'JINJA2_AUTOESCAPE', True)
-JINJA2_NEWSTYLE_GETTEXT = getattr(settings, 'JINJA2_NEWSTYLE_GETTEXT', True)
+JINJA2_LOADER_SETTINGS = getattr(settings, "JINJA2_LOADER_SETTINGS", {})
+JINJA2_EXTENSIONS = getattr(settings, "JINJA2_EXTENSIONS", [])
+JINJA2_FILTERS = getattr(settings, "JINJA2_FILTERS", {})
+JINJA2_FILTERS_REPLACE_FROM_DJANGO = getattr(settings, "JINJA2_FILTERS_REPLACE_FROM_DJANGO", True)
+JINJA2_TESTS = getattr(settings, "JINJA2_TESTS", {})
+JINJA2_GLOBALS = getattr(settings, "JINJA2_GLOBALS", {})
+JINJA2_AUTOESCAPE = getattr(settings, "JINJA2_AUTOESCAPE", True)
+JINJA2_NEWSTYLE_GETTEXT = getattr(settings, "JINJA2_NEWSTYLE_GETTEXT", True)
 
-JINJA2_BYTECODE_CACHE_ENABLE = getattr(settings, 'JINJA2_BYTECODE_CACHE_ENABLE', False)
-JINJA2_BYTECODE_CACHE_NAME = getattr(settings, 'JINJA2_BYTECODE_CACHE_NAME', 'default')
-JINJA2_BYTECODE_CACHE_BACKEND = getattr(settings, 'JINJA2_BYTECODE_CACHE_BACKEND',
-                                        'django_jinja.cache.BytecodeCache')
+JINJA2_BYTECODE_CACHE_ENABLE = getattr(settings, "JINJA2_BYTECODE_CACHE_ENABLE", False)
+JINJA2_BYTECODE_CACHE_NAME = getattr(settings, "JINJA2_BYTECODE_CACHE_NAME", "default")
+JINJA2_BYTECODE_CACHE_BACKEND = getattr(settings, "JINJA2_BYTECODE_CACHE_BACKEND",
+                                        "django_jinja.cache.BytecodeCache")
 
 
 # Default jinja extension list
 DEFAULT_EXTENSIONS = [
-    'jinja2.ext.do',
-    'jinja2.ext.loopcontrols',
-    'jinja2.ext.with_',
-    'jinja2.ext.i18n',
-    'jinja2.ext.autoescape',
+    "jinja2.ext.do",
+    "jinja2.ext.loopcontrols",
+    "jinja2.ext.with_",
+    "jinja2.ext.i18n",
+    "jinja2.ext.autoescape",
 ]
 
 
 JINJA2_FILTERS.update({
-    'static': "django_jinja.builtins.filters.static",
-    'reverseurl': "django_jinja.builtins.filters.reverse",
-    'addslashes': "django_jinja.builtins.filters.addslashes",
-    'capfirst': "django_jinja.builtins.filters.capfirst",
-    'escapejs': "django_jinja.builtins.filters.escapejs_filter",
-    'fix_ampersands': "django_jinja.builtins.filters.fix_ampersands_filter",
-    'floatformat': "django_jinja.builtins.filters.floatformat",
-    'iriencode': "django_jinja.builtins.filters.iriencode",
-    'linenumbers': "django_jinja.builtins.filters.linenumbers",
-    'make_list': "django_jinja.builtins.filters.make_list",
-    'slugify': "django_jinja.builtins.filters.slugify",
-    'stringformat': "django_jinja.builtins.filters.stringformat",
-    'truncatechars': "django_jinja.builtins.filters.truncatechars",
-    'truncatewords': "django_jinja.builtins.filters.truncatewords",
-    'truncatewords_html': "django_jinja.builtins.filters.truncatewords_html",
-    'urlizetrunc': "django_jinja.builtins.filters.urlizetrunc",
-    'ljust': "django_jinja.builtins.filters.ljust",
-    'rjust': "django_jinja.builtins.filters.rjust",
-    'cut': "django_jinja.builtins.filters.cut",
-    'linebreaksbr': "django_jinja.builtins.filters.linebreaksbr",
-    'linebreaks': "django_jinja.builtins.filters.linebreaks_filter",
-    'removetags': "django_jinja.builtins.filters.removetags",
-    'striptags': "django_jinja.builtins.filters.striptags",
-    'add': "django_jinja.builtins.filters.add",
-    'date': "django_jinja.builtins.filters.date",
-    'time': "django_jinja.builtins.filters.time",
-    'timesince': "django_jinja.builtins.filters.timesince_filter",
-    'timeuntil': "django_jinja.builtins.filters.timeuntil_filter",
-    'default_if_none': "django_jinja.builtins.filters.default_if_none",
-    'divisibleby': "django_jinja.builtins.filters.divisibleby",
-    'yesno': "django_jinja.builtins.filters.yesno",
-    'pluralize': "django_jinja.builtins.filters.pluralize",
+    "static": "django_jinja.builtins.filters.static",
+    "reverseurl": "django_jinja.builtins.filters.reverse",
+    "addslashes": "django_jinja.builtins.filters.addslashes",
+    "capfirst": "django_jinja.builtins.filters.capfirst",
+    "escapejs": "django_jinja.builtins.filters.escapejs_filter",
+    "fix_ampersands": "django_jinja.builtins.filters.fix_ampersands_filter",
+    "floatformat": "django_jinja.builtins.filters.floatformat",
+    "iriencode": "django_jinja.builtins.filters.iriencode",
+    "linenumbers": "django_jinja.builtins.filters.linenumbers",
+    "make_list": "django_jinja.builtins.filters.make_list",
+    "slugify": "django_jinja.builtins.filters.slugify",
+    "stringformat": "django_jinja.builtins.filters.stringformat",
+    "truncatechars": "django_jinja.builtins.filters.truncatechars",
+    "truncatewords": "django_jinja.builtins.filters.truncatewords",
+    "truncatewords_html": "django_jinja.builtins.filters.truncatewords_html",
+    "urlizetrunc": "django_jinja.builtins.filters.urlizetrunc",
+    "ljust": "django_jinja.builtins.filters.ljust",
+    "rjust": "django_jinja.builtins.filters.rjust",
+    "cut": "django_jinja.builtins.filters.cut",
+    "linebreaksbr": "django_jinja.builtins.filters.linebreaksbr",
+    "linebreaks": "django_jinja.builtins.filters.linebreaks_filter",
+    "removetags": "django_jinja.builtins.filters.removetags",
+    "striptags": "django_jinja.builtins.filters.striptags",
+    "add": "django_jinja.builtins.filters.add",
+    "date": "django_jinja.builtins.filters.date",
+    "time": "django_jinja.builtins.filters.time",
+    "timesince": "django_jinja.builtins.filters.timesince_filter",
+    "timeuntil": "django_jinja.builtins.filters.timeuntil_filter",
+    "default_if_none": "django_jinja.builtins.filters.default_if_none",
+    "divisibleby": "django_jinja.builtins.filters.divisibleby",
+    "yesno": "django_jinja.builtins.filters.yesno",
+    "pluralize": "django_jinja.builtins.filters.pluralize",
 })
 
 if JINJA2_FILTERS_REPLACE_FROM_DJANGO:
     JINJA2_FILTERS.update({
-        'title': "django_jinja.builtins.filters.title",
-        'upper': "django_jinja.builtins.filters.upper",
-        'lower': "django_jinja.builtins.filters.lower",
-        'urlencode': "django_jinja.builtins.filters.urlencode",
-        'urlize': "django_jinja.builtins.filters.urlize",
-        'wordcount': "django_jinja.builtins.filters.wordcount",
-        'wordwrap': "django_jinja.builtins.filters.wordwrap",
-        'center': "django_jinja.builtins.filters.center",
-        'join': "django_jinja.builtins.filters.join",
-        'length': "django_jinja.builtins.filters.length",
-        'random': "django_jinja.builtins.filters.random",
-        'default': "django_jinja.builtins.filters.default",
-        'filesizeformat': "django_jinja.builtins.filters.filesizeformat",
-        'pprint': "django_jinja.builtins.filters.pprint",
+        "title": "django_jinja.builtins.filters.title",
+        "upper": "django_jinja.builtins.filters.upper",
+        "lower": "django_jinja.builtins.filters.lower",
+        "urlencode": "django_jinja.builtins.filters.urlencode",
+        "urlize": "django_jinja.builtins.filters.urlize",
+        "wordcount": "django_jinja.builtins.filters.wordcount",
+        "wordwrap": "django_jinja.builtins.filters.wordwrap",
+        "center": "django_jinja.builtins.filters.center",
+        "join": "django_jinja.builtins.filters.join",
+        "length": "django_jinja.builtins.filters.length",
+        "random": "django_jinja.builtins.filters.random",
+        "default": "django_jinja.builtins.filters.default",
+        "filesizeformat": "django_jinja.builtins.filters.filesizeformat",
+        "pprint": "django_jinja.builtins.filters.pprint",
     })
 
 JINJA2_GLOBALS.update({
-    'url': "django_jinja.builtins.global_context.url",
-    'static': "django_jinja.builtins.global_context.static",
+    "url": "django_jinja.builtins.global_context.url",
+    "static": "django_jinja.builtins.global_context.static",
 })
 
 
@@ -204,7 +204,7 @@ class Environment(Environment):
         mod_list = []
         for app_path in settings.INSTALLED_APPS:
             try:
-                mod = import_module(app_path + '.templatetags')
+                mod = import_module(app_path + ".templatetags")
                 mod_list.append((app_path, os.path.dirname(mod.__file__)))
             except ImportError:
                 pass
@@ -214,7 +214,7 @@ class Environment(Environment):
                 continue
 
             for filename in filter(lambda x: x.endswith(".py") or x.endswith(".pyc"), os.listdir(mod_path)):
-                if filename == '__init__.py' or filename == '__init__.pyc':
+                if filename == "__init__.py" or filename == "__init__.pyc":
                     continue
 
                 file_mod_path = "%s.templatetags.%s" % (app_path, filename.rsplit(".", 1)[0])
@@ -234,25 +234,25 @@ class Environment(Environment):
             from django.utils import safestring
 
             if hasattr(safestring, "SafeText"):
-                if not hasattr(safestring.SafeText, '__html__'):
+                if not hasattr(safestring.SafeText, "__html__"):
                     safestring.SafeText.__html__ = lambda self: six.text_type(self)
 
             if hasattr(safestring, "SafeString"):
-                if not hasattr(safestring.SafeString, '__html__'):
+                if not hasattr(safestring.SafeString, "__html__"):
                     safestring.SafeString.__html__ = lambda self: six.text_type(self)
 
             if hasattr(safestring, "SafeUnicode"):
-                if not hasattr(safestring.SafeUnicode, '__html__'):
+                if not hasattr(safestring.SafeUnicode, "__html__"):
                     safestring.SafeUnicode.__html__ = lambda self: six.text_type(self)
 
             if hasattr(safestring, "SafeBytes"):
-                if not hasattr(safestring.SafeBytes, '__html__'):
+                if not hasattr(safestring.SafeBytes, "__html__"):
                     safestring.SafeBytes.__html__ = lambda self: six.text_type(self)
 
 
 initial_params = {
-    'autoescape': JINJA2_AUTOESCAPE,
-    'extensions': list(set(list(JINJA2_EXTENSIONS) + DEFAULT_EXTENSIONS)),
+    "autoescape": JINJA2_AUTOESCAPE,
+    "extensions": list(set(list(JINJA2_EXTENSIONS) + DEFAULT_EXTENSIONS)),
 }
 
 initial_params.update(JINJA2_ENVIRONMENT_OPTIONS)
