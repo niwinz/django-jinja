@@ -11,11 +11,11 @@ INSTALL_REQUIRES = [
 ]
 
 if sys.version_info < (2, 7):
-    INSTALL_REQUIRES.append('importlib')
+    INSTALL_REQUIRES.append("importlib")
 
 setup(
     name = "django-jinja",
-    version = "0.24",
+    version = "0.25",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     keywords = "django, jinja2",
@@ -55,6 +55,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.2",
         "Programming Language :: Python :: 3.3",
+        "Programming Language :: Python :: 3.4",
         "Topic :: Internet :: WWW/HTTP",
     ]
 )
