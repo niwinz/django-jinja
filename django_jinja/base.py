@@ -37,6 +37,7 @@ JINJA2_FILTERS_REPLACE_FROM_DJANGO = getattr(settings, 'JINJA2_FILTERS_REPLACE_F
 JINJA2_TESTS = getattr(settings, 'JINJA2_TESTS', {})
 JINJA2_GLOBALS = getattr(settings, 'JINJA2_GLOBALS', {})
 JINJA2_AUTOESCAPE = getattr(settings, 'JINJA2_AUTOESCAPE', True)
+JINJA2_NEWSTYLE_GETTEXT = getattr(settings, 'JINJA2_NEWSTYLE_GETTEXT', True)
 
 JINJA2_BYTECODE_CACHE_ENABLE = getattr(settings, 'JINJA2_BYTECODE_CACHE_ENABLE', False)
 JINJA2_BYTECODE_CACHE_NAME = getattr(settings, 'JINJA2_BYTECODE_CACHE_NAME', 'default')
@@ -161,9 +162,9 @@ class Environment(Environment):
         # install translations
         if settings.USE_I18N:
             from django.utils import translation
-            self.install_gettext_translations(translation)
+            self.install_gettext_translations(translation, newstyle=JINJA2_NEWSTYLE_GETTEXT)
         else:
-            self.install_null_translations(newstyle=False)
+            self.install_null_translations(newstyle=JINJA2_NEWSTYLE_GETTEXT)
 
         self.template_class = Template
 
