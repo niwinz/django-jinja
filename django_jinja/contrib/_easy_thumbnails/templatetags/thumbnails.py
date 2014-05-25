@@ -21,4 +21,5 @@ def thumbnailer(obj):
 
 @library.global_function
 def thumbnail(source, **kwargs):
-    return _thumbnail.get_thumbnailer(source).get_thumbnail(kwargs)
+    thumbnail =  _thumbnail.get_thumbnailer(source).get_thumbnail(kwargs)
+    return thumbnail.url
