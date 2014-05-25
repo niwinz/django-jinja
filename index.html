@@ -30,7 +30,7 @@ asciidoc.install(2);
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_introduction">1. Introduction</h2>
+<h2 id="_introduction">Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph"><p>django-jinja is a <a href="#license">BSD Licensed</a>, simple and nonobstructive jinja2 integration with Django.</p></div>
 <div class="paragraph"><p>Jinja2 provides certain advantages over the native system of Django, for example, explicit calls to
@@ -53,7 +53,7 @@ Unlike Coffin, the django-jinja codebase is much smaller and more modern. This w
 </div>
 </div>
 <div class="sect1">
-<h2 id="_supported_versions">2. Supported versions</h2>
+<h2 id="_supported_versions">Supported versions</h2>
 <div class="sectionbody">
 <div class="ulist"><ul>
 <li>
@@ -70,7 +70,7 @@ Previous stable version: <strong>0.25.0</strong>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_requirements">3. Requirements</h2>
+<h2 id="_requirements">Requirements</h2>
 <div class="sectionbody">
 <div class="ulist"><ul>
 <li>
@@ -92,7 +92,7 @@ jinja2 &gt;= 2.7.0
 </div>
 </div>
 <div class="sect1">
-<h2 id="_features">4. Features</h2>
+<h2 id="_features">Features</h2>
 <div class="sectionbody">
 <div class="ulist"><ul>
 <li>
@@ -130,17 +130,17 @@ jinja2 bytecode cache adapted for use django cache subsystem.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_user_guide">5. User guide</h2>
+<h2 id="_user_guide">User guide</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_installation">5.1. Installation</h3>
-<div class="paragraph"><p>The simplest way to install <strong>django-redis</strong> is using <strong>pip</strong>:</p></div>
+<h3 id="_installation">Installation</h3>
+<div class="paragraph"><p>The simplest way to install <strong>django-jinja</strong> is using <strong>pip</strong>:</p></div>
 <div class="listingblock">
 <div class="content"><div class="highlight"><pre>pip install django-jinja
 </pre></div></div></div>
 </div>
 <div class="sect2">
-<h3 id="_configure">5.2. Configure</h3>
+<h3 id="_configure">Configure</h3>
 <div class="paragraph"><p>The first step for configure <em>django-jinja</em> is replace default
 django template loaders:</p></div>
 <div class="listingblock">
@@ -173,7 +173,7 @@ engine and templates that not matches the <span class="monospaced">.jinja</span>
 </pre></div></div></div>
 </div>
 <div class="sect2">
-<h3 id="_additional_settings">5.3. Additional settings</h3>
+<h3 id="_additional_settings">Additional settings</h3>
 <div class="paragraph"><p>If you need more low level customizations for jinja2 engine, <strong>django-jinja</strong> exposes
 <span class="monospaced">JINJA2_ENVIRONMENT_OPTIONS</span> settings for it:</p></div>
 <div class="listingblock">
@@ -205,13 +205,12 @@ engine and templates that not matches the <span class="monospaced">.jinja</span>
 </pre></div></div></div>
 </div>
 <div class="sect2">
-<h3 id="_bytecode_cache">5.4. Bytecode Cache</h3>
+<h3 id="_bytecode_cache">Bytecode Cache</h3>
 <div class="paragraph"><p><strong>django-jinja</strong> supports the Jinja2&#8217;s template bytecode caching system. Including an implementation
 for makes use of Django&#8217;s built-in cache framework.</p></div>
 <div class="listingblock">
 <div class="content"><div class="highlight"><pre><span class="c"># Enable bytecode cache (default: False)</span>
 <span class="n">JINJA2_BYTECODE_CACHE_ENABLE</span> <span class="o">=</span> <span class="bp">False</span>
-
 
 <span class="c"># Cache backend name for bytecode cache (default: &quot;default&quot;)</span>
 <span class="n">JINJA2_BYTECODE_CACHE_NAME</span> <span class="o">=</span> <span class="s">&quot;default&quot;</span>
@@ -222,7 +221,7 @@ for makes use of Django&#8217;s built-in cache framework.</p></div>
 <div class="paragraph"><p><a href="http://jinja.pocoo.org/docs/api/#bytecode-cache">More documentation about bytecode cache</a></p></div>
 </div>
 <div class="sect2">
-<h3 id="_differences">5.5. Differences</h3>
+<h3 id="_differences">Differences</h3>
 <div class="listingblock">
 <div class="title">Reverse urls in templates</div>
 <div class="content"><div class="highlight"><pre><span class="cp">{{</span> <span class="nv">url</span><span class="o">(</span><span class="s1">&#39;ns:name&#39;</span><span class="o">,</span> <span class="nv">pk</span><span class="o">=</span><span class="nv">obj.pk</span><span class="o">)</span> <span class="cp">}}</span>
@@ -266,7 +265,7 @@ for makes use of Django&#8217;s built-in cache framework.</p></div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_builtin_contrib_modules">6. Builtin contrib modules</h2>
+<h2 id="_builtin_contrib_modules">Builtin contrib modules</h2>
 <div class="sectionbody">
 <div class="paragraph"><p><strong>django-jinja</strong> comes with some additional contrib modules that adapts limited set of external
 django apps for use it easy from jinja templates.</p></div>
@@ -284,7 +283,7 @@ functions with the same functionality.</p></div>
 </tr></table>
 </div>
 <div class="sect2">
-<h3 id="_django_pipeline">6.1. django-pipeline</h3>
+<h3 id="_django_pipeline">django-pipeline</h3>
 <div class="paragraph"><p><a href="https://github.com/cyberdelia/django-pipeline">Pipeline</a> is an asset packaging
 library for Django (official description).</p></div>
 <div class="listingblock">
@@ -298,7 +297,7 @@ library for Django (official description).</p></div>
 </pre></div></div></div>
 </div>
 <div class="sect2">
-<h3 id="_easy_thumbnails">6.2. easy-thumbnails</h3>
+<h3 id="_easy_thumbnails">easy-thumbnails</h3>
 <div class="paragraph"><p>Easy Thumbnails is a thumbnail generation library for Django.</p></div>
 <div class="listingblock">
 <div class="title">Activate plugin (settings.py)</div>
@@ -311,7 +310,7 @@ library for Django (official description).</p></div>
 </pre></div></div></div>
 </div>
 <div class="sect2">
-<h3 id="_django_subdomains">6.3. django-subdomains</h3>
+<h3 id="_django_subdomains">django-subdomains</h3>
 <div class="paragraph"><p>Subdomain helpers for the Django framework, including subdomain-based URL routing.</p></div>
 <div class="listingblock">
 <div class="title">Activate plugin (settings.py)</div>
@@ -323,7 +322,7 @@ library for Django (official description).</p></div>
 </pre></div></div></div>
 </div>
 <div class="sect2">
-<h3 id="_humanize">6.4. humanize</h3>
+<h3 id="_humanize">humanize</h3>
 <div class="paragraph"><p>Django comes with humanize library that exposes some useful template filters.</p></div>
 <div class="listingblock">
 <div class="title">Activate plugin (settings.py)</div>
@@ -334,7 +333,229 @@ library for Django (official description).</p></div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_license">7. License</h2>
+<h2 id="_changelog">Changelog</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_version_1_0_0">Version 1.0.0</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Major code cleanup.
+</p>
+</li>
+<li>
+<p>
+Full django 1.7+ support
+</p>
+</li>
+<li>
+<p>
+Add JINJA2_CONSTANTS settings.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_25">Version 0.25</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Enable newstyle gettext by default.
+</p>
+</li>
+<li>
+<p>
+Add settings for easy disable newstyle gettext.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_24">Version 0.24</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Fix django 1.7 warnings on run tests.
+</p>
+</li>
+<li>
+<p>
+Add all rest methods to error views (403, 404, 500).
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_23">Version 0.23</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Add settings JINJA2_FILTERS_REPLACE_FROM_DJANGO
+</p>
+</li>
+<li>
+<p>
+Add settings JINJA2_MUTE_URLRESOLVE_EXCEPTIONS
+</p>
+</li>
+<li>
+<p>
+Improvements on cache tag.
+</p>
+</li>
+<li>
+<p>
+Other bugfixes.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_22">Version 0.22</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Change template order selection.
+</p>
+</li>
+<li>
+<p>
+New contrib: subdomains
+</p>
+</li>
+<li>
+<p>
+New contrib: dajax-ice
+</p>
+</li>
+<li>
+<p>
+Documentation fixes.
+</p>
+</li>
+<li>
+<p>
+Minor improvements.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_21">Version 0.21</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Remove obsolete <em>version</em> variable from <em>init</em>.py file.
+</p>
+</li>
+<li>
+<p>
+Add bytecode cache with django cache framework support.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_20">Version 0.20</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Introduce backward incompatible change: all contrib apps
+  are renamed (prepened _ on each module name) for avoid
+  name conflicts with the original package.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_19">Version 0.19</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Bugfixes related to autoescape.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_18">Version 0.18</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Test singnal when stream template method is used.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_17">Version 0.17</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Add 4xx/500 django special views.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_16">Version 0.16</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Remove distribute dependency.
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_15">Version 0.15</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Put autoescape ON by default.
+</p>
+</li>
+<li>
+<p>
+Add easy_thumbnails contrib app
+</p>
+</li>
+<li>
+<p>
+Add django humanize contrib app
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_14">Version 0.14</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+Add jinja2 extensions loading by default
+</p>
+</li>
+</ul></div>
+</div>
+<div class="sect2">
+<h3 id="_version_0_13">Version 0.13</h3>
+<div class="ulist"><ul>
+<li>
+<p>
+New intercept method by regex is added.
+</p>
+</li>
+<li>
+<p>
+Documentation improvements.
+</p>
+</li>
+</ul></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_license">License</h2>
 <div class="sectionbody">
 <div class="listingblock">
 <div class="title"><a id="license"></a></div>
@@ -371,7 +592,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0<br>
-Last updated 2014-05-25 00:07:12 CEST
+Last updated 2014-05-25 02:27:54 CEST
 </div>
 </div>
 </body>
