@@ -324,7 +324,7 @@ Version 1.0.0
 
 - Major code cleanup.
 - Full django 1.7+ support
-
+- Add JINJA2_CONSTANTS settings.
 
 Version 0.25
 ~~~~~~~~~~~~
