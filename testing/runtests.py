@@ -62,6 +62,7 @@ test_settings = {
             'output_filename': 'script.2.js',
         }
     },
+    'JINJA2_CONSTANTS': {"foo": "bar"},
     'JINJA2_MUTE_URLRESOLVE_EXCEPTIONS': True,
 }
 

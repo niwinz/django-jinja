@@ -23,6 +23,7 @@ JINJA2_TESTS = getattr(settings, "JINJA2_TESTS", {})
 JINJA2_GLOBALS = getattr(settings, "JINJA2_GLOBALS", {})
 JINJA2_AUTOESCAPE = getattr(settings, "JINJA2_AUTOESCAPE", True)
 JINJA2_NEWSTYLE_GETTEXT = getattr(settings, "JINJA2_NEWSTYLE_GETTEXT", True)
+JINJA2_CONSTANTS = getattr(settings, "JINJA2_CONSTANTS", {})
 
 JINJA2_BYTECODE_CACHE_ENABLE = getattr(settings, "JINJA2_BYTECODE_CACHE_ENABLE", False)
 JINJA2_BYTECODE_CACHE_NAME = getattr(settings, "JINJA2_BYTECODE_CACHE_NAME", "default")
@@ -242,6 +243,9 @@ def load_builtins(env):
             env.globals[name] = utils.load_class(value)
         else:
             env.globals[name] = value
+
+    for name, value in JINJA2_CONSTANTS.items():
+        env.globals[name] = value
 
     env.add_extension(builtins.extensions.CsrfExtension)
     env.add_extension(builtins.extensions.CacheExtension)

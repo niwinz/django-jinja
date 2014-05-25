@@ -45,6 +45,7 @@ class TemplateFunctionsTest(TestCase):
             ("{{ 3|add(2) }}", {}, "5"),
             ("{{ now|date('n Y') }}", {"now": datetime.datetime(2012, 12, 20)}, "12 2012"),
             ("{{ url('test-1') }}", {}, '/test1/'),
+            ("{{ foo }}", {}, "bar"),
         ]
 
         print()
