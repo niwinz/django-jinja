@@ -10,10 +10,9 @@ from pipeline.utils import guess_type
 from pipeline.packager import Packager, PackageNotFound
 
 from django_jinja import library, utils
-lib = library.Library()
 
 
-@lib.global_function
+@library.global_function
 @utils.safe
 def compressed_css(name):
     package = settings.PIPELINE_CSS.get(name, {})
@@ -47,7 +46,7 @@ def compressed_css(name):
     return '\n'.join(tags)
 
 
-@lib.global_function
+@library.global_function
 @utils.safe
 def compressed_js(name):
     package = settings.PIPELINE_JS.get(name, {})
