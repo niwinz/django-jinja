@@ -8,8 +8,7 @@ from django.core.management import call_command
 
 TEST_TEMPLATE_DIR = 'templates'
 RUNTESTS_DIR = os.path.dirname(__file__)
-PREVIOUS_DIR = os.path.abspath(os.path.join(RUNTESTS_DIR, ".."))
-sys.path.insert(0, PREVIOUS_DIR)
+sys.path.insert(0, "testing")
 
 
 test_settings = {
@@ -78,8 +77,6 @@ if __name__ == "__main__":
 
     args = sys.argv
     args.insert(1, "test")
-
-    if django.VERSION[:2] < (1, 6):
-        args.insert(2, "django_jinja_test")
+    args.insert(2, "django_jinja_test")
 
     execute_from_command_line(args)
