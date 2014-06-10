@@ -7,5 +7,5 @@ class DjangoJinjaAppConfig(AppConfig):
     verbose_name = "Django Jinja"
 
     def ready(self):
-        base.initialize_environment()
+        base.env.initialize()
 

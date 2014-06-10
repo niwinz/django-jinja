@@ -2,6 +2,8 @@
 
 import os
 
+import django
+
 from jinja2 import Environment
 from jinja2 import Template
 from jinja2 import FileSystemLoader
@@ -12,7 +14,9 @@ from django.template.context import BaseContext
 from django.utils.importlib import import_module
 from django.utils import six
 
-from . import builtins, utils
+from . import builtins
+from . import library
+from . import utils
 
 
 JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, "JINJA2_ENVIRONMENT_OPTIONS", {})
@@ -147,6 +151,8 @@ class Environment(Environment):
         self.initialize_bytecode_cache()
         self.initialize_template_loader()
         self.initialize_autoescape()
+        self.initialize_builtins()
+        self.initialize_thirdparty_templatetags()
 
     def initialize_i18n(self):
         # install translations
@@ -201,77 +207,77 @@ class Environment(Environment):
             if not hasattr(safestring.SafeBytes, "__html__"):
                 safestring.SafeBytes.__html__ = lambda self: six.text_type(self)
 
+    def initialize_builtins(self):
+        for name, value in JINJA2_FILTERS.items():
+            if isinstance(value, six.string_types):
+                self.filters[name] = utils.load_class(value)
+            else:
+                self.filters[name] = value
 
-def get_templatetags_modules_list():
-    """
-    Get list of modules that contains templatetags
-    submodule.
-    """
-    # Django 1.7 compatibility imports
-    try:
-        from django.apps import apps
-        all_modules = [x.name for x in apps.get_app_configs()]
-    except ImportError:
-        all_modules = settings.INSTALLED_APPS
+        for name, value in JINJA2_TESTS.items():
+            if isinstance(value, six.string_types):
+                self.tests[name] = utils.load_class(value)
+            else:
+                self.tests[name] = value
 
-    mod_list = []
-    for app_path in all_modules:
+        for name, value in JINJA2_GLOBALS.items():
+            if isinstance(value, six.string_types):
+                self.globals[name] = utils.load_class(value)
+            else:
+                self.globals[name] = value
+
+        for name, value in JINJA2_CONSTANTS.items():
+            self.globals[name] = value
+
+        self.add_extension(builtins.extensions.CsrfExtension)
+        self.add_extension(builtins.extensions.CacheExtension)
+
+    def get_templatetags_modules_list(self):
+        """
+        Get list of modules that contains templatetags
+        submodule.
+        """
+        # Django 1.7 compatibility imports
         try:
-            mod = import_module(app_path + ".templatetags")
-            mod_list.append((app_path, os.path.dirname(mod.__file__)))
+            from django.apps import apps
+            all_modules = [x.name for x in apps.get_app_configs()]
         except ImportError:
-            pass
+            all_modules = settings.INSTALLED_APPS
 
-    return mod_list
-
-
-def load_builtins(env):
-    for name, value in JINJA2_FILTERS.items():
-        if isinstance(value, six.string_types):
-            env.filters[name] = utils.load_class(value)
-        else:
-            env.filters[name] = value
-
-    for name, value in JINJA2_TESTS.items():
-        if isinstance(value, six.string_types):
-            env.tests[name] = utils.load_class(value)
-        else:
-            env.tests[name] = value
-
-    for name, value in JINJA2_GLOBALS.items():
-        if isinstance(value, six.string_types):
-            env.globals[name] = utils.load_class(value)
-        else:
-            env.globals[name] = value
-
-    for name, value in JINJA2_CONSTANTS.items():
-        env.globals[name] = value
-
-    env.add_extension(builtins.extensions.CsrfExtension)
-    env.add_extension(builtins.extensions.CacheExtension)
-
-
-def load_django_templatetags():
-    """
-    Given a ready modules list, try import all modules
-    related to templatetags for populate a library.
-    """
-
-    for app_path, mod_path in get_templatetags_modules_list():
-        if not os.path.isdir(mod_path):
-            continue
-
-        for filename in filter(lambda x: x.endswith(".py") or x.endswith(".pyc"), os.listdir(mod_path)):
-            # Exclude __init__.py files
-            if filename == "__init__.py" or filename == "__init__.pyc":
-                continue
-
-            file_mod_path = "%s.templatetags.%s" % (app_path, filename.rsplit(".", 1)[0])
+        mod_list = []
+        for app_path in all_modules:
             try:
-                import_module(file_mod_path)
+                mod = import_module(app_path + ".templatetags")
+                mod_list.append((app_path, os.path.dirname(mod.__file__)))
             except ImportError:
                 pass
 
+        return mod_list
+
+    def preload_templatetags_modules(self):
+        """
+        Given a ready modules list, try import all modules
+        related to templatetags for populate a library.
+        """
+
+        for app_path, mod_path in self.get_templatetags_modules_list():
+            if not os.path.isdir(mod_path):
+                continue
+
+            for filename in filter(lambda x: x.endswith(".py") or x.endswith(".pyc"), os.listdir(mod_path)):
+                # Exclude __init__.py files
+                if filename == "__init__.py" or filename == "__init__.pyc":
+                    continue
+
+                file_mod_path = "%s.templatetags.%s" % (app_path, filename.rsplit(".", 1)[0])
+                try:
+                    import_module(file_mod_path)
+                except ImportError:
+                    pass
+
+    def initialize_thirdparty_templatetags(self):
+        self.preload_templatetags_modules()
+        library._update_env(self)
 
 initial_params = {
     "autoescape": JINJA2_AUTOESCAPE,
@@ -279,14 +285,11 @@ initial_params = {
 }
 
 initial_params.update(JINJA2_ENVIRONMENT_OPTIONS)
+
 env = Environment(**initial_params)
 
-
-def initialize_environment():
+# Initialize environment inline
+if django.VERSION[:2] < (1, 7):
     env.initialize()
-
-    load_django_templatetags()
-    load_builtins(env)
-
 
 __all__ = ["env", "initialize_environment"]

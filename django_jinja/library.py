@@ -3,19 +3,32 @@
 import warnings
 
 
-def _get_env():
-    from django_jinja.base import env
-    return env
+# Global register dict for third party
+# template functions, filters and extensions.
+_local_env = {
+    "globals": {},
+    "tests": {},
+    "filters": {},
+}
+
+
+def _update_env(env):
+    """
+    Given a jinja environment, update it with third party
+    collected environment extensions.
+    """
+
+    env.globals.update(_local_env["globals"])
+    env.tests.update(_local_env["tests"])
+    env.filters.update(_local_env["filters"])
 
 
 def _attach_function(attr, func, name=None):
-    _env = _get_env()
-    _attr = getattr(_env, attr)
-
     if name is None:
         name = func.__name__
 
-    _attr[name] = func
+    global _local_env
+    _local_env[attr][name] = func
     return func
 
 
@@ -37,7 +50,6 @@ def _register_function(attr, name=None, fn=None):
         return _attach_function(attr, fn, name)
 
     raise RuntimeError("Invalid parameters")
-
 
 
 def global_function(*args, **kwargs):
