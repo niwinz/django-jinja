@@ -319,6 +319,21 @@ link:https://docs.djangoproject.com/en/dev/ref/contrib/humanize/[Complete list o
 Changelog
 ---------
 
+Version 1.0.3
+~~~~~~~~~~~~~
+
+- Add timezone template filters and template global functions: localtime, tz and timezone.
+
+Version 1.0.2
+~~~~~~~~~~~~~
+
+- Fix bug with application loading with django < 1.7
+
+Version 1.0.1
+~~~~~~~~~~~~~
+
+- Fix bug introduced in previous version on `easy_thumbnails` contrib app.
+
 Version 1.0.0
 ~~~~~~~~~~~~~
 
