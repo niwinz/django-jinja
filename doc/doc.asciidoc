@@ -1,7 +1,7 @@
 django-jinja documentation
 ==========================
 Andrey Antukh, <niwi@niwi.be>
-1.0.2, 2014-05-24
+1.0.3, 2014-06-15
 
 :toc:
 
