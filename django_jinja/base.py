@@ -78,6 +78,9 @@ JINJA2_FILTERS.update({
     "divisibleby": "django_jinja.builtins.filters.divisibleby",
     "yesno": "django_jinja.builtins.filters.yesno",
     "pluralize": "django_jinja.builtins.filters.pluralize",
+    "localtime": "django_jinja.builtins.filters.localtime",
+    "utc": "django_jinja.builtins.filters.utc",
+    "timezone": "django_jinja.builtins.filters.timezone",
 })
 
 if JINJA2_FILTERS_REPLACE_FROM_DJANGO:
@@ -101,6 +104,9 @@ if JINJA2_FILTERS_REPLACE_FROM_DJANGO:
 JINJA2_GLOBALS.update({
     "url": "django_jinja.builtins.global_context.url",
     "static": "django_jinja.builtins.global_context.static",
+    "localtime": "django_jinja.builtins.filters.localtime",
+    "utc": "django_jinja.builtins.filters.utc",
+    "timezone": "django_jinja.builtins.filters.timezone",
 })
 
 

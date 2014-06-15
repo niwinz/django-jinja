@@ -79,3 +79,11 @@ except ImportError:
 
 def slugify(value):
     return djslugify(force_text(value))
+
+
+
+# TZ
+
+from django.templatetags.tz import do_timezone as timezone
+from django.templatetags.tz import localtime
+from django.templatetags.tz import utc
