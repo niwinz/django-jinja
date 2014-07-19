@@ -28,6 +28,7 @@ test_settings = {
         'pipeline',
         'django_jinja.contrib._pipeline',
     ],
+    'INTERNAL_IPS': ('127.0.0.1',),
     'ROOT_URLCONF':'django_jinja_test.urls',
     'STATIC_URL':'/static/',
     'STATIC_ROOT': os.path.join(RUNTESTS_DIR, 'static'),

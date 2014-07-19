@@ -9,6 +9,8 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.core.urlresolvers import NoReverseMatch
+from django.conf import settings
+from django.shortcuts import render
 
 from django_jinja.base import env, dict_from_context, Template
 
@@ -96,6 +98,16 @@ class TemplateFunctionsTest(TestCase):
         self.assertEqual(result, "&lt;h1&gt;Hellp&lt;/h1&gt;")
 
         env.autoescape = old_autoescape_value
+
+    def test_debug_var_when_render_shortcut_is_used(self):
+        prev_debug_value = settings.DEBUG
+        settings.DEBUG = True
+
+        request = self.factory.get("/")
+        response = render(request, "test-debug-var.jinja")
+        self.assertEqual(response.content, b"foobar")
+
+        settings.DEBUG = prev_debug_value
 
     def test_csrf_01(self):
         template_content = "{% csrf_token %}"
