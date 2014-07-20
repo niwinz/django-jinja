@@ -218,6 +218,14 @@ def mylower(name):
 ----
 
 
+.Register constants on settings
+[source, python]
+----
+JINJA2_CONSTANTS = {
+    "email": "foo@bar.bz",
+}
+----
+
 .Render 4xx/500 pages with jinja
 [source, python]
 ----
