@@ -1,6 +1,9 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from __future__ import print_function, unicode_literals
+
+import datetime
+import sys
 
 from django.http import HttpResponse
 from django.test import signals, TestCase
@@ -13,8 +16,8 @@ from django.shortcuts import render
 
 from django_jinja.base import env, dict_from_context, Template
 
-import datetime
-import sys
+from .forms import TestForm
+
 
 class TemplateFunctionsTest(TestCase):
     def setUp(self):
@@ -82,6 +85,43 @@ class TemplateFunctionsTest(TestCase):
         template = env.from_string("{{ myrenderwith() }}")
         result = template.render({})
         self.assertEqual(result, "<strong>Foo</strong>")
+
+    def test_autoscape_with_form(self):
+        form = TestForm()
+        template = env.from_string("{{ form.as_p() }}")
+        result = template.render({"form": form})
+
+        self.assertEqual(result,
+                         ("""<p><label for="id_name">Name:</label> """
+                          """<input id="id_name" maxlength="2" """
+                          """name="name" type="text" /></p>"""))
+
+
+    def test_autoscape_with_form_field(self):
+        form = TestForm()
+        template = env.from_string("{{ form.name }}")
+        result = template.render({"form": form})
+
+        self.assertEqual(result, """<input id="id_name" maxlength="2" name="name" type="text" />""")
+
+    def test_autoscape_with_form_errors(self):
+        form = TestForm({"name": "foo"})
+        self.assertFalse(form.is_valid())
+
+        template = env.from_string("{{ form.name.errors }}")
+        result = template.render({"form": form})
+
+        self.assertEqual(result,
+                         ("""<ul class="errorlist"><li>Ensure this value """
+                          """has at most 2 characters (it has 3).</li></ul>"""))
+
+        template = env.from_string("{{ form.errors }}")
+        result = template.render({"form": form})
+
+        self.assertEqual(result,
+                         ("""<ul class="errorlist"><li>name<ul class="errorlist">"""
+                          """<li>Ensure this value has at most 2 characters (it """
+                          """has 3).</li></ul></li></ul>"""))
 
     def test_autoescape_01(self):
         old_autoescape_value = env.autoescape

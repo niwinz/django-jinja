@@ -199,6 +199,9 @@ class Environment(Environment):
             return
 
         from django.utils import safestring
+        from django.forms.forms import BoundField
+        from django.forms.utils import ErrorList
+        from django.forms.utils import ErrorDict
 
         if hasattr(safestring, "SafeText"):
             if not hasattr(safestring.SafeText, "__html__"):
@@ -215,6 +218,15 @@ class Environment(Environment):
         if hasattr(safestring, "SafeBytes"):
             if not hasattr(safestring.SafeBytes, "__html__"):
                 safestring.SafeBytes.__html__ = lambda self: six.text_type(self)
+
+        if not hasattr(BoundField, "__html__"):
+            BoundField.__html__ = lambda self: six.text_type(self)
+
+        if not hasattr(ErrorList, "__html__"):
+            ErrorList.__html__ = lambda self: six.text_type(self)
+
+        if not hasattr(ErrorDict, "__html__"):
+            ErrorDict.__html__ = lambda self: six.text_type(self)
 
     def initialize_builtins(self):
         for name, value in JINJA2_FILTERS.items():
