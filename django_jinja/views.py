@@ -51,6 +51,11 @@ class PermissionDenied(ErrorView):
     response_cls = http.HttpResponseForbidden
 
 
+class BadRequest(ErrorView):
+    tmpl_name = "400" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
+    response_cls = http.HttpResponseBadRequest
+
+
 class ServerError(ErrorView):
     tmpl_name = "500" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
     response_cls = http.HttpResponseServerError
