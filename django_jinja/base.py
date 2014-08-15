@@ -200,8 +200,15 @@ class Environment(Environment):
 
         from django.utils import safestring
         from django.forms.forms import BoundField
-        from django.forms.utils import ErrorList
-        from django.forms.utils import ErrorDict
+
+        try:
+            from django.forms.utils import ErrorList
+            from django.forms.utils import ErrorDict
+
+        # Just for django < 1.7 compatibility
+        except ImportError:
+            from django.forms.util import ErrorList
+            from django.forms.util import ErrorDict
 
         if hasattr(safestring, "SafeText"):
             if not hasattr(safestring.SafeText, "__html__"):
