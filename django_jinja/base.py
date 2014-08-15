@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 
 import os
 
@@ -21,18 +21,17 @@ from . import utils
 
 JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, "JINJA2_ENVIRONMENT_OPTIONS", {})
 JINJA2_EXTENSIONS = getattr(settings, "JINJA2_EXTENSIONS", [])
-JINJA2_FILTERS = getattr(settings, "JINJA2_FILTERS", {})
-JINJA2_FILTERS_REPLACE_FROM_DJANGO = getattr(settings, "JINJA2_FILTERS_REPLACE_FROM_DJANGO", True)
-JINJA2_TESTS = getattr(settings, "JINJA2_TESTS", {})
-JINJA2_GLOBALS = getattr(settings, "JINJA2_GLOBALS", {})
 JINJA2_AUTOESCAPE = getattr(settings, "JINJA2_AUTOESCAPE", True)
 JINJA2_NEWSTYLE_GETTEXT = getattr(settings, "JINJA2_NEWSTYLE_GETTEXT", True)
-JINJA2_CONSTANTS = getattr(settings, "JINJA2_CONSTANTS", {})
+JINJA2_FILTERS_REPLACE_FROM_DJANGO = getattr(settings, "JINJA2_FILTERS_REPLACE_FROM_DJANGO", True)
 
 JINJA2_BYTECODE_CACHE_ENABLE = getattr(settings, "JINJA2_BYTECODE_CACHE_ENABLE", False)
 JINJA2_BYTECODE_CACHE_NAME = getattr(settings, "JINJA2_BYTECODE_CACHE_NAME", "default")
 JINJA2_BYTECODE_CACHE_BACKEND = getattr(settings, "JINJA2_BYTECODE_CACHE_BACKEND",
                                         "django_jinja.cache.BytecodeCache")
+
+JINJA2_CONSTANTS = getattr(settings, "JINJA2_CONSTANTS", {})
+JINJA2_TESTS = getattr(settings, "JINJA2_TESTS", {})
 
 
 # Default jinja extension list
@@ -45,7 +44,7 @@ DEFAULT_EXTENSIONS = [
 ]
 
 
-JINJA2_FILTERS.update({
+JINJA2_FILTERS = {
     "static": "django_jinja.builtins.filters.static",
     "reverseurl": "django_jinja.builtins.filters.reverse",
     "addslashes": "django_jinja.builtins.filters.addslashes",
@@ -81,7 +80,7 @@ JINJA2_FILTERS.update({
     "localtime": "django_jinja.builtins.filters.localtime",
     "utc": "django_jinja.builtins.filters.utc",
     "timezone": "django_jinja.builtins.filters.timezone",
-})
+}
 
 if JINJA2_FILTERS_REPLACE_FROM_DJANGO:
     JINJA2_FILTERS.update({
@@ -101,13 +100,17 @@ if JINJA2_FILTERS_REPLACE_FROM_DJANGO:
         "pprint": "django_jinja.builtins.filters.pprint",
     })
 
-JINJA2_GLOBALS.update({
+JINJA2_GLOBALS = {
     "url": "django_jinja.builtins.global_context.url",
     "static": "django_jinja.builtins.global_context.static",
     "localtime": "django_jinja.builtins.filters.localtime",
     "utc": "django_jinja.builtins.filters.utc",
     "timezone": "django_jinja.builtins.filters.timezone",
-})
+}
+
+
+JINJA2_FILTERS.update(getattr(settings, "JINJA2_FILTERS", {}))
+JINJA2_GLOBALS.update(getattr(settings, "JINJA2_GLOBALS", {}))
 
 
 def dict_from_context(context):
