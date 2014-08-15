@@ -1,21 +1,24 @@
-# -*- coding: utf-8 -*-
-
-from django_jinja.library import Library
+from django_jinja import library
 import jinja2
 
-register = Library()
 
-@register.test(name="one")
+@library.test(name="one")
 def is_one(n):
     return n == 1
 
 
-@register.filter
+@library.filter
 @jinja2.contextfilter
 def replace(context, value, x, y):
     return value.replace(x, y)
 
 
-@register.global_function
+@library.global_function
 def myecho(data):
     return data
+
+
+@library.global_function
+@library.render_with("test-render-with.jinja")
+def myrenderwith(*args, **kwargs):
+    return {"name": "Foo"}

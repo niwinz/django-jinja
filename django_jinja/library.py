@@ -1,6 +1,8 @@
-# -*- coding: utf-8 -*-
-
+import functools
 import warnings
+
+from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 
 
 # Global register dict for third party
@@ -85,3 +87,22 @@ class Library(object):
     def __getitem__(self, item, value):
         _env = _get_env()
         return _env.globals[item]
+
+
+def render_with(template, fn=None):
+    """
+    Makes simple function works like
+    django's default inclusion_tag: render
+    specified template with context returned
+    by decorated function.
+    """
+
+    if fn is None:
+        return functools.partial(render_with, template)
+
+    @functools.wraps(fn)
+    def _wrapper(*args, **kwargs):
+        data = render_to_string(template, fn(*args, **kwargs))
+        return mark_safe(data)
+
+    return _wrapper

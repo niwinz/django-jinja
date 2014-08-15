@@ -1,11 +1,10 @@
-# -*- coding: utf-8 -*-
+# -*- encoding: utf-8 -*-
 
 from __future__ import print_function, unicode_literals
 
 from django.http import HttpResponse
 from django.test import signals, TestCase
 from django.test.client import RequestFactory
-from django.template.loader import render_to_string
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
 from django.core.urlresolvers import NoReverseMatch
@@ -78,6 +77,11 @@ class TemplateFunctionsTest(TestCase):
         result = template.render({})
 
         self.assertEqual(result, "foo")
+
+    def test_render_with(self):
+        template = env.from_string("{{ myrenderwith() }}")
+        result = template.render({})
+        self.assertEqual(result, "<strong>Foo</strong>")
 
     def test_autoescape_01(self):
         old_autoescape_value = env.autoescape
