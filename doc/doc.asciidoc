@@ -1,7 +1,7 @@
 django-jinja documentation
 ==========================
 Andrey Antukh, <niwi@niwi.be>
-1.0.3, 2014-06-15
+1.0.4, 2014-08-24
 
 :toc:
 
@@ -334,7 +334,6 @@ Version 1.0.4
 
 - Add render_with decorator as replacement for django inclusion_tag.
 - Reorder how builtin functions/filters are setted making easy overwrite them.
-
 
 Version 1.0.3
 ~~~~~~~~~~~~~
