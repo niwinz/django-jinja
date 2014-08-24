@@ -232,6 +232,13 @@ handler404 = views.PageNotFound.as_view()
 handler500 = views.ServerError.as_view()
 ----
 
+Known Issues
+------------
+
+- django-jinja does not works properly with django's `TemplateResponse` class, widely
+  used by generic views. My recommendations is subclass the `TemplateResponseMixin` and
+  overwrite the render_to_response function.
+
 
 Builtin contrib modules
 -----------------------
