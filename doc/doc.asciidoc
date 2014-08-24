@@ -23,13 +23,6 @@ There are other projects that attempt do same thing: Djinja, Coffin, etc... Why 
   maintainable and easily understandable how the library works.
 
 
-Supported versions
-------------------
-
-- Latest stable version: *1.0.0*
-- Previous stable version: *0.25.0*
-
-
 Requirements
 ------------
 
