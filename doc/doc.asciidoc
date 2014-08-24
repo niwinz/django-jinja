@@ -140,9 +140,10 @@ JINJA2_AUTOESCAPE = True
 # Mute reverse url exceptions (default: False)
 JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
 
-# Replace small subset of jinja2 filters with
-# django filters (default: True)
-JINJA2_FILTERS_REPLACE_FROM_DJANGO = True
+# Keep original small subset of jinja filters 
+# instead of use the django's versions of them.
+# Default: True
+JINJA2_FILTERS_REPLACE_FROM_DJANGO = False
 ----
 
 
