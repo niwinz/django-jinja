@@ -10,7 +10,7 @@ JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = getattr(settings, "JINJA2_MUTE_URLRESOLVE_EX
 logger = logging.getLogger(__name__)
 
 
-def url(name, *args, **kwargs):
+def url(view_name, *args, **kwargs):
     """
     Shortcut filter for reverse url on templates. Is a alternative to
     django {% url %} tag, but more simple.
@@ -23,7 +23,7 @@ def url(name, *args, **kwargs):
 
     """
     try:
-        return django_reverse(name, args=args, kwargs=kwargs)
+        return django_reverse(view_name, args=args, kwargs=kwargs)
     except NoReverseMatch as exc:
         logger.error('Error: %s', exc)
         if not JINJA2_MUTE_URLRESOLVE_EXCEPTIONS:
