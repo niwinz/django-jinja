@@ -59,6 +59,13 @@ class TemplateFunctionsTest(TestCase):
             _result = template.render(kwargs)
             self.assertEqual(_result, result)
 
+    def test_string_interpolation(self):
+        template = env.from_string("{{ 'Hello %s!' % name }}")
+        self.assertEqual(template.render({"name": "foo"}), "Hello foo!")
+
+        template = env.from_string("{{ _('Hello %s!').format(name) }}")
+        self.assertEqual(template.render({"name": "foo"}), "Hello foo!")
+
     def test_urlresolve_exceptions(self):
         template = env.from_string("{{ url('adads') }}")
         template.render({})
