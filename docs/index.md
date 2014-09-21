@@ -8,5 +8,5 @@
 <script>
 setTimeout(function() {
   window.location.href = "http://niwibe.github.io/django-jinja";
-}, 3000)
+}, 1500)
 </script>
