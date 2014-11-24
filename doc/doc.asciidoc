@@ -67,8 +67,8 @@ django template loaders:
 [source, python]
 ----
 TEMPLATE_LOADERS = (
-    'django_jinja.loaders.AppLoader',
     'django_jinja.loaders.FileSystemLoader',
+    'django_jinja.loaders.AppLoader',
 )
 ----
 

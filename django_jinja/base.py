@@ -183,8 +183,8 @@ class Environment(Environment):
         loader = getattr(settings, "JINJA2_LOADER", None)
         if loader is None:
             from django.template.loaders import app_directories
-            default_loader_dirs = (app_directories.app_template_dirs +
-                                   tuple(settings.TEMPLATE_DIRS))
+            default_loader_dirs = (tuple(settings.TEMPLATE_DIRS) +
+                                   app_directories.app_template_dirs)
 
             self.loader = FileSystemLoader(default_loader_dirs)
         elif isinstance(loader, six.string_types):
