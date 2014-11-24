@@ -1,9 +1,11 @@
 django-jinja documentation
 ==========================
 Andrey Antukh, <niwi@niwi.be>
-1.0.4, 2014-08-24
-
-:toc:
+1.0.5
+:toc: left
+:numbered:
+:source-highlighter: pygments
+:pygments-style: friendly
 
 
 Introduction
