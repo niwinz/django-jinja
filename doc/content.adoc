@@ -334,7 +334,7 @@ License
 
 [source,text]
 ----
-Copyright (c) 2011-2014 Andrei Antoukh <niwi@niwi.be>
+Copyright (c) 2011-2014 Andre Antukh <niwi@niwi.be>
 
 All rights reserved.
 
