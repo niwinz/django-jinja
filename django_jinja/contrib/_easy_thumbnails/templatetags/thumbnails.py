@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
 import logging
 
 from easy_thumbnails.conf import settings
