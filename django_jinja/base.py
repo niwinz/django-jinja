@@ -276,7 +276,8 @@ class Environment(Environment):
         for app_path in all_modules:
             try:
                 mod = import_module(app_path + ".templatetags")
-                mod_list.append((app_path, os.path.dirname(mod.__file__)))
+                if mod is not None:
+                    mod_list.append((app_path, os.path.dirname(mod.__file__)))
             except ImportError:
                 pass
 
