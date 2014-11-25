@@ -25,8 +25,8 @@ def debug_silence(error_output=''):
     return inner
 
 
-@debug_silence(error_output='')
 @library.filter
+@debug_silence(error_output='')
 def thumbnail_url(source, alias):
     return _thumbnail.thumbnail_url(source, alias)
 
