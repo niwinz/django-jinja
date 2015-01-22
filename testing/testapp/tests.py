@@ -4,6 +4,7 @@ from __future__ import print_function, unicode_literals
 
 import datetime
 import sys
+import django
 
 from django.http import HttpResponse
 from django.test import signals, TestCase
@@ -15,6 +16,10 @@ from django.conf import settings
 from django.shortcuts import render
 
 from django_jinja.base import env, dict_from_context, Template
+from django.template import engines
+
+if django.VERSION[:2] >= (1, 8):
+    env = engines["jinja2"]
 
 from .forms import TestForm
 
