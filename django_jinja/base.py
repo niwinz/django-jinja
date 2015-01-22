@@ -329,22 +329,21 @@ def make_environemnt(defaults=None, clspath=None):
     return env
 
 
-def initialize(env):
+def initialize(environment):
     """
     Initialize given environment populating it with
     builtins and with django i18n data.
     """
-    _initialize_builtins(env)
-    _initialize_thirdparty(env)
-    _initialize_i18n(env)
-    _initialize_template_loader(env)
-    _initialize_bytecode_cache(env)
+    _initialize_builtins(environment)
+    _initialize_thirdparty(environment)
+    _initialize_i18n(environment)
+    _initialize_bytecode_cache(environment)
+    _initialize_template_loader(environment)
 
 
 def setup():
     patch_django_for_autoescape()
     preload_templatetags_from_apps()
-    initialize(env)
 
 
 # Create a global instance for preserve
