@@ -129,24 +129,14 @@ class TemplateFunctionsTest(TestCase):
                           """has 3).</li></ul></li></ul>"""))
 
     def test_autoescape_01(self):
-        old_autoescape_value = env.autoescape
-        env.autoescape = True
-
         template = env.from_string("{{ foo|safe }}")
         result = template.render({'foo': '<h1>Hellp</h1>'})
         self.assertEqual(result, "<h1>Hellp</h1>")
 
-        env.autoescape = old_autoescape_value
-
     def test_autoescape_02(self):
-        old_autoescape_value = env.autoescape
-        env.autoescape = True
-
         template = env.from_string("{{ foo }}")
         result = template.render({'foo': '<h1>Hellp</h1>'})
         self.assertEqual(result, "&lt;h1&gt;Hellp&lt;/h1&gt;")
-
-        env.autoescape = old_autoescape_value
 
     def test_debug_var_when_render_shortcut_is_used(self):
         prev_debug_value = settings.DEBUG
