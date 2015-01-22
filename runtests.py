@@ -70,6 +70,9 @@ test_settings = {
     "JINJA2_CONSTANTS": {"foo": "bar"},
     "JINJA2_AUTOESCAPE": True,
     "JINJA2_MUTE_URLRESOLVE_EXCEPTIONS": True,
+    "TEMPLATES": [
+        {"BACKEND": "django_jinja.backend.Jinja2", "NAME": "jinja2", "APP_DIRS": True}
+    ],
 }
 
 
