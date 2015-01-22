@@ -31,7 +31,7 @@ def static(path):
 from django.template.defaultfilters import addslashes
 from django.template.defaultfilters import capfirst
 from django.utils.html import escapejs as escapejs_filter
-from django.utils.html import fix_ampersands as fix_ampersands_filter
+# from django.utils.html import fix_ampersands as fix_ampersands_filter
 from django.template.defaultfilters import floatformat
 from django.template.defaultfilters import iriencode
 from django.template.defaultfilters import linenumbers

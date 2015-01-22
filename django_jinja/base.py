@@ -6,7 +6,7 @@ import django
 import jinja2
 
 from django.conf import settings
-from django.template import Origin
+# from django.template import Origin
 from django.template.context import BaseContext
 from django.utils.importlib import import_module
 from django.utils import six
@@ -45,7 +45,7 @@ JINJA2_FILTERS = {
     "addslashes": "django_jinja.builtins.filters.addslashes",
     "capfirst": "django_jinja.builtins.filters.capfirst",
     "escapejs": "django_jinja.builtins.filters.escapejs_filter",
-    "fix_ampersands": "django_jinja.builtins.filters.fix_ampersands_filter",
+    # "fix_ampersands": "django_jinja.builtins.filters.fix_ampersands_filter",
     "floatformat": "django_jinja.builtins.filters.floatformat",
     "iriencode": "django_jinja.builtins.filters.iriencode",
     "linenumbers": "django_jinja.builtins.filters.linenumbers",
@@ -132,7 +132,7 @@ class Template(jinja2.Template):
         new_context = dict_from_context(context)
         if settings.TEMPLATE_DEBUG:
             from django.test import signals
-            self.origin = Origin(self.filename)
+            # self.origin = Origin(self.filename)
             signals.template_rendered.send(sender=self, template=self, context=context)
 
         return super(Template, self).render(new_context)
@@ -141,7 +141,7 @@ class Template(jinja2.Template):
         new_context = dict_from_context(context)
         if settings.TEMPLATE_DEBUG:
             from django.test import signals
-            self.origin = Origin(self.filename)
+            # self.origin = Origin(self.filename)
             signals.template_rendered.send(sender=self, template=self, context=context)
 
         return super(Template, self).stream(new_context)
