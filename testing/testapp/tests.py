@@ -213,8 +213,9 @@ class DjangoPipelineTestTest(TestCase):
     def test_pipeline_js_safe(self):
         template = env.from_string("{{ compressed_js('test') }}")
         result = template.render({})
-        self.assertEqual(result,
-            '<script type="text/javascript" src="/static/script.2.js" charset="utf-8"></script>')
+        self.assertTrue(result.startswith("<script"))
+        self.assertIn("application/javascript", result)
+        self.assertIn("/static/script.2.js", result)
 
     def test_pipeline_css_safe(self):
         template = env.from_string("{{ compressed_css('test') }}")
