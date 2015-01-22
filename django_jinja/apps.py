@@ -10,3 +10,5 @@ class DjangoJinjaAppConfig(AppConfig):
 
     def ready(self):
         base.setup()
+        if django.VERSION[:2] <= (1, 7):
+            base.initialize(base.env)

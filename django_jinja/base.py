@@ -354,4 +354,5 @@ env = make_environemnt()
 
 # Fallback for prevous django versions.
 if django.VERSION[:2] < (1, 7):
+    initialize(env)
     setup()
