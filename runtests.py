@@ -54,6 +54,11 @@ test_settings = {
         "test": {
             "source_filenames": ["style.css"],
             "output_filename": "style.2.css",
+            "extra_context": {"media": "all"},
+        },
+        "test2": {
+            "source_filenames": ["style.css"],
+            "output_filename": "style.2.css",
         }
     },
     "PIPELINE_JS": {
