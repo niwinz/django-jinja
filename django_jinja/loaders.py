@@ -1,4 +1,7 @@
-# -*- coding: utf-8 -*-
+"""
+Api for django <= 1.7.x that uses loader extending
+way for get it working.
+"""
 
 import re
 
@@ -26,14 +29,11 @@ class LoaderMixin(object):
     is_usable = True
 
     def load_template(self, template_name, template_dirs=None):
-        # If regex intercept is off (default), try
-        # template intercept by extension.
-        if (not RE_INTERCEPT_ON and
-                not template_name.endswith(DEFAULT_JINJA2_TEMPLATE_EXTENSION)):
+        # If regex intercept is off (default), try template intercept by extension.
+        if (not RE_INTERCEPT_ON and not template_name.endswith(DEFAULT_JINJA2_TEMPLATE_EXTENSION)):
             return super(LoaderMixin, self).load_template(template_name, template_dirs)
 
-        # If regex intercept is on, try regex match over
-        # template name.
+        # If regex intercept is on, try regex match over template name.
         elif RE_INTERCEPT_ON and not RE_INTERCEPT.match(template_name):
             return super(LoaderMixin, self).load_template(template_name, template_dirs)
 

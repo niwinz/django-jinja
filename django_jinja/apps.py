@@ -1,3 +1,5 @@
+import django
+
 from django.apps import AppConfig
 from django_jinja import base
 
@@ -7,5 +9,4 @@ class DjangoJinjaAppConfig(AppConfig):
     verbose_name = "Django Jinja"
 
     def ready(self):
-        base.env.initialize()
-
+        base.setup()
