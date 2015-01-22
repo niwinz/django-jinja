@@ -80,7 +80,8 @@ except ImportError:
 def slugify(value):
     return djslugify(force_text(value))
 
-
+from functools import partial
+linebreaksbr = partial(linebreaksbr, autoescape=True)
 
 # TZ
 

@@ -138,6 +138,11 @@ class TemplateFunctionsTest(TestCase):
         result = template.render({'foo': '<h1>Hellp</h1>'})
         self.assertEqual(result, "&lt;h1&gt;Hellp&lt;/h1&gt;")
 
+    def test_autoescape_03(self):
+        template = env.from_string("{{ foo|linebreaksbr }}")
+        result = template.render({"foo": "<script>alert(1)</script>\nfoo"})
+        self.assertEqual(result, "&lt;script&gt;alert(1)&lt;/script&gt;<br />foo")
+
     def test_debug_var_when_render_shortcut_is_used(self):
         prev_debug_value = settings.DEBUG
         settings.DEBUG = True
