@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import django
+
 from django.conf import settings
 from django.views.generic import View
 from django.template import loader, RequestContext
@@ -16,8 +18,12 @@ class GenericView(View):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
-        output = loader.render_to_string(self.tmpl_name, context,
-                                         context_instance=RequestContext(request))
+        if django.VERSION[:2] < (1, 8):
+            output = loader.render_to_string(self.tmpl_name, context,
+                                             context_instance=RequestContext(request))
+        else:
+            output = loader.render_to_string(self.tmpl_name, context, request=request)
+
         return self.response_cls(output, content_type=self.content_type)
 
 

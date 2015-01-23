@@ -1,6 +1,10 @@
-# -*- coding: utf-8 -*-
+"""
+Api for django <= 1.7.x that uses loader extending
+way for get it working.
+"""
 
 import re
+import jinja2
 
 from django.conf import settings
 from django.template import TemplateDoesNotExist
@@ -8,40 +12,33 @@ from django.template.loaders import app_directories
 from django.template.loaders import filesystem
 from django_jinja.base import env
 
-import jinja2
-
+from . import base
 
 if hasattr(settings, "DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE"):
-    RE_INTERCEPT_ON = True
-    DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE = \
-        settings.DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE
-    RE_INTERCEPT = re.compile(settings.DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE)
+    INTERCEPT_RE = getattr(settings, "DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE")
+    REGEX = re.compile(INTERCEPT_RE)
+    EXTENSION = None
 else:
-    RE_INTERCEPT_ON = False
-    DEFAULT_JINJA2_TEMPLATE_EXTENSION = getattr(settings,
-        'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
+    REGEX = None
+    EXTENSION = getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
 
 
 class LoaderMixin(object):
     is_usable = True
 
+    def match_template(self, template_name):
+        return base.match_template(template_name, regex=REGEX, extension=EXTENSION)
+
     def load_template(self, template_name, template_dirs=None):
-        # If regex intercept is off (default), try
-        # template intercept by extension.
-        if (not RE_INTERCEPT_ON and
-                not template_name.endswith(DEFAULT_JINJA2_TEMPLATE_EXTENSION)):
+        if self.match_template(template_name):
+            try:
+                template = env.get_template(template_name)
+                return template, template.filename
+            except jinja2.TemplateNotFound:
+                raise TemplateDoesNotExist(template_name)
+        else:
             return super(LoaderMixin, self).load_template(template_name, template_dirs)
 
-        # If regex intercept is on, try regex match over
-        # template name.
-        elif RE_INTERCEPT_ON and not RE_INTERCEPT.match(template_name):
-            return super(LoaderMixin, self).load_template(template_name, template_dirs)
-
-        try:
-            template = env.get_template(template_name)
-            return template, template.filename
-        except jinja2.TemplateNotFound:
-            raise TemplateDoesNotExist(template_name)
 
 
 class FileSystemLoader(LoaderMixin, filesystem.Loader):
