@@ -3,6 +3,8 @@ django-jinja
 
 Simple and nonobstructive jinja2 integration with Django.
 
+**Now with support for django 1.8**
+
 
 .. image:: https://img.shields.io/travis/niwibe/django-jinja.svg?style=flat
     :target: https://travis-ci.org/niwibe/django-jinja
