@@ -1,6 +1,15 @@
 Changelog
 =========
 
+Version 1.1.0
+-------------
+
+- Code base refactored.
+- Add django 1.8 support.
+- Remove `fix_ampersands` filter.
+- Fix linebreaksbr autoescape bug.
+
+
 Version 1.0.5
 -------------
 
