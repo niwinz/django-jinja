@@ -298,6 +298,15 @@ def _initialize_bytecode_cache(env):
         env.bytecode_cache = cls(JINJA2_BYTECODE_CACHE_NAME)
 
 
+def match_template(template_name, regex=None, extension=None):
+    if extension is not None:
+        return template_name.endswith(extension)
+    elif regex:
+        return regex.match(template_name)
+    else:
+        return False
+
+
 def make_environemnt(defaults=None, clspath=None):
     """
     Create a new instance of jinja2 environment.
@@ -327,6 +336,7 @@ def make_environemnt(defaults=None, clspath=None):
     env.template_class = Template
 
     return env
+
 
 
 def initialize(environment):

@@ -38,9 +38,11 @@ class Jinja2(BaseEngine):
         newstyle_gettext = options.pop("newstyle_gettext", True)
         context_processors = options.pop("context_processors", [])
 
+        match_extension = options.pop("match_extension", ".jinja")
+        match_regex = options.pop("match_regex", None)
+
         environment_clspath = options.pop("environment", "jinja2.Environment")
         environment_cls = import_string(environment_clspath)
-
 
         options.setdefault("loader", jinja2.FileSystemLoader(self.template_dirs))
         options.setdefault("extensions", base.DEFAULT_EXTENSIONS)
@@ -53,7 +55,10 @@ class Jinja2(BaseEngine):
             options.setdefault("undefined", jinja2.Undefined)
 
         self.env = environment_cls(**options)
+
         self._context_processors = context_processors
+        self._match_regex = match_regex
+        self._match_extension = match_extension
 
         self._initialize_i18n(newstyle_gettext)
         self._initialize_builtins()
@@ -115,7 +120,15 @@ class Jinja2(BaseEngine):
     def from_string(self, template_code):
         return Template(self.env.from_string(template_code), self)
 
+    def match_template(self, template_name):
+        return base.match_template(template_name,
+                                   regex=self._match_regex,
+                                   extension=self._match_extension)
+
     def get_template(self, template_name):
+        if not self.match_template(template_name):
+            raise TemplateDoesNotExist("Template {} does not exists".format(template_name))
+
         try:
             return Template(self.env.get_template(template_name), self)
         except jinja2.TemplateNotFound as exc:
