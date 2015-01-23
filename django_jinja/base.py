@@ -369,4 +369,4 @@ def setup_django_gte_18():
 
 # Fallback for prevous django versions.
 if django.VERSION[:2] < (1, 7):
-    setup()
+    setup_django_lte_17()
