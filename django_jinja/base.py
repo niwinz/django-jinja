@@ -341,17 +341,22 @@ def initialize(environment):
     _initialize_template_loader(environment)
 
 
-def setup():
+env = None
+
+def setup_django_lte_17():
+    global env
+    env = make_environemnt()
+
+    patch_django_for_autoescape()
+    preload_templatetags_from_apps()
+    initialize(env)
+
+
+def setup_django_gte_18():
     patch_django_for_autoescape()
     preload_templatetags_from_apps()
 
 
-# Create a global instance for preserve
-# the previos behavior (django <= 1.7.x)
-env = make_environemnt()
-
-
 # Fallback for prevous django versions.
 if django.VERSION[:2] < (1, 7):
-    initialize(env)
     setup()

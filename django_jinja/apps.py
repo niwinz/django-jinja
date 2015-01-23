@@ -9,6 +9,7 @@ class DjangoJinjaAppConfig(AppConfig):
     verbose_name = "Django Jinja"
 
     def ready(self):
-        base.setup()
         if django.VERSION[:2] <= (1, 7):
-            base.initialize(base.env)
+            base.setup_django_lte_17()
+        else:
+            base.setup_django_gte_18()
