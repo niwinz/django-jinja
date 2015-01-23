@@ -1,18 +1,15 @@
-django-jinja documentation
-==========================
+= django-jinja - Jinja2 Template Engine for Django
 Andrey Antukh, <niwi@niwi.be>
-1.0.5
+1.1.0
 :toc: left
 :numbered:
 :source-highlighter: pygments
 :pygments-style: friendly
 
 
-Introduction
-------------
+== Introduction
 
 django-jinja is a xref:license[BSD Licensed], simple and nonobstructive jinja2 integration with Django.
-
 
 Jinja2 provides certain advantages over the native system of Django, for example, explicit calls to
 callable from templates, has better performance and has a plugin system, etc ...
@@ -25,16 +22,7 @@ There are other projects that attempt do same thing: Djinja, Coffin, etc... Why 
   maintainable and easily understandable how the library works.
 
 
-Requirements
-------------
-
-- Python 2.7, 3.3 or 3.4
-- Django 1.4, 1.5, 1.6 and 1.7
-- jinja2 >= 2.7.0
-
-
-Features
---------
+=== Features
 
 - Auto-load templatetags compatible with Jinja2 on same way as Django.
 - Django templates can coexist with Jinja2 templates without any problems.
@@ -43,14 +31,38 @@ Features
 - I18n subsystem adapted for Jinja2 (makemessages now collects messages from Jinja templates)
 - Compatible with python2 and python3 using same codebase.
 - jinja2 bytecode cache adapted for use django cache subsystem.
+- Django 1.8 support out of the box.
 
 
+=== Django 1.8 support
 
-User guide
-----------
+Django 1.8 introduces multiple template engines support and comes with Jinja2 backend.
 
-Installation
-~~~~~~~~~~~~
+But it has some drawbacks:
+
+- not autoloads template tags.
+- by default search templates on _jinja2_ directory instead of _templates_ (jinja2 are also templates,
+  I don't understand why put them in different directory?)
+- not setups i18n support.
+- not has support for django context processors.
+
+In summary, for make it working like _django_jinja_ is already working for years, it requires a lot
+of boilerplate.
+
+*django-jinja since version 1.1 also comes with django 1.8 compatible backend*, but supporting all
+the things.
+
+
+== Requirements
+
+- Python 2.7, 3.3 or 3.4
+- Django 1.5, 1.6, 1.7 and 1.8
+- jinja2 >= 2.7.0
+
+
+== User guide
+
+=== Installation
 
 The simplest way to install **django-jinja** is using **pip**:
 
@@ -59,9 +71,14 @@ The simplest way to install **django-jinja** is using **pip**:
 pip install django-jinja
 ----
 
+Add add it to django installed apps list:
 
-Configure
-~~~~~~~~~
+[source, python]
+----
+INSTALLED_APPS += ('django_jinja',)
+----
+
+=== Configure for django +++<=+++ 1.7
 
 The first step for configure _django-jinja_ is replace default
 django template loaders:
@@ -74,15 +91,8 @@ TEMPLATE_LOADERS = (
 )
 ----
 
-Add add it to django installed apps list:
-
-[source, python]
-----
-INSTALLED_APPS += ('django_jinja',)
-----
-
-django-jinja template loaders inherit's from a django template loaders and works like middleware, intercepts
-by predefined condition templates for render with jinja2 engine.
+django-jinja template loaders inherit's from a django template loaders and works like middleware, 
+intercepts by predefined condition templates for render with jinja2 engine.
 
 The simplest condition is using file extensions:
 
@@ -91,9 +101,9 @@ The simplest condition is using file extensions:
 DEFAULT_JINJA2_TEMPLATE_EXTENSION = '.jinja'
 ----
 
-With this settings, django-jinja intercepts all templates with `.jinja` extension and render them with jinja2
-engine and templates that not matches the `.jinja` extension are forwarded to django templates engine.
-
+With this settings, django-jinja intercepts all templates with `.jinja` extension and render them with 
+jinja2 engine and templates that not matches the `.jinja` extension are forwarded to django templates 
+engine.
 
 Additionaly, *django-jinja* exposes, more advanced matcher, using regular exceptions:
 
@@ -109,8 +119,7 @@ DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE = r"^(?!admin/).*"
 ----
 
 
-Additional settings
-~~~~~~~~~~~~~~~~~~~
+==== Additional settings
 
 If you need more low level customizations for jinja2 engine, *django-jinja* exposes
 `JINJA2_ENVIRONMENT_OPTIONS` settings for it:
@@ -142,15 +151,11 @@ JINJA2_AUTOESCAPE = True
 # Mute reverse url exceptions (default: False)
 JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
 
-# Keep original small subset of jinja filters 
+# Keep original small subset of jinja filters
 # instead of use the django's versions of them.
 # Default: True
 JINJA2_FILTERS_REPLACE_FROM_DJANGO = False
 ----
-
-
-Bytecode Cache
-~~~~~~~~~~~~~~
 
 *django-jinja* supports the Jinja2's template bytecode caching system. Including an implementation
 for makes use of Django's built-in cache framework.
@@ -170,8 +175,74 @@ JINJA2_BYTECODE_CACHE_BACKEND = "path.to.you.cache.class"
 link:http://jinja.pocoo.org/docs/api/#bytecode-cache[More documentation about bytecode cache]
 
 
-Differences
-~~~~~~~~~~~
+=== Configure for django +++>=+++ 1.8
+
+Django 1.8 introduces multiple template engine and new way to configure them.
+
+This is a quick example of how to configure _django-jinja_ with django 1.8 configuration
+formata:
+
+[source, python]
+----
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True
+    },
+    {
+        "BACKEND": "django_jinja.backend.Jinja2",
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "match_extension", ".jinja",
+        }
+    },
+]
+----
+
+_django-jinja_ backend, unlike django's one, uses the "templates" directory and works like a middleware.
+It intercepts by extension or by regular expression.
+
+
+Full list of options, almost all them not mandatory:
+
+[source, python]
+----
+TEMPLATES = [
+    {
+        "BACKEND": "django_jinja.backend.Jinja2",
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "match_extension": ".jinja",
+            "match_regex": r"^(?!admin/).*", # this is exclusive with match_extension
+            "context_processors": [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.contrib.messages.context_processors.messages",
+            ],
+            "extensions": [
+                "jinja2.ext.do",
+                "jinja2.ext.loopcontrols",
+                "jinja2.ext.with_",
+                "jinja2.ext.i18n",
+                "jinja2.ext.autoescape",
+            ],
+            "newstyle_gettext": True,
+            "environment": "jinja2.Environment",
+            "auto_reload": settings.DEBUG
+        }
+    }
+]
+----
+
+All other options are passed directly to environment constructor.
+
+
+=== Differences
 
 .Reverse urls in templates
 [source, html+jinja]
@@ -233,6 +304,7 @@ handler403 = views.PermissionDenied.as_view()
 handler404 = views.PageNotFound.as_view()
 handler500 = views.ServerError.as_view()
 ----
+
 
 Known Issues
 ------------
@@ -317,7 +389,7 @@ INSTALLED_APPS += ('django_jinja.contrib._subdomains',)
 humanize
 ~~~~~~~~
 
-Django comes with humanize library that exposes some useful template filters. 
+Django comes with humanize library that exposes some useful template filters.
 
 .Activate plugin (settings.py)
 [source, python]
@@ -334,7 +406,7 @@ License
 
 [source,text]
 ----
-Copyright (c) 2011-2014 Andre Antukh <niwi@niwi.be>
+Copyright (c) 2011-2015 Andre Antukh <niwi@niwi.be>
 
 All rights reserved.
 
