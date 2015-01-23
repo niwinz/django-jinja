@@ -16,9 +16,9 @@ from django.conf import settings
 from django.shortcuts import render
 
 from django_jinja.base import env, dict_from_context, Template
-from django.template import engines
 
 if django.VERSION[:2] >= (1, 8):
+    from django.template import engines
     env = engines["jinja2"]
 
 from .forms import TestForm
