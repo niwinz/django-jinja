@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 1.1.1
+-------------
+
+- Fix typos on function names.
+- Honor Django's `setting_changed` signal to reinitialize the Jinja2 environment.
+
+Thanks to @akx
+
 Version 1.1.0
 -------------
 
