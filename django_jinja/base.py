@@ -285,11 +285,9 @@ def _initialize_template_loader(env):
         from django.template.loaders import app_directories
         default_loader_dirs = (tuple(settings.TEMPLATE_DIRS) +
                                app_directories.app_template_dirs)
-        env.loader = jinja2.FileSystemLoader(default_loader_dirs)
+        loader = jinja2.FileSystemLoader(default_loader_dirs)
 
-    # And in the last case, attach it as is.
-    else:
-        env.loader = loader
+    env.loader = loader
 
 
 def _initialize_bytecode_cache(env):
