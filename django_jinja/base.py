@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.test.signals import setting_changed
 
 import os
 
@@ -349,6 +350,12 @@ def initialize(environment):
     _initialize_template_loader(environment)
 
 
+def testing_reinitialize_signal(setting, **kwargs):
+    if "JINJA" in setting or "TEMPLATE" in setting:
+        global env
+        env = make_environment()
+        initialize(env)
+
 env = None
 
 def setup_django_lte_17():
@@ -358,6 +365,7 @@ def setup_django_lte_17():
     patch_django_for_autoescape()
     preload_templatetags_from_apps()
     initialize(env)
+    setting_changed.connect(testing_reinitialize_signal)
 
 
 def setup_django_gte_18():
