@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.test.signals import setting_changed
 
 import os
 
@@ -285,11 +286,9 @@ def _initialize_template_loader(env):
         from django.template.loaders import app_directories
         default_loader_dirs = (tuple(settings.TEMPLATE_DIRS) +
                                app_directories.app_template_dirs)
-        env.loader = jinja2.FileSystemLoader(default_loader_dirs)
+        loader = jinja2.FileSystemLoader(default_loader_dirs)
 
-    # And in the last case, attach it as is.
-    else:
-        env.loader = loader
+    env.loader = loader
 
 
 def _initialize_bytecode_cache(env):
@@ -307,7 +306,7 @@ def match_template(template_name, regex=None, extension=None):
         return False
 
 
-def make_environemnt(defaults=None, clspath=None):
+def make_environment(defaults=None, clspath=None):
     """
     Create a new instance of jinja2 environment.
     """
@@ -351,15 +350,22 @@ def initialize(environment):
     _initialize_template_loader(environment)
 
 
+def testing_reinitialize_signal(setting, **kwargs):
+    if "JINJA" in setting or "TEMPLATE" in setting:
+        global env
+        env = make_environment()
+        initialize(env)
+
 env = None
 
 def setup_django_lte_17():
     global env
-    env = make_environemnt()
+    env = make_environment()
 
     patch_django_for_autoescape()
     preload_templatetags_from_apps()
     initialize(env)
+    setting_changed.connect(testing_reinitialize_signal)
 
 
 def setup_django_gte_18():
