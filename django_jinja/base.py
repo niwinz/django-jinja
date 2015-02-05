@@ -307,7 +307,7 @@ def match_template(template_name, regex=None, extension=None):
         return False
 
 
-def make_environemnt(defaults=None, clspath=None):
+def make_environment(defaults=None, clspath=None):
     """
     Create a new instance of jinja2 environment.
     """
@@ -355,7 +355,7 @@ env = None
 
 def setup_django_lte_17():
     global env
-    env = make_environemnt()
+    env = make_environment()
 
     patch_django_for_autoescape()
     preload_templatetags_from_apps()
