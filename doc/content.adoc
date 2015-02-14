@@ -351,7 +351,8 @@ Builtin contrib modules
 -----------------------
 
 *django-jinja* comes with some additional contrib modules that adapts limited set of external
-django apps for use it easy from jinja templates.
+django apps for use it easy from jinja templates. Please note that in order to use any of these
+contrib modules, you'll need to install the relevant dependent package yourself first.
 
 
 [NOTE]
