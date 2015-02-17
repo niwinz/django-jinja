@@ -7,7 +7,7 @@ import sys
 import django
 
 from django.http import HttpResponse
-from django.test import signals, TestCase, override_settings
+from django.test import signals, TestCase
 from django.test.client import RequestFactory
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
