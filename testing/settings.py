@@ -6,6 +6,8 @@ BASE_DIR = os.path.dirname(__file__)
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+ALLOWED_HOSTS = ["*"]
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -28,21 +30,19 @@ LANGUAGE_CODE = "en"
 ADMIN_MEDIA_PREFIX = "/static/admin/"
 INTERNAL_IPS = ("127.0.0.1",)
 
+#STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, "static"),
-# )
-
-
-# STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-
+PIPELINE_CSS_COMPRESSOR = None
+PIPELINE_JS_COMPRESSOR = None
+PIPELINE_ENABLE = False
 
 STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'pipeline.finders.PipelineFinder',
+    "django.contrib.staticfiles.finders.FileSystemFinder",
+    "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    "pipeline.finders.PipelineFinder",
+    "pipeline.finders.CachedFileFinder",
 )
 
 # TEMPLATE_DIRS = ()
@@ -105,8 +105,49 @@ PIPELINE_JS = {
 JINJA2_CONSTANTS = {"foo": "bar"}
 JINJA2_AUTOESCAPE = True
 JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
-JINJA2_TEMPLATE_EXTENSION = '.jinja'
+JINJA2_TEMPLATE_EXTENSION = ".jinja"
+# JINJA2_EXTENSIONS = [
+#     "pipeline.jinja2.ext.PipelineExtension",
+# ]
 
 import django
 if django.VERSION[:2] >= (1, 6):
     TEST_RUNNER = "django.test.runner.DiscoverRunner"
+
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "require_debug_false": {
+            "()": "django.utils.log.RequireDebugFalse"
+        }
+    },
+
+    "formatters": {
+        "simple": {
+            "format": "%(asctime)s: %(message)s",
+        }
+    },
+
+    "handlers": {
+        "console":{
+            "level":"DEBUG",
+            "class":"logging.StreamHandler",
+            "formatter": "simple"
+        },
+
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": True,
+        },
+        "arandomtable.custom": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+        },
+
+    }
+}
