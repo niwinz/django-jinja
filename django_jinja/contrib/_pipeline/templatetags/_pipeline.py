@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from pipeline.conf import settings
 from pipeline.utils import guess_type
 from pipeline.packager import Packager, PackageNotFound
+from pipeline.collector import default_collector
 
 from django_jinja import library, utils
 
@@ -44,6 +45,7 @@ def compressed_css(ctx, name):
     if settings.PIPELINE_ENABLED:
         return _render_css(package.output_filename)
     else:
+        default_collector.collect()
         paths = packager.compile(package.paths)
         tags = [_render_css(path) for path in paths]
         return '\n'.join(tags)
@@ -88,6 +90,7 @@ def compressed_js(ctx, name):
     if settings.PIPELINE_ENABLED:
         return _render_js(package.output_filename)
     else:
+        default_collector.collect()
         paths = packager.compile(package.paths)
         templates = packager.pack_templates(package)
         tags = [_render_js(js) for js in paths]
