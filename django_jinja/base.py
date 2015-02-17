@@ -214,7 +214,7 @@ def patch_django_for_autoescape():
         ErrorDict.__html__ = lambda self: six.text_type(self)
 
 
-def preload_templatetags_from_apps():
+def _initialize_extensions():
     """
     Iterate over all available apps in searching and preloading
     available template filters or functions for jinja2.
@@ -339,12 +339,12 @@ def make_environment(defaults=None, clspath=None):
     return env
 
 
-
 def initialize(environment):
     """
     Initialize given environment populating it with
     builtins and with django i18n data.
     """
+    _initialize_extensions()
     _initialize_builtins(environment)
     _initialize_thirdparty(environment)
     _initialize_i18n(environment)
@@ -358,23 +358,17 @@ def testing_reinitialize_signal(setting, **kwargs):
         env = make_environment()
         initialize(env)
 
+# Global variable for store the environment for django <= 1.7
 env = None
 
-def setup_django_lte_17():
+def setup():
     global env
     env = make_environment()
 
-    patch_django_for_autoescape()
-    preload_templatetags_from_apps()
     initialize(env)
     setting_changed.connect(testing_reinitialize_signal)
 
-
-def setup_django_gte_18():
-    patch_django_for_autoescape()
-    preload_templatetags_from_apps()
-
-
 # Fallback for prevous django versions.
 if django.VERSION[:2] < (1, 7):
-    setup_django_lte_17()
+    patch_django_for_autoescape()
+    setup()
