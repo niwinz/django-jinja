@@ -44,6 +44,12 @@ class Jinja2(BaseEngine):
         environment_clspath = options.pop("environment", "jinja2.Environment")
         environment_cls = import_string(environment_clspath)
 
+        extra_filters = options.pop("filters", {})
+        extra_tests = options.pop("tests", {})
+        extra_globals = options.pop("globals", {})
+        extra_constants = options.pop("constants", {})
+        replace_filters_from_django = options.pop("replace_filters_from_django", True)
+
         options.setdefault("loader", jinja2.FileSystemLoader(self.template_dirs))
         options.setdefault("extensions", base.DEFAULT_EXTENSIONS)
         options.setdefault("auto_reload", settings.DEBUG)
@@ -62,7 +68,11 @@ class Jinja2(BaseEngine):
 
         self._initialize_extensions()
         self._initialize_i18n(newstyle_gettext)
-        self._initialize_builtins()
+        self._initialize_builtins(filters=extra_filters,
+                                  tests=extra_tests,
+                                  globals=extra_globals,
+                                  constants=extra_constants,
+                                  replace_filters_from_django=replace_filters_from_django)
         self._initialize_thirdparty()
 
     def _initialize_thirdparty(self):
@@ -79,10 +89,14 @@ class Jinja2(BaseEngine):
         else:
             self.env.install_null_translations(newstyle=newstyle)
 
-    def _initialize_builtins(self, filters=None, tests=None, globals=None, constants=None):
+    def _initialize_builtins(self, filters=None, tests=None, globals=None, constants=None,
+                             replace_filters_from_django=True):
         _filters = copy.copy(base.JINJA2_FILTERS)
         if filters is not None:
             _filters.update(filters)
+
+        if replace_filters_from_django:
+            _filters.update(base.FILTERS_FROM_DJANGO)
 
         _globals = copy.copy(base.JINJA2_GLOBALS)
         if globals is not None:
@@ -116,6 +130,8 @@ class Jinja2(BaseEngine):
 
         self.env.add_extension(builtins.extensions.CsrfExtension)
         self.env.add_extension(builtins.extensions.CacheExtension)
+
+
 
     @cached_property
     def context_processors(self):

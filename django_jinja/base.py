@@ -78,23 +78,22 @@ JINJA2_FILTERS = {
     "timezone": "django_jinja.builtins.filters.timezone",
 }
 
-if JINJA2_FILTERS_REPLACE_FROM_DJANGO:
-    JINJA2_FILTERS.update({
-        "title": "django_jinja.builtins.filters.title",
-        "upper": "django_jinja.builtins.filters.upper",
-        "lower": "django_jinja.builtins.filters.lower",
-        "urlencode": "django_jinja.builtins.filters.urlencode",
-        "urlize": "django_jinja.builtins.filters.urlize",
-        "wordcount": "django_jinja.builtins.filters.wordcount",
-        "wordwrap": "django_jinja.builtins.filters.wordwrap",
-        "center": "django_jinja.builtins.filters.center",
-        "join": "django_jinja.builtins.filters.join",
-        "length": "django_jinja.builtins.filters.length",
-        "random": "django_jinja.builtins.filters.random",
-        "default": "django_jinja.builtins.filters.default",
-        "filesizeformat": "django_jinja.builtins.filters.filesizeformat",
-        "pprint": "django_jinja.builtins.filters.pprint",
-    })
+FILTERS_FROM_DJANGO = {
+    "title": "django_jinja.builtins.filters.title",
+    "upper": "django_jinja.builtins.filters.upper",
+    "lower": "django_jinja.builtins.filters.lower",
+    "urlencode": "django_jinja.builtins.filters.urlencode",
+    "urlize": "django_jinja.builtins.filters.urlize",
+    "wordcount": "django_jinja.builtins.filters.wordcount",
+    "wordwrap": "django_jinja.builtins.filters.wordwrap",
+    "center": "django_jinja.builtins.filters.center",
+    "join": "django_jinja.builtins.filters.join",
+    "length": "django_jinja.builtins.filters.length",
+    "random": "django_jinja.builtins.filters.random",
+    "default": "django_jinja.builtins.filters.default",
+    "filesizeformat": "django_jinja.builtins.filters.filesizeformat",
+    "pprint": "django_jinja.builtins.filters.pprint",
+}
 
 JINJA2_GLOBALS = {
     "url": "django_jinja.builtins.global_context.url",
@@ -241,11 +240,20 @@ def _initialize_builtins(env):
     Inject into environment instances builtin
     filters, tests, globals, and constants.
     """
+
+
     for name, value in JINJA2_FILTERS.items():
         if isinstance(value, six.string_types):
             env.filters[name] = utils.load_class(value)
         else:
             env.filters[name] = value
+
+    if JINJA2_FILTERS_REPLACE_FROM_DJANGO:
+        for name, value in FILTERS_FROM_DJANGO.items():
+            if isinstance(value, six.string_types):
+                env.filters[name] = utils.load_class(value)
+            else:
+                env.filters[name] = value
 
     for name, value in JINJA2_TESTS.items():
         if isinstance(value, six.string_types):
