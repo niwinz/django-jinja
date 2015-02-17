@@ -3,7 +3,7 @@ import os, sys
 sys.path.insert(0, "..")
 
 BASE_DIR = os.path.dirname(__file__)
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 DATABASES = {
