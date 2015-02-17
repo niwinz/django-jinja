@@ -34,23 +34,26 @@ There are other projects that attempt do same thing: Djinja, Coffin, etc... Why 
 - Django 1.8 support out of the box.
 
 
-=== Django 1.8 support
+=== Django 1.8 support notes
 
-Django 1.8 introduces multiple template engines support and comes with Jinja2 backend.
 
-But it has some drawbacks:
+Since django 1.8, multiple template engine support was added to django, and *django-jinja* comes
+with support for it. Implementing the backend interface and new configuration syntax.
 
-- not autoloads template tags.
-- by default search templates on _jinja2_ directory instead of _templates_ (jinja2 are also templates,
-  I don't understand why put them in different directory?)
-- not setups i18n support.
-- not has support for django context processors.
+Django also comes with basic jinja backend, but it not has a lot of facilities and integrations
+with the rest of django. *django-jinja* comes to the rescue and add everything missing.
 
-In summary, for make it working like _django_jinja_ is already working for years, it requires a lot
-of boilerplate.
+*django-jinja* comes with that brief list of differences with django's built-in backend.
 
-*django-jinja since version 1.1 also comes with django 1.8 compatible backend*, but supporting all
-the things.
+* find the templates as usual in `"<appname>/templates"` directory instead of
+  `"<appname>/jinja2"` directory.
+* preload template tags
+* gettext message loading (i18n)
+* support for django context processors
+
+NOTE: the usage of context processors is not the recommended way anymore, and with *django-jinja*
+you can done it setting global data or global constants. See below, in the django 1.8 configuration
+related section.
 
 
 == Requirements
@@ -224,6 +227,19 @@ TEMPLATES = [
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
             ],
+            "tests": {
+                "mytest": "path.to.tests.mytestfn",
+            },
+            "filters": {
+                "myfilter": "path.to.filters.myfilterfn",
+            },
+            "constants": {
+                "hello": "hello world",
+            },
+            "globals": {
+                "somefn": "path.to.functions.somefn",
+            },
+            "replace_filters_from_django": True,
             "extensions": [
                 "jinja2.ext.do",
                 "jinja2.ext.loopcontrols",
@@ -373,7 +389,7 @@ library for Django (official description).
 
 [WARNING]
 ====
-This plugin is deprecated, *django-pipeline* is coming with good jinja support and it
+This plugin is deprecated, *django-pipeline* is come with good jinja support and it
 should be used.
 
 You can use the native *django-pipeline* suport for jinja templates adding the
