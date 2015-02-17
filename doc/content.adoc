@@ -371,6 +371,15 @@ django-pipeline
 link:https://github.com/cyberdelia/django-pipeline[Pipeline] is an asset packaging
 library for Django (official description).
 
+[WARNING]
+====
+This plugin is deprecated, *django-pipeline* is coming with good jinja support and it
+should be used.
+
+You can use the native *django-pipeline* suport for jinja templates adding the
+"pipeline.jinja2.ext.PipelineExtension" to `JINJA2_EXTENSIONS` list.
+====
+
 .Activate plugin (settings.py)
 [source, python]
 ----
