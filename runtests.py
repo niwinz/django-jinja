@@ -88,7 +88,6 @@ test_settings = {
      ],
 }
 
-
 if django.VERSION[:2] >= (1, 6):
     test_settings["TEST_RUNNER"] = "django.test.runner.DiscoverRunner"
 

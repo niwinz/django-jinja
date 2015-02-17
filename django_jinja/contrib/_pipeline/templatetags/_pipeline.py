@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals, absolute_import
 
+import jinja2
+
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.template.loader import render_to_string
 
@@ -13,8 +15,9 @@ from django_jinja import library, utils
 
 
 @library.global_function
+@jinja2.contextfunction
 @utils.safe
-def compressed_css(name):
+def compressed_css(ctx, name):
     package = settings.PIPELINE_CSS.get(name, {})
     if package:
         package = {name: package}
@@ -35,27 +38,28 @@ def compressed_css(name):
             'url': staticfiles_storage.url(path)
         })
 
-        return render_to_string(template_name, context)
+        template = ctx.environment.get_template(template_name)
+        return template.render(context)
 
     if settings.PIPELINE_ENABLED:
         return _render_css(package.output_filename)
-
-    paths = packager.compile(package.paths)
-    tags = [_render_css(path) for path in paths]
-
-    return '\n'.join(tags)
+    else:
+        paths = packager.compile(package.paths)
+        tags = [_render_css(path) for path in paths]
+        return '\n'.join(tags)
 
 
 @library.global_function
+@jinja2.contextfunction
 @utils.safe
-def compressed_js(name):
+def compressed_js(ctx, name):
     package = settings.PIPELINE_JS.get(name, {})
     if package:
         package = {name: package}
 
     packager = Packager(css_packages={}, js_packages=package)
     try:
-        package = packager.package_for('js', name)
+        package = packager.package_for("js", name)
     except PackageNotFound:
         return ""
 
@@ -66,23 +70,28 @@ def compressed_js(name):
             'type': guess_type(path, 'text/javascript'),
             'url': staticfiles_storage.url(path),
         })
-        return render_to_string(template_name, context)
+
+        template = ctx.environment.get_template(template_name)
+        return template.render(context)
 
     def _render_inline_js(js):
         context = package.extra_context
         context.update({
             'source': js
         })
-        return render_to_string("pipeline/inline_js.jinja", context)
 
+        template = ctx.environment.get_template("pipeline/inline_js.jinja")
+
+        return template.render(context)
+
+    # Render a optimized one
     if settings.PIPELINE_ENABLED:
         return _render_js(package.output_filename)
+    else:
+        paths = packager.compile(package.paths)
+        templates = packager.pack_templates(package)
+        tags = [_render_js(js) for js in paths]
+        if templates:
+            tags.append(_render_inline_js(templates))
 
-    paths = packager.compile(package.paths)
-    templates = packager.pack_templates(package)
-    tags = [_render_js(js) for js in paths]
-
-    if templates:
-        tags.append(_render_inline_js(templates))
-
-    return '\n'.join(tags)
+        return '\n'.join(tags)

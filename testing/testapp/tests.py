@@ -7,7 +7,7 @@ import sys
 import django
 
 from django.http import HttpResponse
-from django.test import signals, TestCase
+from django.test import signals, TestCase, override_settings
 from django.test.client import RequestFactory
 from django.template import RequestContext
 from django.core.urlresolvers import reverse
@@ -215,9 +215,11 @@ class TemplateFunctionsTest(TestCase):
 
 
 class DjangoPipelineTestTest(TestCase):
+
     def test_pipeline_js_safe(self):
         template = env.from_string("{{ compressed_js('test') }}")
         result = template.render({})
+
         self.assertTrue(result.startswith("<script"))
         self.assertIn("text/javascript", result)
         self.assertIn("/static/script.2.js", result)
