@@ -23,7 +23,7 @@ install:
   - pip install $DJANGO --use-mirrors
   - pip install jinja2 django-pipeline --use-mirrors
 script:
-  - python runtests.py
+  - cd testing && python runtests.py
 
 notifications:
   email:
