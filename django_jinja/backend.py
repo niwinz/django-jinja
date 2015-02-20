@@ -33,22 +33,21 @@ class Jinja2(BaseEngine):
     def __init__(self, params):
         params = params.copy()
         options = params.pop("OPTIONS", {}).copy()
+
         super(Jinja2, self).__init__(params)
 
         newstyle_gettext = options.pop("newstyle_gettext", True)
         context_processors = options.pop("context_processors", [])
-
         match_extension = options.pop("match_extension", ".jinja")
         match_regex = options.pop("match_regex", None)
-
         environment_clspath = options.pop("environment", "jinja2.Environment")
-        environment_cls = import_string(environment_clspath)
-
         extra_filters = options.pop("filters", {})
         extra_tests = options.pop("tests", {})
         extra_globals = options.pop("globals", {})
         extra_constants = options.pop("constants", {})
         replace_filters_from_django = options.pop("replace_filters_from_django", True)
+
+        environment_cls = import_string(environment_clspath)
 
         options.setdefault("loader", jinja2.FileSystemLoader(self.template_dirs))
         options.setdefault("extensions", base.DEFAULT_EXTENSIONS)

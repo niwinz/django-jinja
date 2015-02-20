@@ -39,7 +39,6 @@ JINJA2_BYTECODE_CACHE_BACKEND = getattr(settings, "JINJA2_BYTECODE_CACHE_BACKEND
 JINJA2_CONSTANTS = getattr(settings, "JINJA2_CONSTANTS", {})
 JINJA2_TESTS = getattr(settings, "JINJA2_TESTS", {})
 
-
 JINJA2_FILTERS = {
     "static": "django_jinja.builtins.filters.static",
     "reverseurl": "django_jinja.builtins.filters.reverse",
