@@ -14,13 +14,16 @@ import copy
 import jinja2
 
 from django.conf import settings
-from django.template import TemplateDoesNotExist, TemplateSyntaxError
 from django.utils import six
 from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
 
+from django.template import RequestContext
+from django.template import TemplateSyntaxError
+from django.template import TemplateDoesNotExist
 from django.template.backends.base import BaseEngine
-from django.template.backends.utils import csrf_input_lazy, csrf_token_lazy
+from django.template.backends.utils import csrf_input_lazy
+from django.template.backends.utils import csrf_token_lazy
 
 from . import base
 from . import utils
@@ -130,8 +133,6 @@ class Jinja2(BaseEngine):
         self.env.add_extension(builtins.extensions.CsrfExtension)
         self.env.add_extension(builtins.extensions.CacheExtension)
 
-
-
     @cached_property
     def context_processors(self):
         return tuple(import_string(path) for path in self._context_processors)
@@ -157,7 +158,6 @@ class Jinja2(BaseEngine):
             six.reraise(TemplateSyntaxError, TemplateSyntaxError(exc.args),
                         sys.exc_info()[2])
 
-from django.template import RequestContext
 
 class Template(object):
     def __init__(self, template, backend):
