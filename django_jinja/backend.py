@@ -152,11 +152,9 @@ class Jinja2(BaseEngine):
         try:
             return Template(self.env.get_template(template_name), self)
         except jinja2.TemplateNotFound as exc:
-            six.reraise(TemplateDoesNotExist, TemplateDoesNotExist(exc.args),
-                        sys.exc_info()[2])
+            six.reraise(TemplateDoesNotExist, TemplateDoesNotExist(exc.args), sys.exc_info()[2])
         except jinja2.TemplateSyntaxError as exc:
-            six.reraise(TemplateSyntaxError, TemplateSyntaxError(exc.args),
-                        sys.exc_info()[2])
+            six.reraise(TemplateSyntaxError, TemplateSyntaxError(exc.args), sys.exc_info()[2])
 
 
 class Template(object):
