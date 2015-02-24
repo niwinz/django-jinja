@@ -293,8 +293,16 @@ def _initialize_template_loader(env):
     # and django app template dirs.
     if loader is None:
         from django.template.loaders import app_directories
-        default_loader_dirs = (tuple(settings.TEMPLATE_DIRS) +
-                               app_directories.app_template_dirs)
+
+        try:
+            app_template_dirs = app_directories.app_template_dirs
+        except AttributeError:
+            from django.template.utils import get_app_template_dirs
+            app_template_dirs = get_app_template_dirs('templates')
+
+        default_loader_dirs = (
+            tuple(settings.TEMPLATE_DIRS) + app_template_dirs
+        )
         loader = jinja2.FileSystemLoader(default_loader_dirs)
 
     env.loader = loader
