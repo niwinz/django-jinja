@@ -158,6 +158,9 @@ JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
 # instead of use the django's versions of them.
 # Default: True
 JINJA2_FILTERS_REPLACE_FROM_DJANGO = False
+
+# A list of additional extensions
+JINJA2_EXTENSIONS = ["path.to.your.Extension"]
 ----
 
 *django-jinja* supports the Jinja2's template bytecode caching system. Including an implementation
