@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.test.signals import setting_changed
-
 import os
+from importlib import import_module
 
 import django
 import jinja2
-
 from django.conf import settings
-# from django.template import Origin
 from django.template.context import BaseContext
-from django.utils.importlib import import_module
+from django.test.signals import setting_changed
 from django.utils import six
 
 from . import builtins
