@@ -209,7 +209,6 @@ TEMPLATES = [
 _django-jinja_ backend, unlike django's one, uses the "templates" directory and works like a middleware.
 It intercepts by extension or by regular expression.
 
-
 Full list of options, almost all them not mandatory:
 
 [source, python]

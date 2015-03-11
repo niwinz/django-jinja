@@ -17,6 +17,7 @@ Version 1.1.0
 - Add django 1.8 support.
 - Remove `fix_ampersands` filter.
 - Fix linebreaksbr autoescape bug.
+- Start using `jinja2.DebugUndefined` when settings.DEBUG is True.
 
 
 Version 1.0.5
