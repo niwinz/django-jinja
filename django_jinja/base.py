@@ -322,16 +322,14 @@ def make_environment(defaults=None, clspath=None):
     initial_params = {"autoescape": JINJA2_AUTOESCAPE}
     initial_params.update(JINJA2_ENVIRONMENT_OPTIONS)
 
-    if "extensions" not in initial_params:
-        initial_params["extensions"] = []
-
+    initial_params.setdefault("extensions", [])
     initial_params["extensions"].extend(DEFAULT_EXTENSIONS)
     initial_params["extensions"].extend(JINJA2_EXTENSIONS)
 
     if settings.DEBUG:
-        initial_params["undefined"] = jinja2.DebugUndefined
+        initial_params.setdefault("undefined", jinja2.DebugUndefined)
     else:
-        initial_params["undefined"] = jinja2.Undefined
+        initial_params.setdefault("undefined", jinja2.Undefined)
 
     if defaults is not None:
         initial_params.update(defaults)
