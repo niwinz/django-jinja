@@ -12,6 +12,7 @@ from __future__ import absolute_import
 import sys
 import copy
 import jinja2
+from importlib import import_module
 
 from django.conf import settings
 from django.utils import six
@@ -86,7 +87,7 @@ class Jinja2(BaseEngine):
     def _initialize_i18n(self, newstyle):
         # Initialize i18n support
         if settings.USE_I18N:
-            from django.utils import translation
+            translation = import_module(base.JINJA2_TRANSLATION_ENGINE)
             self.env.install_gettext_translations(translation, newstyle=newstyle)
         else:
             self.env.install_null_translations(newstyle=newstyle)
