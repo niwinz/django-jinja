@@ -32,6 +32,7 @@ JINJA2_BYTECODE_CACHE_ENABLE = getattr(settings, "JINJA2_BYTECODE_CACHE_ENABLE",
 JINJA2_BYTECODE_CACHE_NAME = getattr(settings, "JINJA2_BYTECODE_CACHE_NAME", "default")
 JINJA2_BYTECODE_CACHE_BACKEND = getattr(settings, "JINJA2_BYTECODE_CACHE_BACKEND",
                                         "django_jinja.cache.BytecodeCache")
+JINJA2_TRANSLATION_ENGINE = getattr(settings, "JINJA2_TRANSLATION_ENGINE", "django.utils.translation")
 
 JINJA2_CONSTANTS = getattr(settings, "JINJA2_CONSTANTS", {})
 JINJA2_TESTS = getattr(settings, "JINJA2_TESTS", {})
@@ -277,7 +278,7 @@ def _initialize_thirdparty(env):
 def _initialize_i18n(env):
     # install translations
     if settings.USE_I18N:
-        from django.utils import translation
+        translation = import_module(JINJA2_TRANSLATION_ENGINE)
         env.install_gettext_translations(translation, newstyle=JINJA2_NEWSTYLE_GETTEXT)
     else:
         env.install_null_translations(newstyle=JINJA2_NEWSTYLE_GETTEXT)
