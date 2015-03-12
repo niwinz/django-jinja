@@ -12,6 +12,7 @@ from __future__ import absolute_import
 import sys
 import copy
 import jinja2
+from importlib import import_module
 
 from django.conf import settings
 from django.utils import six
