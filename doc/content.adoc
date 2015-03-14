@@ -1,6 +1,6 @@
 = django-jinja - Jinja2 Template Engine for Django
 Andrey Antukh, <niwi@niwi.be>
-1.2.1
+1.3.0
 :toc: left
 :numbered:
 :source-highlighter: pygments
@@ -33,37 +33,12 @@ There are other projects that attempt do same thing: Djinja, Coffin, etc... Why 
 - jinja2 bytecode cache adapted for use django cache subsystem.
 - Django 1.8 support out of the box.
 
-
-=== Django 1.8 support notes
-
-
-Since django 1.8, multiple template engine support was added to django, and *django-jinja* comes
-with support for it. Implementing the backend interface and new configuration syntax.
-
-Django also comes with basic jinja backend, but it not has a lot of facilities and integrations
-with the rest of django. *django-jinja* comes to the rescue and add everything missing.
-
-*django-jinja* comes with that brief list of differences with django's built-in backend.
-
-* find the templates as usual in `"<appname>/templates"` directory instead of
-  `"<appname>/jinja2"` directory.
-* preload template tags
-* gettext message loading (i18n)
-* support for django context processors
-
-NOTE: the usage of context processors is not the recommended way anymore, and with *django-jinja*
-you can done it setting global data or global constants. See below, in the django 1.8 configuration
-related section.
-
-
 == Requirements
 
 - Python 2.7, 3.3 or 3.4
 - Django 1.5, 1.6, 1.7 and 1.8
 - jinja2 >= 2.7.0
 
-
-== User guide
 
 === Installation
 
@@ -81,7 +56,15 @@ Add add it to django installed apps list:
 INSTALLED_APPS += ('django_jinja',)
 ----
 
-=== Configure for django +++<=+++ 1.7
+== User guide (django +++<=+++ 1.7)
+
+=== Introduction
+
+Since django-jinja supports two ways to setup (mainly for django <= 1.7 and django >= 1.8)
+this section tries expain how to setup it for django <= 1.7.
+
+
+=== Quick Setup
 
 The first step for configure _django-jinja_ is replace default
 django template loaders:
@@ -108,6 +91,11 @@ With this settings, django-jinja intercepts all templates with `.jinja` extensio
 jinja2 engine and templates that not matches the `.jinja` extension are forwarded to django templates
 engine.
 
+
+=== Advances settings
+
+==== Regex based template matching
+
 Additionaly, *django-jinja* exposes, more advanced matcher, using regular exceptions:
 
 [source, python]
@@ -122,50 +110,79 @@ DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE = r"^(?!admin/).*"
 ----
 
 
-==== Additional settings
+==== Setup autoescape
 
-If you need more low level customizations for jinja2 engine, *django-jinja* exposes
-`JINJA2_ENVIRONMENT_OPTIONS` settings for it:
-
-[source, python]
-----
-JINJA2_ENVIRONMENT_OPTIONS = {
-    'block_start_string' : '\BLOCK{',
-    'block_end_string' : '}',
-    'variable_start_string' : '\VAR{',
-    'variable_end_string' : '}',
-    'comment_start_string' : '\#{',
-    'comment_end_string' : '}',
-    'line_statement_prefix' : '%-',
-    'line_comment_prefix' : '%#',
-    'trim_blocks' : True,
-    'autoescape' : False,
-}
-----
-
-In any case, this settings may be never should be used, because for most used options,
-*django-jinja* exposes specific settings:
+You can enable or disable autoescaping with `JINJA2_AUTOESCAPE` setting.
 
 [source, python]
 ----
 # Enable/Disable autoescaping (default: True)
 JINJA2_AUTOESCAPE = True
+----
 
+
+==== Mute url resolve exceptions
+
+Sometimes, you want simply mute exceptions related to url resolving. You can mute exceptions
+with the following entry on your settings:
+
+[source, python]
+----
 # Mute reverse url exceptions (default: False)
 JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
+----
 
-# Keep original small subset of jinja filters
-# instead of use the django's versions of them.
-# Default: True
-JINJA2_FILTERS_REPLACE_FROM_DJANGO = False
 
-# A list of additional extensions
-JINJA2_EXTENSIONS = ["path.to.your.Extension"]
+==== Set custom loader
 
+django-jinja by default setups a proper template loader for load templates from
+django's `TEMPLATES_DIRS` and app specific templates. But in some circumstances you
+want override completely it. This can be done using the following entry on
+your settings:
+
+[source, python]
+----
 # Set custom loader
 import jinja2
 JINJA2_LOADER = jinja2.FileSystemLoader(["/some/path"])
 ----
+
+==== Add additional extensions
+
+django-jinja, by default set up a great amount of extensions for make your experience
+using jinja in django painless. But if you want add more extesions, you can done
+using `JINJA2_EXTENSIONS`:
+
+[source, python]
+----
+from django_jinja.base import DEFAULT_EXTENSIONS
+JINJA2_EXTENSIONS = DEFAULT_EXTENSIONS + [
+    "path.to.your.Extension"
+]
+----
+
+This is a list of default extensions automacally loaded:
+
+[source, python]
+----
+DEFAULT_EXTENSIONS = [
+    "jinja2.ext.do",
+    "jinja2.ext.loopcontrols",
+    "jinja2.ext.with_",
+    "jinja2.ext.i18n",
+    "jinja2.ext.autoescape",
+    "django_jinja.builtins.extensions.CsrfExtension",
+    "django_jinja.builtins.extensions.CacheExtension",
+    "django_jinja.builtins.extensions.TimezoneExtension",
+    "django_jinja.builtins.extensions.UrlsExtension",
+    "django_jinja.builtins.extensions.StaticFilesExtension",
+    "django_jinja.builtins.extensions.DjangoFiltersExtension",
+    "django_jinja.builtins.extensions.DjangoExtraFiltersExtension",
+]
+----
+
+
+==== Template bytecode cache
 
 *django-jinja* supports the Jinja2's template bytecode caching system. Including an implementation
 for makes use of Django's built-in cache framework.
@@ -185,9 +202,30 @@ JINJA2_BYTECODE_CACHE_BACKEND = "path.to.you.cache.class"
 link:http://jinja.pocoo.org/docs/api/#bytecode-cache[More documentation about bytecode cache]
 
 
-=== Configure for django +++>=+++ 1.8
+== User Guilde (for django  +++>=+++ 1.8)
 
-Django 1.8 introduces multiple template engine and new way to configure them.
+=== Introduction
+
+Since django 1.8, multiple template engine support was added to django, and *django-jinja* comes
+with support for it. Implementing the backend interface and new configuration syntax.
+
+Django also comes with basic jinja backend, but it not has a lot of facilities and integrations
+with the rest of django. *django-jinja* comes to the rescue and add everything missing.
+
+*django-jinja* comes with that brief list of differences with django's built-in backend.
+
+* find the templates as usual in `"<appname>/templates"` directory instead of
+  `"<appname>/jinja2"` directory.
+* preload template tags
+* gettext message loading (i18n)
+* support for django context processors
+
+NOTE: the usage of context processors is not the recommended way anymore, and with *django-jinja*
+you can done it setting global data or global constants. See below, in the django 1.8 configuration
+related section.
+
+
+=== Quick Setup
 
 This is a quick example of how to configure _django-jinja_ with django 1.8 configuration
 formata:
@@ -210,64 +248,132 @@ TEMPLATES = [
 ]
 ----
 
-_django-jinja_ backend, unlike django's one, uses the "templates" directory and works like a middleware.
-It intercepts by extension or by regular expression.
-
-Full list of options, almost all them not mandatory:
-
-[source, python]
-----
-TEMPLATES = [
-    {
-        "BACKEND": "django_jinja.backend.Jinja2",
-        "APP_DIRS": True,
-        "OPTIONS": {
-            "match_extension": ".jinja",
-            "match_regex": r"^(?!admin/).*", # this is exclusive with match_extension
-            "context_processors": [
-                "django.contrib.auth.context_processors.auth",
-                "django.template.context_processors.debug",
-                "django.template.context_processors.i18n",
-                "django.template.context_processors.media",
-                "django.template.context_processors.static",
-                "django.template.context_processors.tz",
-                "django.contrib.messages.context_processors.messages",
-            ],
-            "tests": {
-                "mytest": "path.to.tests.mytestfn",
-            },
-            "filters": {
-                "myfilter": "path.to.filters.myfilterfn",
-            },
-            "constants": {
-                "hello": "hello world",
-            },
-            "globals": {
-                "somefn": "path.to.functions.somefn",
-            },
-            "replace_filters_from_django": True,
-            "extensions": [
-                "jinja2.ext.do",
-                "jinja2.ext.loopcontrols",
-                "jinja2.ext.with_",
-                "jinja2.ext.i18n",
-                "jinja2.ext.autoescape",
-            ],
-            "newstyle_gettext": True,
-            "environment": "jinja2.Environment",
-            "auto_reload": settings.DEBUG
-        }
-    }
-]
-----
 
 All other options are passed directly to environment constructor.
 
-You can get more extensions for make your expreience using jinja more
-grateful using this set of jinja extensions for django: https://github.com/MoritzS/jinja2-django-tags
+=== Advanced options
+
+==== Regex based template matching
+
+Additionaly, *django-jinja* exposes, more advanced matcher, using regular exceptions:
+
+[source, python]
+----
+"OPTIONS": {
+    "match_regex": r"^(?!admin/).*", # this is exclusive with match_extension
+}
+----
 
 
-=== Differences
+==== Context processors support
+
+This a helper for make possible use django's contect processors with jinja2 backend
+for django 1.8. It usage is not recommended and the purpose of it existence
+is for help in migration.
+
+.Example setup a bunch of context processors:
+[source, python]
+----
+"OPTIONS": {
+    "context_processors": [
+        "django.contrib.auth.context_processors.auth",
+        "django.template.context_processors.debug",
+        "django.template.context_processors.i18n",
+        "django.template.context_processors.media",
+        "django.template.context_processors.static",
+        "django.template.context_processors.tz",
+        "django.contrib.messages.context_processors.messages",
+    ],
+}
+----
+
+
+==== Custom filters, globals, constants and tests
+
+django-jinja backend offers a helper options for easy setup constants, global
+functions, tests and filters:
+
+[source, python]
+----
+"OPTIONS": {
+    "tests": {
+        "mytest": "path.to.tests.mytestfn",
+    },
+    "filters": {
+        "myfilter": "path.to.filters.myfilterfn",
+    },
+    "constants": {
+        "hello": "hello world",
+    },
+    "globals": {
+        "somefn": "path.to.functions.somefn",
+    },
+----
+
+==== Add additional extensions
+
+django-jinja, by default set up a great amount of extensions for make your experience
+using jinja in django painless. But if you want add more extesions, you can done
+using `extensions` entry on backend options:
+
+[source, python]
+----
+from django_jinja.base import DEFAULT_EXTENSIONS
+
+# ... on backend settings:
+"OPTIONS": {
+    "extensions": DEFAULT_EXTENSIONS + [
+        "path.to.your.Extension"
+    ]
+}
+----
+
+This is a list of default extensions automacally loaded:
+
+[source, python]
+----
+DEFAULT_EXTENSIONS = [
+    "jinja2.ext.do",
+    "jinja2.ext.loopcontrols",
+    "jinja2.ext.with_",
+    "jinja2.ext.i18n",
+    "jinja2.ext.autoescape",
+    "django_jinja.builtins.extensions.CsrfExtension",
+    "django_jinja.builtins.extensions.CacheExtension",
+    "django_jinja.builtins.extensions.TimezoneExtension",
+    "django_jinja.builtins.extensions.UrlsExtension",
+    "django_jinja.builtins.extensions.StaticFilesExtension",
+    "django_jinja.builtins.extensions.DjangoFiltersExtension",
+    "django_jinja.builtins.extensions.DjangoExtraFiltersExtension",
+]
+----
+
+
+==== Gettext Style
+
+Jinja2 implements two stiles of gettext. You can read about it here:
+http://jinja.pocoo.org/docs/dev/extensions/#newstyle-gettext.
+
+You can switch to concrete style using the `newstyle_gettext` entry on
+backend options:
+
+[source, python]
+----
+from django_jinja.base import DEFAULT_EXTENSIONS
+
+# ... on backend settings:
+"OPTIONS": {
+    "newstyle_gettext": True,
+}
+----
+
+
+== Differences
+
+=== Url reversing
+
+django-jinja comes with helpers for reverse urls. Instead of using the django's approach, it uses
+a simple function called `url`.
 
 .Reverse urls in templates
 [source, html+jinja]
@@ -275,15 +381,31 @@ grateful using this set of jinja extensions for django: https://github.com/Morit
 {{ url('ns:name', pk=obj.pk) }}
 ----
 
+This approach is very flexible, because we do not need additional options for set a result
+if executing url in one variable. With jinja2 you can use the set template tag for it:
 
-.Static files urls
+[source, html+jinja]
+----
+{% set myurl=url("ns:name", pk=obj.pk) %}
+----
+
+==== Static files
+
+Like urls, the static files can be resolved with simple `static` function available globally
+in jinja context:
+
+.Example resolving static files
 [source, html+jinja]
 ----
 {{ static("js/lib/foo.js") }}
 ----
 
 
-.I18n support
+==== i18n support
+
+django-jinja inherits the jinja2 approach for handle translation strings. You can read more about
+it here: http://jinja.pocoo.org/docs/dev/templates/#i18n
+
 [source, html+jinja]
 ----
 {{ _('Hello %(name)s', name=user.name) }}
@@ -293,7 +415,17 @@ grateful using this set of jinja extensions for django: https://github.com/Morit
 {% endtrans %}
 ----
 
-.Registring own tests, filters and functions
+Additionally, django-jinja extends the django's `makemessages` command for make it work
+with jinja2 i18n tags.
+
+
+==== Registring filters in a "django" way.
+
+django-jinja comes with facilities for loading template filters, globals and tests
+from django applications.
+
+Here an example:
+
 [source, python]
 ----
 # <someapp>/templatetags/<anyfile>.py
@@ -343,15 +475,11 @@ def myrenderwith(*args, **kwargs):
 ----
 
 
-.Register constants on settings
-[source, python]
-----
-JINJA2_CONSTANTS = {
-    "email": "foo@bar.bz",
-}
-----
+==== Render 4xx/500 pages with jinja
 
-.Render 4xx/500 pages with jinja
+django-jinja also provides a set of views for easy
+render 4xx/500 pages using jinja engine:
+
 [source, python]
 ----
 # yourproject/urls.py
@@ -364,16 +492,17 @@ handler500 = views.ServerError.as_view()
 ----
 
 
-Known Issues
-------------
+== Known Issues
 
 - django-jinja does not works properly with django's `TemplateResponse` class, widely
   used by generic views. My recommendations is subclass the `TemplateResponseMixin` and
   overwrite the render_to_response function.
+- Previously to django 1.8, some way of using i18n related functions are not properly
+  parsed with makemessages.
 
 
-Builtin contrib modules
------------------------
+
+== Builtin contrib modules
 
 *django-jinja* comes with some additional contrib modules that adapts limited set of external
 django apps for use it easy from jinja templates. Please note that in order to use any of these
@@ -401,8 +530,8 @@ library for Django (official description).
 This plugin is deprecated, *django-pipeline* is come with good jinja support and it
 should be used.
 
-You can use the native *django-pipeline* suport for jinja templates adding the
-"pipeline.jinja2.ext.PipelineExtension" to `JINJA2_EXTENSIONS` list.
+You can use the native *django-pipeline* suport for jinja using the
+"pipeline.jinja2.ext.PipelineExtension" extension.
 ====
 
 .Activate plugin (settings.py)
@@ -453,6 +582,7 @@ INSTALLED_APPS += ('django_jinja.contrib._subdomains',)
 ----
 {{ url('homepage', subdomain='wildcard') }}
 ----
+
 
 humanize
 ~~~~~~~~
