@@ -415,6 +415,8 @@ it here: http://jinja.pocoo.org/docs/dev/templates/#i18n
 Additionally, django-jinja extends the django's `makemessages` command for make it work
 with jinja2 i18n tags.
 
+If you want more django like i18n related tags, you can use extensions from https://github.com/MoritzS/jinja2-django-tags.
+
 
 ==== Registring filters in a "django" way.
 
