@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 1.3.0
+-------------
+
+- Now all builtin filters, and global functions are implemented
+  using jinja2 extensions.
+- Breaking change: JINJA2_FILTERS_REPLACE_FROM_DJANGO is removed
+
+
 Version 1.2.1
 -------------
 
