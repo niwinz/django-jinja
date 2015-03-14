@@ -12,6 +12,7 @@ from __future__ import absolute_import
 import sys
 import copy
 import jinja2
+from importlib import import_module
 
 from django.conf import settings
 from django.utils import six
@@ -49,6 +50,7 @@ class Jinja2(BaseEngine):
         extra_globals = options.pop("globals", {})
         extra_constants = options.pop("constants", {})
         replace_filters_from_django = options.pop("replace_filters_from_django", True)
+        translation_engine = options.pop("translation_engine", "django.utils.translation")
 
         environment_cls = import_string(environment_clspath)
 
@@ -68,8 +70,14 @@ class Jinja2(BaseEngine):
         self._match_regex = match_regex
         self._match_extension = match_extension
 
+        # Initialize i18n support
+        if settings.USE_I18N:
+            translation = import_module(translation_engine)
+            self.env.install_gettext_translations(translation, newstyle=newstyle)
+        else:
+            self.env.install_null_translations(newstyle=newstyle_gettext)
+
         self._initialize_extensions()
-        self._initialize_i18n(newstyle_gettext)
         self._initialize_builtins(filters=extra_filters,
                                   tests=extra_tests,
                                   globals=extra_globals,
@@ -82,14 +90,6 @@ class Jinja2(BaseEngine):
 
     def _initialize_extensions(self):
         base._initialize_extensions()
-
-    def _initialize_i18n(self, newstyle):
-        # Initialize i18n support
-        if settings.USE_I18N:
-            from django.utils import translation
-            self.env.install_gettext_translations(translation, newstyle=newstyle)
-        else:
-            self.env.install_null_translations(newstyle=newstyle)
 
     def _initialize_builtins(self, filters=None, tests=None, globals=None, constants=None,
                              replace_filters_from_django=True):
