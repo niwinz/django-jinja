@@ -359,9 +359,6 @@ backend options:
 
 [source, python]
 ----
-from django_jinja.base import DEFAULT_EXTENSIONS
-
-# ... on backend settings:
 "OPTIONS": {
     "newstyle_gettext": True,
 }
