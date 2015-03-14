@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.2.1
+-------------
+
+- Improved JINJA2_LOADER handling for django <= 1.7
+- Add documentation entry for JINJA2_LOADER.
+
+
 Version 1.2.0
 -------------
 
