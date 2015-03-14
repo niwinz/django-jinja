@@ -161,6 +161,10 @@ JINJA2_FILTERS_REPLACE_FROM_DJANGO = False
 
 # A list of additional extensions
 JINJA2_EXTENSIONS = ["path.to.your.Extension"]
+
+# Set custom loader
+import jinja2
+JINJA2_LOADER = jinja2.FileSystemLoader(["/some/path"])
 ----
 
 *django-jinja* supports the Jinja2's template bytecode caching system. Including an implementation
