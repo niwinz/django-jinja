@@ -73,7 +73,7 @@ class Jinja2(BaseEngine):
         # Initialize i18n support
         if settings.USE_I18N:
             translation = import_module(translation_engine)
-            self.env.install_gettext_translations(translation, newstyle=newstyle)
+            self.env.install_gettext_translations(translation, newstyle=newstyle_gettext)
         else:
             self.env.install_null_translations(newstyle=newstyle_gettext)
 
