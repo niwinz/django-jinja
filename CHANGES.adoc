@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.2.0
+-------------
+
+- Allow set custom module as translation engine. (by @toshka)
+
+
 Version 1.1.1
 -------------
 
@@ -8,6 +14,7 @@ Version 1.1.1
 - Honor Django's `setting_changed` signal to reinitialize the Jinja2 environment.
 
 Thanks to @akx
+
 
 
 Version 1.1.0
