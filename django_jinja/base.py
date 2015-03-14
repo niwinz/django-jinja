@@ -21,88 +21,29 @@ DEFAULT_EXTENSIONS = [
     "jinja2.ext.with_",
     "jinja2.ext.i18n",
     "jinja2.ext.autoescape",
+    "django_jinja.builtins.extensions.CsrfExtension",
+    "django_jinja.builtins.extensions.CacheExtension",
+    "django_jinja.builtins.extensions.TimezoneExtension",
+    "django_jinja.builtins.extensions.UrlsExtension",
+    "django_jinja.builtins.extensions.StaticFilesExtension",
+    "django_jinja.builtins.extensions.DjangoFiltersExtension",
+    "django_jinja.builtins.extensions.DjangoExtraFiltersExtension",
 ]
 
 JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, "JINJA2_ENVIRONMENT_OPTIONS", {})
 JINJA2_EXTENSIONS = getattr(settings, "JINJA2_EXTENSIONS", [])
 JINJA2_AUTOESCAPE = getattr(settings, "JINJA2_AUTOESCAPE", True)
 JINJA2_NEWSTYLE_GETTEXT = getattr(settings, "JINJA2_NEWSTYLE_GETTEXT", True)
-JINJA2_FILTERS_REPLACE_FROM_DJANGO = getattr(settings, "JINJA2_FILTERS_REPLACE_FROM_DJANGO", True)
 
 JINJA2_BYTECODE_CACHE_ENABLE = getattr(settings, "JINJA2_BYTECODE_CACHE_ENABLE", False)
 JINJA2_BYTECODE_CACHE_NAME = getattr(settings, "JINJA2_BYTECODE_CACHE_NAME", "default")
 JINJA2_BYTECODE_CACHE_BACKEND = getattr(settings, "JINJA2_BYTECODE_CACHE_BACKEND",
                                         "django_jinja.cache.BytecodeCache")
 JINJA2_TRANSLATION_ENGINE = getattr(settings, "JINJA2_TRANSLATION_ENGINE", "django.utils.translation")
-
 JINJA2_CONSTANTS = getattr(settings, "JINJA2_CONSTANTS", {})
 JINJA2_TESTS = getattr(settings, "JINJA2_TESTS", {})
-
-JINJA2_FILTERS = {
-    "static": "django_jinja.builtins.filters.static",
-    "reverseurl": "django_jinja.builtins.filters.reverse",
-    "addslashes": "django_jinja.builtins.filters.addslashes",
-    "capfirst": "django_jinja.builtins.filters.capfirst",
-    "escapejs": "django_jinja.builtins.filters.escapejs_filter",
-    "floatformat": "django_jinja.builtins.filters.floatformat",
-    "iriencode": "django_jinja.builtins.filters.iriencode",
-    "linenumbers": "django_jinja.builtins.filters.linenumbers",
-    "make_list": "django_jinja.builtins.filters.make_list",
-    "slugify": "django_jinja.builtins.filters.slugify",
-    "stringformat": "django_jinja.builtins.filters.stringformat",
-    "truncatechars": "django_jinja.builtins.filters.truncatechars",
-    "truncatewords": "django_jinja.builtins.filters.truncatewords",
-    "truncatewords_html": "django_jinja.builtins.filters.truncatewords_html",
-    "urlizetrunc": "django_jinja.builtins.filters.urlizetrunc",
-    "ljust": "django_jinja.builtins.filters.ljust",
-    "rjust": "django_jinja.builtins.filters.rjust",
-    "cut": "django_jinja.builtins.filters.cut",
-    "linebreaksbr": "django_jinja.builtins.filters.linebreaksbr",
-    "linebreaks": "django_jinja.builtins.filters.linebreaks_filter",
-    "removetags": "django_jinja.builtins.filters.removetags",
-    "striptags": "django_jinja.builtins.filters.striptags",
-    "add": "django_jinja.builtins.filters.add",
-    "date": "django_jinja.builtins.filters.date",
-    "time": "django_jinja.builtins.filters.time",
-    "timesince": "django_jinja.builtins.filters.timesince_filter",
-    "timeuntil": "django_jinja.builtins.filters.timeuntil_filter",
-    "default_if_none": "django_jinja.builtins.filters.default_if_none",
-    "divisibleby": "django_jinja.builtins.filters.divisibleby",
-    "yesno": "django_jinja.builtins.filters.yesno",
-    "pluralize": "django_jinja.builtins.filters.pluralize",
-    "localtime": "django_jinja.builtins.filters.localtime",
-    "utc": "django_jinja.builtins.filters.utc",
-    "timezone": "django_jinja.builtins.filters.timezone",
-}
-
-FILTERS_FROM_DJANGO = {
-    "title": "django_jinja.builtins.filters.title",
-    "upper": "django_jinja.builtins.filters.upper",
-    "lower": "django_jinja.builtins.filters.lower",
-    "urlencode": "django_jinja.builtins.filters.urlencode",
-    "urlize": "django_jinja.builtins.filters.urlize",
-    "wordcount": "django_jinja.builtins.filters.wordcount",
-    "wordwrap": "django_jinja.builtins.filters.wordwrap",
-    "center": "django_jinja.builtins.filters.center",
-    "join": "django_jinja.builtins.filters.join",
-    "length": "django_jinja.builtins.filters.length",
-    "random": "django_jinja.builtins.filters.random",
-    "default": "django_jinja.builtins.filters.default",
-    "filesizeformat": "django_jinja.builtins.filters.filesizeformat",
-    "pprint": "django_jinja.builtins.filters.pprint",
-}
-
-JINJA2_GLOBALS = {
-    "url": "django_jinja.builtins.global_context.url",
-    "static": "django_jinja.builtins.global_context.static",
-    "localtime": "django_jinja.builtins.filters.localtime",
-    "utc": "django_jinja.builtins.filters.utc",
-    "timezone": "django_jinja.builtins.filters.timezone",
-}
-
-
-JINJA2_FILTERS.update(getattr(settings, "JINJA2_FILTERS", {}))
-JINJA2_GLOBALS.update(getattr(settings, "JINJA2_GLOBALS", {}))
+JINJA2_FILTERS = getattr(settings, "JINJA2_FILTERS", {})
+JINJA2_GLOBALS = getattr(settings, "JINJA2_GLOBALS", {})
 
 
 def dict_from_context(context):
@@ -244,13 +185,6 @@ def _initialize_builtins(env):
         else:
             env.filters[name] = value
 
-    if JINJA2_FILTERS_REPLACE_FROM_DJANGO:
-        for name, value in FILTERS_FROM_DJANGO.items():
-            if isinstance(value, six.string_types):
-                env.filters[name] = utils.load_class(value)
-            else:
-                env.filters[name] = value
-
     for name, value in JINJA2_TESTS.items():
         if isinstance(value, six.string_types):
             env.tests[name] = utils.load_class(value)
@@ -265,9 +199,6 @@ def _initialize_builtins(env):
 
     for name, value in JINJA2_CONSTANTS.items():
         env.globals[name] = value
-
-    env.add_extension(builtins.extensions.CsrfExtension)
-    env.add_extension(builtins.extensions.CacheExtension)
 
 
 def _initialize_i18n(env):

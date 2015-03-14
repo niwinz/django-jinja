@@ -1,16 +1,22 @@
 from __future__ import unicode_literals
 
 import traceback
+import logging
 
-from django.conf import settings
-from django.core.cache import cache
 import django
-
-from jinja2.ext import Extension
-from jinja2 import nodes
+from django.conf import settings
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.core.cache import cache
+from django.core.urlresolvers import NoReverseMatch
+from django.core.urlresolvers import reverse
+from django.utils.formats import localize
+from django.utils.translation import pgettext
+from django.utils.translation import ugettext
 from jinja2 import Markup
 from jinja2 import TemplateSyntaxError
-
+from jinja2 import lexer
+from jinja2 import nodes
+from jinja2.ext import Extension
 
 try:
     from django.utils.encoding import force_text
@@ -18,6 +24,12 @@ try:
 except ImportError:
     from django.utils.encoding import force_unicode as force_text
     from django.utils.encoding import smart_str as force_bytes
+
+
+JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = getattr(settings, "JINJA2_MUTE_URLRESOLVE_EXCEPTIONS", False)
+logger = logging.getLogger(__name__)
+
+
 
 # Compatibility with django <= 1.5
 
@@ -44,12 +56,13 @@ class CsrfExtension(Extension):
         self.environment = environment
 
     def parse(self, parser):
-        try:
-            token = next(parser.stream)
-            call_res = self.call_method('_render', [nodes.Name('csrf_token', 'load')])
-            return nodes.Output([call_res]).set_lineno(token.lineno)
-        except Exception:
-            traceback.print_exc()
+        lineno = parser.stream.expect('name:csrf_token').lineno
+        call = self.call_method(
+            '_render',
+            [nodes.Name('csrf_token', 'load', lineno=lineno)],
+            lineno=lineno
+        )
+        return nodes.Output([nodes.MarkSafe(call)])
 
     def _render(self, csrf_token):
         if csrf_token:
@@ -122,3 +135,95 @@ class CacheExtension(Extension):
             cache.set(cache_key, force_text(value), expire_time)
 
         return value
+
+class StaticFilesExtension(Extension):
+    def __init__(self, environment):
+        super(StaticFilesExtension, self).__init__(environment)
+        environment.globals["static"] = self._static
+
+    def _static(self, path):
+        return staticfiles_storage.url(path)
+
+
+class UrlsExtension(Extension):
+    def __init__(self, environment):
+        super(UrlsExtension, self).__init__(environment)
+        environment.globals["url"] = self._url_reverse
+
+    def _url_reverse(self, name, *args, **kwargs):
+        try:
+            return reverse(name, args=args, kwargs=kwargs)
+        except NoReverseMatch as exc:
+            logger.error('Error: %s', exc)
+            if not JINJA2_MUTE_URLRESOLVE_EXCEPTIONS:
+                raise
+            return ''
+        return reverse(name, args=args, kwargs=kwargs)
+
+
+from . import filters
+
+class TimezoneExtension(Extension):
+    def __init__(self, environment):
+        super(TimezoneExtension, self).__init__(environment)
+        environment.globals["utc"] = filters.utc
+        environment.globals["timezone"] = filters.timezone
+        environment.globals["localtime"] = filters.localtime
+
+
+class DjangoFiltersExtension(Extension):
+    def __init__(self, environment):
+        super(DjangoFiltersExtension, self).__init__(environment)
+        environment.filters["static"] = filters.static
+        environment.filters["reverseurl"] = filters.reverse
+        environment.filters["addslashes"] = filters.addslashes
+        environment.filters["capfirst"] = filters.capfirst
+        environment.filters["escapejs"] = filters.escapejs_filter
+        environment.filters["floatformat"] = filters.floatformat
+        environment.filters["iriencode"] = filters.iriencode
+        environment.filters["linenumbers"] = filters.linenumbers
+        environment.filters["make_list"] = filters.make_list
+        environment.filters["slugify"] = filters.slugify
+        environment.filters["stringformat"] = filters.stringformat
+        environment.filters["truncatechars"] = filters.truncatechars
+        environment.filters["truncatewords"] = filters.truncatewords
+        environment.filters["truncatewords_html"] = filters.truncatewords_html
+        environment.filters["urlizetrunc"] = filters.urlizetrunc
+        environment.filters["ljust"] = filters.ljust
+        environment.filters["rjust"] = filters.rjust
+        environment.filters["cut"] = filters.cut
+        environment.filters["linebreaksbr"] = filters.linebreaksbr
+        environment.filters["linebreaks"] = filters.linebreaks_filter
+        environment.filters["removetags"] = filters.removetags
+        environment.filters["striptags"] = filters.striptags
+        environment.filters["add"] = filters.add
+        environment.filters["date"] = filters.date
+        environment.filters["time"] = filters.time
+        environment.filters["timesince"] = filters.timesince_filter
+        environment.filters["timeuntil"] = filters.timeuntil_filter
+        environment.filters["default_if_none"] = filters.default_if_none
+        environment.filters["divisibleby"] = filters.divisibleby
+        environment.filters["yesno"] = filters.yesno
+        environment.filters["pluralize"] = filters.pluralize
+        environment.filters["localtime"] = filters.localtime
+        environment.filters["utc"] = filters.utc
+        environment.filters["timezone"] = filters.timezone
+
+
+class DjangoExtraFiltersExtension(Extension):
+    def __init__(self, environment):
+        super(DjangoExtraFiltersExtension, self).__init__(environment)
+        environment.filters["title"] = filters.title
+        environment.filters["upper"] = filters.upper
+        environment.filters["lower"] = filters.lower
+        environment.filters["urlencode"] = filters.urlencode
+        environment.filters["urlize"] = filters.urlize
+        environment.filters["wordcount"] = filters.wordcount
+        environment.filters["wordwrap"] = filters.wordwrap
+        environment.filters["center"] = filters.center
+        environment.filters["join"] = filters.join
+        environment.filters["length"] = filters.length
+        environment.filters["random"] = filters.random
+        environment.filters["default"] = filters.default
+        environment.filters["filesizeformat"] = filters.filesizeformat
+        environment.filters["pprint"] = filters.pprint
