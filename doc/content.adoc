@@ -263,6 +263,9 @@ TEMPLATES = [
 
 All other options are passed directly to environment constructor.
 
+You can get more extensions for make your expreience using jinja more
+grateful using this set of jinja extensions for django: https://github.com/MoritzS/jinja2-django-tags
+
 
 === Differences
 
