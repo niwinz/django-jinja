@@ -94,7 +94,7 @@ TEMPLATE_LOADERS = (
 )
 ----
 
-django-jinja template loaders inherit's from a django template loaders and works like middleware, 
+django-jinja template loaders inherit's from a django template loaders and works like middleware,
 intercepts by predefined condition templates for render with jinja2 engine.
 
 The simplest condition is using file extensions:
@@ -104,8 +104,8 @@ The simplest condition is using file extensions:
 DEFAULT_JINJA2_TEMPLATE_EXTENSION = '.jinja'
 ----
 
-With this settings, django-jinja intercepts all templates with `.jinja` extension and render them with 
-jinja2 engine and templates that not matches the `.jinja` extension are forwarded to django templates 
+With this settings, django-jinja intercepts all templates with `.jinja` extension and render them with
+jinja2 engine and templates that not matches the `.jinja` extension are forwarded to django templates
 engine.
 
 Additionaly, *django-jinja* exposes, more advanced matcher, using regular exceptions:

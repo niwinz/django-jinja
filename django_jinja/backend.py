@@ -9,26 +9,25 @@ django_jinja easy with django 1.8.
 
 from __future__ import absolute_import
 
-import sys
 import copy
-import jinja2
+import sys
 from importlib import import_module
 
+import jinja2
 from django.conf import settings
+from django.template import RequestContext
+from django.template import TemplateDoesNotExist
+from django.template import TemplateSyntaxError
+from django.template.backends.base import BaseEngine
+from django.template.backends.utils import csrf_input_lazy
+from django.template.backends.utils import csrf_token_lazy
 from django.utils import six
 from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
 
-from django.template import RequestContext
-from django.template import TemplateSyntaxError
-from django.template import TemplateDoesNotExist
-from django.template.backends.base import BaseEngine
-from django.template.backends.utils import csrf_input_lazy
-from django.template.backends.utils import csrf_token_lazy
-
 from . import base
-from . import utils
 from . import builtins
+from . import utils
 
 
 class Jinja2(BaseEngine):

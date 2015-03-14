@@ -8,6 +8,7 @@ from django.conf import settings
 from django.template.context import BaseContext
 from django.test.signals import setting_changed
 from django.utils import six
+from jinja2.loaders import BaseLoader
 
 from . import builtins
 from . import library
@@ -43,7 +44,6 @@ JINJA2_FILTERS = {
     "addslashes": "django_jinja.builtins.filters.addslashes",
     "capfirst": "django_jinja.builtins.filters.capfirst",
     "escapejs": "django_jinja.builtins.filters.escapejs_filter",
-    # "fix_ampersands": "django_jinja.builtins.filters.fix_ampersands_filter",
     "floatformat": "django_jinja.builtins.filters.floatformat",
     "iriencode": "django_jinja.builtins.filters.iriencode",
     "linenumbers": "django_jinja.builtins.filters.linenumbers",
@@ -287,15 +287,20 @@ def _initialize_i18n(env):
 def _initialize_template_loader(env):
     loader = getattr(settings, "JINJA2_LOADER", None)
 
-    # Create a default loader using django template dirs
-    # and django app template dirs.
-    if loader is None:
+    if isinstance(loader, six.string_types):
+        cls = utils.load_class(loader)
+        env.loader = cls()
+    elif isinstance(loader, BaseLoader):
+        env.loader = loader
+    elif loader is None:
+        # Create a default loader using django template dirs
+        # and django app template dirs.
         from django.template.loaders import app_directories
         default_loader_dirs = (tuple(settings.TEMPLATE_DIRS) +
                                app_directories.app_template_dirs)
-        loader = jinja2.FileSystemLoader(default_loader_dirs)
-
-    env.loader = loader
+        env.loader = jinja2.FileSystemLoader(default_loader_dirs)
+    else:
+        raise RuntimeError("Wrong parameters to 'JINJA2_LOADER'")
 
 
 def _initialize_bytecode_cache(env):
