@@ -210,12 +210,11 @@ def patch_django_for_autoescape():
         ErrorDict.__html__ = lambda self: six.text_type(self)
 
 
-def _initialize_extensions():
+def _initialize_thirdparty(env):
     """
     Iterate over all available apps in searching and preloading
     available template filters or functions for jinja2.
     """
-
     for app_path, mod_path in _iter_templatetags_modules_list():
         if not os.path.isdir(mod_path):
             continue
@@ -231,14 +230,14 @@ def _initialize_extensions():
             except ImportError:
                 pass
 
+    library._update_env(env)
+
 
 def _initialize_builtins(env):
     """
     Inject into environment instances builtin
     filters, tests, globals, and constants.
     """
-
-
     for name, value in JINJA2_FILTERS.items():
         if isinstance(value, six.string_types):
             env.filters[name] = utils.load_class(value)
@@ -269,10 +268,6 @@ def _initialize_builtins(env):
 
     env.add_extension(builtins.extensions.CsrfExtension)
     env.add_extension(builtins.extensions.CacheExtension)
-
-
-def _initialize_thirdparty(env):
-    library._update_env(env)
 
 
 def _initialize_i18n(env):
@@ -352,7 +347,6 @@ def initialize(environment):
     Initialize given environment populating it with
     builtins and with django i18n data.
     """
-    _initialize_extensions()
     _initialize_builtins(environment)
     _initialize_thirdparty(environment)
     _initialize_i18n(environment)

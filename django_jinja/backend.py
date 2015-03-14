@@ -76,19 +76,13 @@ class Jinja2(BaseEngine):
         else:
             self.env.install_null_translations(newstyle=newstyle_gettext)
 
-        self._initialize_extensions()
         self._initialize_builtins(filters=extra_filters,
                                   tests=extra_tests,
                                   globals=extra_globals,
                                   constants=extra_constants,
                                   replace_filters_from_django=replace_filters_from_django)
-        self._initialize_thirdparty()
 
-    def _initialize_thirdparty(self):
         base._initialize_thirdparty(self.env)
-
-    def _initialize_extensions(self):
-        base._initialize_extensions()
 
     def _initialize_builtins(self, filters=None, tests=None, globals=None, constants=None,
                              replace_filters_from_django=True):
