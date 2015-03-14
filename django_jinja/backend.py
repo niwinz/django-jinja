@@ -30,6 +30,27 @@ from . import builtins
 from . import utils
 
 
+class Template(object):
+    def __init__(self, template, backend):
+        self.template = template
+        self.backend = backend
+
+    def render(self, context=None, request=None):
+        if context is None:
+            context = {}
+
+        if request is not None:
+            context["request"] = request
+            context["csrf_input"] = csrf_input_lazy(request)
+            context["csrf_token"] = csrf_token_lazy(request)
+
+            # Support for django context processors
+            for processor in self.backend.context_processors:
+                context.update(processor(request))
+
+        return self.template.render(context)
+
+
 class Jinja2(BaseEngine):
     app_dirname = "templates"
 
@@ -150,23 +171,3 @@ class Jinja2(BaseEngine):
             six.reraise(TemplateSyntaxError, TemplateSyntaxError(exc.args), sys.exc_info()[2])
 
 
-class Template(object):
-    def __init__(self, template, backend):
-        self.template = template
-        self.backend = backend
-
-
-    def render(self, context=None, request=None):
-        if context is None:
-            context = {}
-
-        if request is not None:
-            context["request"] = request
-            context["csrf_input"] = csrf_input_lazy(request)
-            context["csrf_token"] = csrf_token_lazy(request)
-
-            # Support for django context processors
-            for processor in self.backend.context_processors:
-                context.update(processor(request))
-
-        return self.template.render(context)
