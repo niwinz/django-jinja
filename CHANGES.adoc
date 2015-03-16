@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.3.1
+-------------
+
+- Fix bug related to doble inclusion of DEFAULT_EXTENSIONS.
+- Remove the extra django filters extension and document the change.
+
+
 Version 1.3.0
 -------------
 

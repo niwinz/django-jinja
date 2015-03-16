@@ -1,6 +1,6 @@
 = django-jinja - Jinja2 Template Engine for Django
 Andrey Antukh, <niwi@niwi.be>
-1.3.0
+1.3.1
 :toc: left
 :numbered:
 :source-highlighter: pygments
@@ -178,7 +178,6 @@ DEFAULT_EXTENSIONS = [
     "django_jinja.builtins.extensions.UrlsExtension",
     "django_jinja.builtins.extensions.StaticFilesExtension",
     "django_jinja.builtins.extensions.DjangoFiltersExtension",
-    "django_jinja.builtins.extensions.DjangoExtraFiltersExtension",
 ]
 ----
 
@@ -345,7 +344,6 @@ DEFAULT_EXTENSIONS = [
     "django_jinja.builtins.extensions.UrlsExtension",
     "django_jinja.builtins.extensions.StaticFilesExtension",
     "django_jinja.builtins.extensions.DjangoFiltersExtension",
-    "django_jinja.builtins.extensions.DjangoExtraFiltersExtension",
 ]
 ----
 
@@ -417,6 +415,16 @@ Additionally, django-jinja extends the django's `makemessages` command for make 
 with jinja2 i18n tags.
 
 If you want more django like i18n related tags, you can use extensions from https://github.com/MoritzS/jinja2-django-tags.
+
+
+=== Replace jinja filters with django versions
+
+Django and Jinja overlaps in a little subset of template filters. For handle proper this, django-jinja
+gets the decistion to use the jinja versions. But if you want a django version of them, you should use
+the "django_jinja.builtins.extensions.DjangoExtraFiltersExtension" extension.
+
+The affected filters are: title, upper, lower, urlencode, urlize, wordcount, wordwrap, center
+join, length, random, default, filesizeformat, pprint.
 
 
 === Registring filters in a "django" way.
