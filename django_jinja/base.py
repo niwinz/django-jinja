@@ -30,7 +30,7 @@ DEFAULT_EXTENSIONS = [
 ]
 
 JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, "JINJA2_ENVIRONMENT_OPTIONS", {})
-JINJA2_EXTENSIONS = getattr(settings, "JINJA2_EXTENSIONS", [])
+JINJA2_EXTENSIONS = getattr(settings, "JINJA2_EXTENSIONS", DEFAULT_EXTENSIONS)
 JINJA2_AUTOESCAPE = getattr(settings, "JINJA2_AUTOESCAPE", True)
 JINJA2_NEWSTYLE_GETTEXT = getattr(settings, "JINJA2_NEWSTYLE_GETTEXT", True)
 
@@ -251,7 +251,6 @@ def make_environment(defaults=None, clspath=None):
     initial_params.update(JINJA2_ENVIRONMENT_OPTIONS)
 
     initial_params.setdefault("extensions", [])
-    initial_params["extensions"].extend(DEFAULT_EXTENSIONS)
     initial_params["extensions"].extend(JINJA2_EXTENSIONS)
 
     if settings.DEBUG:
