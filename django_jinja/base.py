@@ -27,7 +27,6 @@ DEFAULT_EXTENSIONS = [
     "django_jinja.builtins.extensions.UrlsExtension",
     "django_jinja.builtins.extensions.StaticFilesExtension",
     "django_jinja.builtins.extensions.DjangoFiltersExtension",
-    "django_jinja.builtins.extensions.DjangoExtraFiltersExtension",
 ]
 
 JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, "JINJA2_ENVIRONMENT_OPTIONS", {})
