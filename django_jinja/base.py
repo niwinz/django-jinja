@@ -247,6 +247,7 @@ def make_environment(defaults=None, clspath=None):
     """
     Create a new instance of jinja2 environment.
     """
+
     initial_params = {"autoescape": JINJA2_AUTOESCAPE}
     initial_params.update(JINJA2_ENVIRONMENT_OPTIONS)
 

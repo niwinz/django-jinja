@@ -65,6 +65,31 @@ TEMPLATE_LOADERS = [
    "django_jinja.loaders.FileSystemLoader"
 ]
 
+
+JINJA2_CONSTANTS = {"foo": "bar"}
+JINJA2_AUTOESCAPE = True
+JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
+JINJA2_TEMPLATE_EXTENSION = ".jinja"
+
+
+DEFAULT_EXTENSIONS = [
+    "jinja2.ext.do",
+    "jinja2.ext.loopcontrols",
+    "jinja2.ext.with_",
+    "jinja2.ext.i18n",
+    "jinja2.ext.autoescape",
+    "django_jinja.builtins.extensions.CsrfExtension",
+    "django_jinja.builtins.extensions.CacheExtension",
+    "django_jinja.builtins.extensions.TimezoneExtension",
+    "django_jinja.builtins.extensions.UrlsExtension",
+    "django_jinja.builtins.extensions.StaticFilesExtension",
+    "django_jinja.builtins.extensions.DjangoFiltersExtension",
+]
+
+JINJA2_EXTENSIONS = DEFAULT_EXTENSIONS + [
+    "django_jinja.builtins.extensions.DjangoExtraFiltersExtension",
+]
+
 TEMPLATES = [
    {"BACKEND": "django_jinja.backend.Jinja2",
     "NAME": "jinja2",
@@ -78,7 +103,8 @@ TEMPLATES = [
            "django.template.context_processors.static",
            "django.template.context_processors.tz",
            "django.contrib.messages.context_processors.messages",
-        ]
+        ],
+        "extensions": JINJA2_EXTENSIONS
     }}
 ]
 
@@ -101,14 +127,6 @@ PIPELINE_JS = {
        "output_filename": "script.2.js",
    }
 }
-
-JINJA2_CONSTANTS = {"foo": "bar"}
-JINJA2_AUTOESCAPE = True
-JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
-JINJA2_TEMPLATE_EXTENSION = ".jinja"
-# JINJA2_EXTENSIONS = [
-#     "pipeline.jinja2.ext.PipelineExtension",
-# ]
 
 import django
 if django.VERSION[:2] >= (1, 6):
