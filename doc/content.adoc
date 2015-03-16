@@ -386,7 +386,7 @@ if executing url in one variable. With jinja2 you can use the set template tag f
 {% set myurl=url("ns:name", pk=obj.pk) %}
 ----
 
-==== Static files
+=== Static files
 
 Like urls, the static files can be resolved with simple `static` function available globally
 in jinja context:
@@ -398,7 +398,7 @@ in jinja context:
 ----
 
 
-==== i18n support
+=== i18n support
 
 django-jinja inherits the jinja2 approach for handle translation strings. You can read more about
 it here: http://jinja.pocoo.org/docs/dev/templates/#i18n
@@ -418,7 +418,7 @@ with jinja2 i18n tags.
 If you want more django like i18n related tags, you can use extensions from https://github.com/MoritzS/jinja2-django-tags.
 
 
-==== Registring filters in a "django" way.
+=== Registring filters in a "django" way.
 
 django-jinja comes with facilities for loading template filters, globals and tests
 from django applications.
@@ -474,7 +474,7 @@ def myrenderwith(*args, **kwargs):
 ----
 
 
-==== Render 4xx/500 pages with jinja
+=== Render 4xx/500 pages with jinja
 
 django-jinja also provides a set of views for easy
 render 4xx/500 pages using jinja engine:
