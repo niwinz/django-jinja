@@ -27,7 +27,7 @@ http://stackoverflow.com/questions/2090717/getting-translation-strings-for-jinja
 import re
 from django.core.management.commands import makemessages
 from django.utils.translation import trans_real
-from django.template import BLOCK_TAG_START, BLOCK_TAG_END
+from django.template.base import BLOCK_TAG_START, BLOCK_TAG_END
 
 strip_whitespace_right = re.compile(r"(%s-?\s*(trans|pluralize).*?-%s)\s+" % (BLOCK_TAG_START, BLOCK_TAG_END), re.U)
 strip_whitespace_left = re.compile(r"\s+(%s-\s*(endtrans|pluralize).*?-?%s)" % (BLOCK_TAG_START, BLOCK_TAG_END), re.U)
@@ -48,7 +48,7 @@ class Command(makemessages.Command):
         trans_real.endblock_re = re.compile(
             trans_real.endblock_re.pattern + '|' + r"""^-?\s*endtrans\s*-?$""")
         trans_real.block_re = re.compile(
-            trans_real.block_re.pattern + '|' + r"""^-?\s*trans(?:\s+(?!'|")(?=.*?=.*?)|-?$)""")
+            trans_real.block_re.pattern + '|' + r"""^-?\s*trans(?:\s+(?!'|")(?=.*?=.*?)|\s*-?$)""")
         trans_real.plural_re = re.compile(
             trans_real.plural_re.pattern + '|' + r"""^-?\s*pluralize(?:\s+.+|-?$)""")
 
