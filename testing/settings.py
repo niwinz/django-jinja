@@ -108,6 +108,9 @@ TEMPLATES = [
            "django.template.context_processors.tz",
            "django.contrib.messages.context_processors.messages",
         ],
+        "constants": {
+            "foo": "bar",
+        },
         "extensions": JINJA2_EXTENSIONS
     }}
 ]
