@@ -156,17 +156,9 @@ using `JINJA2_EXTENSIONS`:
 
 [source, python]
 ----
-from django_jinja.base import DEFAULT_EXTENSIONS
-JINJA2_EXTENSIONS = DEFAULT_EXTENSIONS + [
-    "path.to.your.Extension"
-]
-----
-
-This is a list of default extensions automacally loaded:
-
-[source, python]
-----
-DEFAULT_EXTENSIONS = [
+JINJA2_EXTENSIONS = [
+    # The default extensions, you should include them
+    # if you are overwritting the settings.
     "jinja2.ext.do",
     "jinja2.ext.loopcontrols",
     "jinja2.ext.with_",
@@ -178,6 +170,9 @@ DEFAULT_EXTENSIONS = [
     "django_jinja.builtins.extensions.UrlsExtension",
     "django_jinja.builtins.extensions.StaticFilesExtension",
     "django_jinja.builtins.extensions.DjangoFiltersExtension",
+
+    # Your extensions here...
+    "path.to.your.Extension"
 ]
 ----
 
@@ -223,6 +218,9 @@ with the rest of django. *django-jinja* comes to the rescue and add everything m
 NOTE: the usage of context processors is not the recommended way anymore, and with *django-jinja*
 you can done it setting global data or global constants. See below, in the django 1.8 configuration
 related section.
+
+WARNING: The settings variables used for configure django-jinja for django <= 1.7 does not works
+if you are using the django 1.8 backend.
 
 
 === Quick Setup
@@ -318,33 +316,26 @@ using `extensions` entry on backend options:
 
 [source, python]
 ----
-from django_jinja.base import DEFAULT_EXTENSIONS
-
-# ... on backend settings:
 "OPTIONS": {
-    "extensions": DEFAULT_EXTENSIONS + [
+    "extensions": [
+        # The default extensions, you should include them
+        # if you are overwritting the settings.
+        "jinja2.ext.do",
+        "jinja2.ext.loopcontrols",
+        "jinja2.ext.with_",
+        "jinja2.ext.i18n",
+        "jinja2.ext.autoescape",
+        "django_jinja.builtins.extensions.CsrfExtension",
+        "django_jinja.builtins.extensions.CacheExtension",
+        "django_jinja.builtins.extensions.TimezoneExtension",
+        "django_jinja.builtins.extensions.UrlsExtension",
+        "django_jinja.builtins.extensions.StaticFilesExtension",
+        "django_jinja.builtins.extensions.DjangoFiltersExtension",
+
+        # Your extensions here...
         "path.to.your.Extension"
     ]
 }
-----
-
-This is a list of default extensions automacally loaded:
-
-[source, python]
-----
-DEFAULT_EXTENSIONS = [
-    "jinja2.ext.do",
-    "jinja2.ext.loopcontrols",
-    "jinja2.ext.with_",
-    "jinja2.ext.i18n",
-    "jinja2.ext.autoescape",
-    "django_jinja.builtins.extensions.CsrfExtension",
-    "django_jinja.builtins.extensions.CacheExtension",
-    "django_jinja.builtins.extensions.TimezoneExtension",
-    "django_jinja.builtins.extensions.UrlsExtension",
-    "django_jinja.builtins.extensions.StaticFilesExtension",
-    "django_jinja.builtins.extensions.DjangoFiltersExtension",
-]
 ----
 
 
@@ -362,6 +353,54 @@ backend options:
     "newstyle_gettext": True,
 }
 ----
+
+==== Complete example
+
+This is a complete configuration example with django-jinja's defaults:
+
+[source, python]
+----
+TEMPLATES = [
+    {
+        "BACKEND": "django_jinja.backend.Jinja2",
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "match_extension", ".jinja",
+            "match_regex": "*\.jinja$", # This is exclusive with "match_extension"
+            "newstyle_gettext": True,
+            "tests": {
+                "mytest": "path.to.my.test",
+            },
+            "filters": {
+                "myfilter": "path.to.my.filter",
+            },
+            "globals": {
+                "myglobal": "path.to.my.globalfunc",
+            },
+            "constants": {
+                "foo": "bar",
+            },
+            "extensions": [
+                "jinja2.ext.do",
+                "jinja2.ext.loopcontrols",
+                "jinja2.ext.with_",
+                "jinja2.ext.i18n",
+                "jinja2.ext.autoescape",
+                "django_jinja.builtins.extensions.CsrfExtension",
+                "django_jinja.builtins.extensions.CacheExtension",
+                "django_jinja.builtins.extensions.TimezoneExtension",
+                "django_jinja.builtins.extensions.UrlsExtension",
+                "django_jinja.builtins.extensions.StaticFilesExtension",
+                "django_jinja.builtins.extensions.DjangoFiltersExtension",
+            ],
+            "autoescape": True,
+            "auto_reload": settings.DEBUG,
+            "translation_engine": "django.utils.translation",
+        }
+    },
+]
+----
+
 
 
 == Differences
