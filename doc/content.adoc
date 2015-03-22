@@ -365,7 +365,7 @@ TEMPLATES = [
         "BACKEND": "django_jinja.backend.Jinja2",
         "APP_DIRS": True,
         "OPTIONS": {
-            "match_extension", ".jinja",
+            "match_extension": ".jinja",
             "match_regex": "*\.jinja$", # This is exclusive with "match_extension"
             "newstyle_gettext": True,
             "tests": {
