@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 1.3.2
+-------------
+
+- Do not load django < 1.7 setup related settings for django 1.8 backend.
+- Fix django-debug-toolbar compatibility.
+
+
 Version 1.3.1
 -------------
 
