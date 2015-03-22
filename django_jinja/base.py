@@ -69,8 +69,22 @@ class Template(jinja2.Template):
         new_context = dict_from_context(context)
         if settings.TEMPLATE_DEBUG:
             from django.test import signals
-            # self.origin = Origin(self.filename)
-            signals.template_rendered.send(sender=self, template=self, context=context)
+
+            # Define a "django" like context for emitatet the multi
+            # layered context object. This is mainly for apps like
+            # django-debug-toolbar that are very coupled to django's
+            # internal implementation of context.
+
+            if not isinstance(context, BaseContext):
+                class CompatibilityContext(dict):
+                    @property
+                    def dicts(self):
+                        return [self]
+
+                context = CompatibilityContext(context)
+
+            signals.template_rendered.send(sender=self, template=self,
+                                           context=context)
 
         return super(Template, self).render(new_context)
 
