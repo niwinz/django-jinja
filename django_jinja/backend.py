@@ -104,40 +104,27 @@ class Jinja2(BaseEngine):
         base._initialize_thirdparty(self.env)
 
     def _initialize_builtins(self, filters=None, tests=None, globals=None, constants=None):
-        _filters = copy.copy(base.JINJA2_FILTERS)
-        if filters is not None:
-            _filters.update(filters)
-
-        _globals = copy.copy(base.JINJA2_GLOBALS)
-        if globals is not None:
-            _globals.update(globals)
-
-        _tests = copy.copy(base.JINJA2_TESTS)
-        if tests is not None:
-            _tests.update(tests)
-
-        _constants = copy.copy(base.JINJA2_CONSTANTS)
-        if constants is not None:
-            _constants.update(constants)
-
         def insert(data, name, value):
             if isinstance(value, six.string_types):
                 data[name] = import_string(value)
             else:
                 data[name] = value
 
-        for name, value in _filters.items():
-            insert(self.env.filters, name, value)
+        if filters:
+            for name, value in filters.items():
+                insert(self.env.filters, name, value)
 
-        for name, value in _tests.items():
-            insert(self.env.tests, name, value)
+        if tests:
+            for name, value in tests.items():
+                insert(self.env.tests, name, value)
 
-        for name, value in _globals.items():
-            insert(self.env.globals, name, value)
+        if globals:
+            for name, value in globals.items():
+                insert(self.env.globals, name, value)
 
-        for name, value in _constants.items():
-            self.env.globals[name] = value
-
+        if constants:
+            for name, value in constants.items():
+                self.env.globals[name] = value
 
     @cached_property
     def context_processors(self):
