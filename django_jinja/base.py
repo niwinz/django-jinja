@@ -249,10 +249,11 @@ def _initialize_bytecode_cache(env):
 
 
 def match_template(template_name, regex=None, extension=None):
+    import re
     if extension is not None:
-        return template_name.endswith(extension)
+        return template_name.endswith(extension) and re.match(regex, template_name)
     elif regex:
-        return regex.match(template_name)
+        return re.match(regex, template_name)
     else:
         return False
 
