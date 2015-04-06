@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import re
 from importlib import import_module
 
 import django
@@ -249,10 +250,14 @@ def _initialize_bytecode_cache(env):
 
 
 def match_template(template_name, regex=None, extension=None):
-    if extension is not None:
-        return template_name.endswith(extension)
+    if extension:
+        matches_extension = template_name.endswith(extension)
+        if regex:
+            return matches_extension and re.match(regex, template_name)
+        else:
+            return template_name.endswith(extension)
     elif regex:
-        return regex.match(template_name)
+        return re.match(regex, template_name)
     else:
         return False
 

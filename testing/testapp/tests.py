@@ -15,7 +15,7 @@ from django.core.urlresolvers import NoReverseMatch
 from django.conf import settings
 from django.shortcuts import render
 
-from django_jinja.base import env, dict_from_context, Template
+from django_jinja.base import env, dict_from_context, Template, match_template
 
 if django.VERSION[:2] >= (1, 8):
     from django.template import engines
@@ -294,3 +294,17 @@ class TemplateDebugSignalsTest(TestCase):
             request = RequestFactory().get('/')
             response = view(request, template_name=template_name)
             self.assertEqual(response.content, b"success")
+
+
+class BaseTests(TestCase):
+    def test_match_template(self):
+        self.assertFalse(
+            match_template('admin/foo.html', regex=None, extension=None))
+        self.assertFalse(
+            match_template('admin/foo.html', regex=None, extension='.jinja'))
+        self.assertTrue(
+            match_template('admin/foo.html', regex=None, extension='.html'))
+        self.assertTrue(
+            match_template('admin/foo.html', regex=r'.*\.html', extension=None))
+        self.assertFalse(
+            match_template('admin/foo.html', regex=r"^(?!admin/.*)", extension=None))
