@@ -197,7 +197,7 @@ JINJA2_BYTECODE_CACHE_BACKEND = "path.to.you.cache.class"
 link:http://jinja.pocoo.org/docs/api/#bytecode-cache[More documentation about bytecode cache]
 
 
-== User Guilde (for django  +++>=+++ 1.8)
+== User guide (for django  +++>=+++ 1.8)
 
 === Introduction
 
