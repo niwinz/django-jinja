@@ -258,7 +258,7 @@ Additionaly, *django-jinja* exposes, more advanced matcher, using regular except
 [source, python]
 ----
 "OPTIONS": {
-    "match_regex": r"^(?!admin/).*", # this is exclusive with match_extension
+    "match_regex": r"^(?!admin/).*", # this is additive to match_extension
 }
 ----
 
@@ -365,8 +365,10 @@ TEMPLATES = [
         "BACKEND": "django_jinja.backend.Jinja2",
         "APP_DIRS": True,
         "OPTIONS": {
-            "match_extension": ".jinja",
-            "match_regex": "*\.jinja$", # This is exclusive with "match_extension"
+            # Match the template names ending in .html but not the ones in the admin folder.
+            "match_extension": ".html",
+            "match_regex": r"^(?!admin/).*",
+
             "newstyle_gettext": True,
             "tests": {
                 "mytest": "path.to.my.test",
