@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 1.3.3
+-------------
+
+- Fix django 1.8 compatibilities.
+- Fix documentation issues.
+- Remove obsolete code.
+
+
 Version 1.3.2
 -------------
 
