@@ -1,0 +1,24 @@
+{% trans bar=foo %}
+Foo {{ bar }}
+{% endtrans %}
+
+{{ _('Index') }}
+<th>{{ table_sort('date_start', _('Year')) }}</th>
+
+<p>{% trans %}1 Hello {{ user }}!{% endtrans %}</p>
+
+<p>{% trans user=user.username %}2 Hello {{ user }}!{% endtrans %}</p>
+
+{% trans book_title=book.title, author=author.name %}
+3 This is {{ book_title }} by {{ author }}
+{% endtrans %}
+
+{% trans count=list|length %}
+4 There is {{ count }} {{ name }} object.
+{% pluralize %}
+4 There are {{ count }} {{ name }} objects.
+{% endtrans %}
+
+{{ _('5 Hello World!') }}
+
+{{ _('6 Hello %(user)s!')|format(user=user.username) }}
