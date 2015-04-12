@@ -232,22 +232,24 @@ formata:
 ----
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
-        "APP_DIRS": True
-    },
-    {
         "BACKEND": "django_jinja.backend.Jinja2",
         "APP_DIRS": True,
         "OPTIONS": {
             "match_extension": ".jinja",
         }
     },
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True
+    },
 ]
 ----
 
+NOTE: Is very important the order, because the django-jinja backend uses the same directory for the
+templates and acts as a middleware, if you put the django engine first every jinja template will
+be found by the django engine.
 
-All other options are passed directly to environment constructor.
 
 === Advanced options
 
@@ -262,12 +264,13 @@ Additionaly, *django-jinja* exposes, more advanced matcher, using regular except
 }
 ----
 
+But is not excluyent with the `match_extension` settings, is complementary.
+
 
 ==== Context processors support
 
 This a helper for make possible use django's contect processors with jinja2 backend
-for django 1.8. It usage is not recommended and the purpose of it existence
-is for help in migration.
+for django 1.8. 
 
 .Example setup a bunch of context processors:
 [source, python]
@@ -284,6 +287,11 @@ is for help in migration.
     ],
 }
 ----
+
+As usual, this is a default list of context processors and you can forget
+setup them if you do not have own. Furthermore, it is now not recommended way
+to setup variables in the context and the purpose of its existence is a help
+for migrations.
 
 
 ==== Custom filters, globals, constants and tests
@@ -307,6 +315,7 @@ functions, tests and filters:
         "somefn": "path.to.functions.somefn",
     },
 ----
+
 
 ==== Add additional extensions
 
@@ -336,12 +345,13 @@ using `extensions` entry on backend options:
         "path.to.your.Extension"
     ]
 }
+
 ----
 
 
 ==== Gettext Style
 
-Jinja2 implements two stiles of gettext. You can read about it here:
+Jinja2 implements two styles of gettext. You can read about it here:
 http://jinja.pocoo.org/docs/dev/extensions/#newstyle-gettext.
 
 You can switch to concrete style using the `newstyle_gettext` entry on
@@ -353,6 +363,7 @@ backend options:
     "newstyle_gettext": True,
 }
 ----
+
 
 ==== Complete example
 
@@ -402,7 +413,6 @@ TEMPLATES = [
     },
 ]
 ----
-
 
 
 == Differences
@@ -455,7 +465,8 @@ it here: http://jinja.pocoo.org/docs/dev/templates/#i18n
 Additionally, django-jinja extends the django's `makemessages` command for make it work
 with jinja2 i18n tags.
 
-If you want more django like i18n related tags, you can use extensions from https://github.com/MoritzS/jinja2-django-tags.
+If you want more django like i18n related tags, you can use extensions from
+https://github.com/MoritzS/jinja2-django-tags.
 
 
 === Replace jinja filters with django versions
@@ -543,9 +554,6 @@ handler500 = views.ServerError.as_view()
 
 == Known Issues
 
-- django-jinja does not works properly with django's `TemplateResponse` class, widely
-  used by generic views. My recommendations is subclass the `TemplateResponseMixin` and
-  overwrite the render_to_response function.
 - Previously to django 1.8, some way of using i18n related functions are not properly
   parsed with makemessages.
 
