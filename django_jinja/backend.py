@@ -159,6 +159,10 @@ class Jinja2(BaseEngine):
     def context_processors(self):
         return tuple(import_string(path) for path in self._context_processors)
 
+    @property
+    def match_extension(self):
+        return self._match_extension
+
     def from_string(self, template_code):
         return Template(self.env.from_string(template_code), self)
 

@@ -17,7 +17,7 @@ from django.core.urlresolvers import NoReverseMatch
 from django.conf import settings
 from django.shortcuts import render
 
-from django_jinja.base import dict_from_context, Template, match_template
+from django_jinja.base import dict_from_context, Template, match_template, get_match_extension
 
 from .forms import TestForm
 
@@ -362,3 +362,36 @@ class BaseTests(TestCase):
             match_template('admin/foo.html', regex=r'.*\.html', extension=None))
         self.assertFalse(
             match_template('admin/foo.html', regex=r"^(?!admin/.*)", extension=None))
+
+    def test_get_match_extension(self):
+        if django.VERSION[:2] < (1, 8):
+            self.assertEquals(getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja'), get_match_extension())
+        else:
+            from django_jinja.backend import Jinja2
+            self.assertEquals(Jinja2.get_default().match_extension, get_match_extension())
+
+    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
+    def test_get_match_extension_using(self):
+        with self.modify_settings(TEMPLATES={
+            'append': [{"BACKEND": "django_jinja.backend.Jinja2",
+                "NAME": "jinja2dup",
+                "APP_DIRS": True,
+                "OPTIONS": {
+                    "match_extension": ".jinjadup",
+                    "context_processors": [
+                       "django.contrib.auth.context_processors.auth",
+                       "django.template.context_processors.debug",
+                       "django.template.context_processors.i18n",
+                       "django.template.context_processors.media",
+                       "django.template.context_processors.static",
+                       "django.template.context_processors.tz",
+                       "django.contrib.messages.context_processors.messages",
+                    ],
+                    "constants": {
+                       "foo": "bar",
+                    },
+                    "extensions": settings.JINJA2_EXTENSIONS
+                }}],
+        }):
+            self.assertEquals(".jinja", get_match_extension(using='jinja2'))
+            self.assertEquals(".jinjadup", get_match_extension(using="jinja2dup"))

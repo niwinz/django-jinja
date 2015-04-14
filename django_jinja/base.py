@@ -291,6 +291,39 @@ def make_environment(defaults=None, clspath=None):
     return env
 
 
+if django.VERSION[:2] < (1, 8):
+    def get_match_extension(using=None):
+        """
+        Gets the extension that the template loader will match for
+        django-jinja. This returns the DEFAULT_JINJA2_TEMPLATE_EXTENSION
+        setting.
+
+        The "using" parameter is ignored for Django versions before 1.8.
+        """
+        return getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
+else:
+    def get_match_extension(using=None):
+        """
+        Gets the extension that the template loader will match for
+        django-jinja. This returns Jinja2.match_extension.
+
+        The "using" parameter selects with Jinja2 backend to use if
+        you have multiple ones configured in settings.TEMPLATES.
+        If it is None and only one Jinja2 backend is defined then it
+        will use that, otherwise an ImproperlyConfigured exception
+        is thrown.
+        """
+        from .backend import Jinja2
+        from django.template import engines
+
+        if using is None:
+            engine = Jinja2.get_default()
+        else:
+            engine = engines[using]
+
+        return engine.match_extension
+
+
 def initialize(environment):
     """
     Initialize given environment populating it with
