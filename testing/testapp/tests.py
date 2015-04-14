@@ -15,17 +15,20 @@ from django.core.urlresolvers import NoReverseMatch
 from django.conf import settings
 from django.shortcuts import render
 
-from django_jinja.base import env, dict_from_context, Template, match_template
-
-if django.VERSION[:2] >= (1, 8):
-    from django.template import engines
-    env = engines["jinja2"]
+from django_jinja.base import dict_from_context, Template, match_template
 
 from .forms import TestForm
 
 
 class TemplateFunctionsTest(TestCase):
     def setUp(self):
+        from django_jinja.base import env
+
+        if django.VERSION[:2] >= (1, 8):
+            from django.template import engines
+            env = engines["jinja2"]
+
+        self.env = env
         self.factory = RequestFactory()
 
     def tearDown(self):
@@ -60,47 +63,47 @@ class TemplateFunctionsTest(TestCase):
         print()
         for template_str, kwargs, result in filters_data:
             print("- Testing: ", template_str, "with:", kwargs)
-            template = env.from_string(template_str)
+            template = self.env.from_string(template_str)
             _result = template.render(kwargs)
             self.assertEqual(_result, result)
 
     def test_string_interpolation(self):
-        template = env.from_string("{{ 'Hello %s!' % name }}")
+        template = self.env.from_string("{{ 'Hello %s!' % name }}")
         self.assertEqual(template.render({"name": "foo"}), "Hello foo!")
 
-        template = env.from_string("{{ _('Hello %s!').format(name) }}")
+        template = self.env.from_string("{{ _('Hello %s!').format(name) }}")
         self.assertEqual(template.render({"name": "foo"}), "Hello foo!")
 
     def test_urlresolve_exceptions(self):
-        template = env.from_string("{{ url('adads') }}")
+        template = self.env.from_string("{{ url('adads') }}")
         template.render({})
 
     def test_custom_addons_01(self):
-        template = env.from_string("{{ 'Hello'|replace('H','M') }}")
+        template = self.env.from_string("{{ 'Hello'|replace('H','M') }}")
         result = template.render({})
 
         self.assertEqual(result, "Mello")
 
     def test_custom_addons_02(self):
-        template = env.from_string("{% if m is one %}Foo{% endif %}")
+        template = self.env.from_string("{% if m is one %}Foo{% endif %}")
         result = template.render({'m': 1})
 
         self.assertEqual(result, "Foo")
 
     def test_custom_addons_03(self):
-        template = env.from_string("{{ myecho('foo') }}")
+        template = self.env.from_string("{{ myecho('foo') }}")
         result = template.render({})
 
         self.assertEqual(result, "foo")
 
     def test_render_with(self):
-        template = env.from_string("{{ myrenderwith() }}")
+        template = self.env.from_string("{{ myrenderwith() }}")
         result = template.render({})
         self.assertEqual(result, "<strong>Foo</strong>")
 
     def test_autoscape_with_form(self):
         form = TestForm()
-        template = env.from_string("{{ form.as_p() }}")
+        template = self.env.from_string("{{ form.as_p() }}")
         result = template.render({"form": form})
 
         self.assertIn('maxlength="2"', result)
@@ -108,7 +111,7 @@ class TemplateFunctionsTest(TestCase):
 
     def test_autoscape_with_form_field(self):
         form = TestForm()
-        template = env.from_string("{{ form.name }}")
+        template = self.env.from_string("{{ form.name }}")
         result = template.render({"form": form})
 
         self.assertIn('maxlength="2"', result)
@@ -118,14 +121,14 @@ class TemplateFunctionsTest(TestCase):
         form = TestForm({"name": "foo"})
         self.assertFalse(form.is_valid())
 
-        template = env.from_string("{{ form.name.errors }}")
+        template = self.env.from_string("{{ form.name.errors }}")
         result = template.render({"form": form})
 
         self.assertEqual(result,
                          ("""<ul class="errorlist"><li>Ensure this value """
                           """has at most 2 characters (it has 3).</li></ul>"""))
 
-        template = env.from_string("{{ form.errors }}")
+        template = self.env.from_string("{{ form.errors }}")
         result = template.render({"form": form})
 
         self.assertEqual(result,
@@ -134,17 +137,17 @@ class TemplateFunctionsTest(TestCase):
                           """has 3).</li></ul></li></ul>"""))
 
     def test_autoescape_01(self):
-        template = env.from_string("{{ foo|safe }}")
+        template = self.env.from_string("{{ foo|safe }}")
         result = template.render({'foo': '<h1>Hellp</h1>'})
         self.assertEqual(result, "<h1>Hellp</h1>")
 
     def test_autoescape_02(self):
-        template = env.from_string("{{ foo }}")
+        template = self.env.from_string("{{ foo }}")
         result = template.render({'foo': '<h1>Hellp</h1>'})
         self.assertEqual(result, "&lt;h1&gt;Hellp&lt;/h1&gt;")
 
     def test_autoescape_03(self):
-        template = env.from_string("{{ foo|linebreaksbr }}")
+        template = self.env.from_string("{{ foo|linebreaksbr }}")
         result = template.render({"foo": "<script>alert(1)</script>\nfoo"})
         self.assertEqual(result, "&lt;script&gt;alert(1)&lt;/script&gt;<br />foo")
 
@@ -168,12 +171,12 @@ class TemplateFunctionsTest(TestCase):
             request.META["CSRF_COOKIE"] = '1234123123'
 
         if django.VERSION[:2] >= (1, 8):
-            template = env.from_string(template_content)
+            template = self.env.from_string(template_content)
             result = template.render({}, request)
 
         else:
             context = dict_from_context(RequestContext(request))
-            template = env.from_string(template_content)
+            template = self.env.from_string(template_content)
             result = template.render(context)
 
         self.assertEqual(result, "<input type='hidden' name='csrfmiddlewaretoken' value='1234123123' />")
@@ -184,7 +187,7 @@ class TemplateFunctionsTest(TestCase):
         request = self.factory.get('/customer/details')
         context = dict_from_context(RequestContext(request))
 
-        template = env.from_string(template_content)
+        template = self.env.from_string(template_content)
         result = template.render(context)
 
         self.assertEqual(result, "fóäo bar")
@@ -215,9 +218,17 @@ class TemplateFunctionsTest(TestCase):
 
 
 class DjangoPipelineTestTest(TestCase):
+    def setUp(self):
+        from django_jinja.base import env
+
+        if django.VERSION[:2] >= (1, 8):
+            from django.template import engines
+            env = engines["jinja2"]
+
+        self.env = env
 
     def test_pipeline_js_safe(self):
-        template = env.from_string("{{ compressed_js('test') }}")
+        template = self.env.from_string("{{ compressed_js('test') }}")
         result = template.render({})
 
         self.assertTrue(result.startswith("<script"))
@@ -225,7 +236,7 @@ class DjangoPipelineTestTest(TestCase):
         self.assertIn("/static/script.2.js", result)
 
     def test_pipeline_css_safe_01(self):
-        template = env.from_string("{{ compressed_css('test') }}")
+        template = self.env.from_string("{{ compressed_css('test') }}")
         result = template.render({})
         self.assertIn("media=\"all\"", result)
         self.assertIn("stylesheet", result)
@@ -233,7 +244,7 @@ class DjangoPipelineTestTest(TestCase):
         self.assertIn("/static/style.2.css", result)
 
     def test_pipeline_css_safe_02(self):
-        template = env.from_string("{{ compressed_css('test2') }}")
+        template = self.env.from_string("{{ compressed_css('test2') }}")
         result = template.render({})
         self.assertNotIn("media", result)
         self.assertIn("stylesheet", result)
