@@ -5,7 +5,9 @@ from __future__ import print_function, unicode_literals
 import datetime
 import sys
 import django
+import unittest
 
+from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponse
 from django.test import signals, TestCase
 from django.test.client import RequestFactory
@@ -216,6 +218,47 @@ class TemplateFunctionsTest(TestCase):
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.content, b"500")
 
+    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
+    def test_get_default(self):
+        from django_jinja.backend import Jinja2
+        Jinja2.get_default.cache_clear()
+        self.assertEqual(Jinja2.get_default(), self.env)
+
+    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
+    def test_get_default_multiple(self):
+        from django_jinja.backend import Jinja2
+
+        with self.modify_settings(TEMPLATES={
+            'append': [{"BACKEND": "django_jinja.backend.Jinja2",
+                "NAME": "jinja2dup",
+                "APP_DIRS": True,
+                "OPTIONS": {
+                    "context_processors": [
+                       "django.contrib.auth.context_processors.auth",
+                       "django.template.context_processors.debug",
+                       "django.template.context_processors.i18n",
+                       "django.template.context_processors.media",
+                       "django.template.context_processors.static",
+                       "django.template.context_processors.tz",
+                       "django.contrib.messages.context_processors.messages",
+                    ],
+                    "constants": {
+                       "foo": "bar",
+                    },
+                    "extensions": settings.JINJA2_EXTENSIONS
+                }}],
+        }):
+            with self.assertRaisesRegexp(ImproperlyConfigured, r'Several Jinja2 backends are configured'):
+                Jinja2.get_default()
+
+    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
+    def test_get_default_none(self):
+        from django.conf import global_settings
+        from django_jinja.backend import Jinja2
+
+        with self.settings(TEMPLATES=global_settings.TEMPLATES):
+            with self.assertRaisesRegexp(ImproperlyConfigured, r'No Jinja2 backend is configured'):
+                Jinja2.get_default()
 
 class DjangoPipelineTestTest(TestCase):
     def setUp(self):

@@ -14,14 +14,17 @@ import sys
 from importlib import import_module
 
 import jinja2
+from django.core import signals
+from django.core.exceptions import ImproperlyConfigured
 from django.conf import settings
+from django.dispatch import receiver
 from django.template import RequestContext
 from django.template import TemplateDoesNotExist
 from django.template import TemplateSyntaxError
 from django.template.backends.base import BaseEngine
 from django.template.backends.utils import csrf_input_lazy
 from django.template.backends.utils import csrf_token_lazy
-from django.utils import six
+from django.utils import lru_cache, six
 from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
 
@@ -53,6 +56,32 @@ class Template(object):
 
 class Jinja2(BaseEngine):
     app_dirname = "templates"
+
+    @staticmethod
+    @lru_cache.lru_cache()
+    def get_default():
+        """
+        When only one django-jinja backend is configured, returns it.
+        Raises ImproperlyConfigured otherwise.
+
+        This is required for finding the match extension where the
+        developer does not specify a template_engine on a
+        TemplateResponseMixin subclass.
+        """
+        from django.template import engines
+
+        jinja_engines = [engine for engine in engines.all()
+                          if isinstance(engine, Jinja2)]
+        if len(jinja_engines) == 1:
+            # Unwrap the Jinja2 engine instance.
+            return jinja_engines[0]
+        elif len(jinja_engines) == 0:
+            raise ImproperlyConfigured(
+                "No Jinja2 backend is configured.")
+        else:
+            raise ImproperlyConfigured(
+                "Several Jinja2 backends are configured. "
+                "You must select one explicitly.")
 
     def __init__(self, params):
         params = params.copy()
@@ -149,4 +178,8 @@ class Jinja2(BaseEngine):
         except jinja2.TemplateSyntaxError as exc:
             six.reraise(TemplateSyntaxError, TemplateSyntaxError(exc.args), sys.exc_info()[2])
 
-
+@receiver(signals.setting_changed)
+def _setting_changed(sender, setting, *args, **kwargs):
+    """ Reset the Jinja2.get_default() cached when TEMPLATES changes. """
+    if setting == "TEMPLATES":
+        Jinja2.get_default.cache_clear()
