@@ -18,6 +18,7 @@ from django.conf import settings
 from django.shortcuts import render
 
 from django_jinja.base import dict_from_context, Template, match_template, get_match_extension
+from django_jinja.views.generic.base import Jinja2TemplateResponseMixin
 
 from .forms import TestForm
 
@@ -395,3 +396,68 @@ class BaseTests(TestCase):
         }):
             self.assertEquals(".jinja", get_match_extension(using='jinja2'))
             self.assertEquals(".jinjadup", get_match_extension(using="jinja2dup"))
+
+
+class TemplateResponseTests(TestCase):
+    class _BaseView(object):
+        def get_template_names(self):
+            return [
+                'name1.html',
+                'name2.html',
+                'name3.html.jinja',
+            ]
+
+    def setUp(self):
+        self.obj1 = TestModel.objects.create()
+
+    def test_get_template_names(self):
+        class _View(Jinja2TemplateResponseMixin, self._BaseView):
+            pass
+
+        view = _View()
+        self.assertEquals(
+            ['name1.html.jinja', 'name2.html.jinja', 'name3.html.jinja'],
+            view.get_template_names()
+        )
+
+    def test_get_template_names_classext(self):
+        class _View(Jinja2TemplateResponseMixin, self._BaseView):
+            jinja2_template_extension = '.foo'
+
+        view = _View()
+        self.assertEquals(
+            ['name1.html.foo', 'name2.html.foo', 'name3.html.jinja.foo'],
+            view.get_template_names()
+        )
+
+    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
+    def test_get_template_names_using(self):
+        class _View(Jinja2TemplateResponseMixin, self._BaseView):
+            template_engine = 'jinja2dup'
+
+        with self.modify_settings(TEMPLATES={
+            'append': [{"BACKEND": "django_jinja.backend.Jinja2",
+                "NAME": "jinja2dup",
+                "APP_DIRS": True,
+                "OPTIONS": {
+                    "match_extension": ".jinjadup",
+                    "context_processors": [
+                       "django.contrib.auth.context_processors.auth",
+                       "django.template.context_processors.debug",
+                       "django.template.context_processors.i18n",
+                       "django.template.context_processors.media",
+                       "django.template.context_processors.static",
+                       "django.template.context_processors.tz",
+                       "django.contrib.messages.context_processors.messages",
+                    ],
+                    "constants": {
+                       "foo": "bar",
+                    },
+                    "extensions": settings.JINJA2_EXTENSIONS
+                }}],
+        }):
+            view = _View()
+            self.assertEquals(
+                ['name1.html.jinjadup', 'name2.html.jinjadup', 'name3.html.jinja.jinjadup'],
+                view.get_template_names()
+            )
