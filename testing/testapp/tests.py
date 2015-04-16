@@ -21,6 +21,7 @@ from django_jinja.base import dict_from_context, Template, match_template, get_m
 from django_jinja.views.generic.base import Jinja2TemplateResponseMixin
 
 from .forms import TestForm
+from .models import TestModel
 
 
 class TemplateFunctionsTest(TestCase):
@@ -461,3 +462,131 @@ class TemplateResponseTests(TestCase):
                 ['name1.html.jinjadup', 'name2.html.jinjadup', 'name3.html.jinja.jinjadup'],
                 view.get_template_names()
             )
+
+class GenericViewTests(TestCase):
+    def setUp(self):
+        from django.utils import timezone
+
+        self.obj1 = TestModel.objects.create(date=timezone.now())
+        self.obj2 = TestModel.objects.create(date=timezone.now())
+
+    def test_detailview(self):
+        self.assertContains(
+            self.client.get('/testmodel/{0}/detail'.format(self.obj1.pk)),
+            'DetailView Test Template',
+            status_code=200
+        )
+
+    def test_createview(self):
+        self.assertContains(
+            self.client.get('/testmodel/create'),
+            'CreateView Test Template',
+            status_code=200
+        )
+
+    def test_deleteview(self):
+        self.assertContains(
+            self.client.get('/testmodel/{0}/delete'.format(self.obj1.pk)),
+            'DeleteView Test Template',
+            status_code=200
+        )
+
+    def test_updateview(self):
+        self.assertContains(
+            self.client.get('/testmodel/{0}/update'.format(self.obj1.pk)),
+            'UpdateView Test Template',
+            status_code=200
+        )
+
+    def test_listview(self):
+        self.assertContains(
+            self.client.get('/testmodel/'),
+            'ListView Test Template',
+            status_code=200
+        )
+
+    def test_archiveindexview(self):
+        self.assertContains(
+            self.client.get('/testmodel/archive/'),
+            'ArchiveIndexView Test Template',
+            status_code=200
+        )
+
+    def test_yeararchiveview(self):
+        self.assertContains(
+            self.client.get('/testmodel/archive/{0:%Y}/'.format(self.obj1.date)),
+            'YearArchiveView Test Template',
+            status_code=200
+        )
+
+    def test_montharchiveview(self):
+        self.assertContains(
+            self.client.get('/testmodel/archive/{0:%Y/%b}/'.format(self.obj1.date)),
+            'MonthArchiveView Test Template',
+            status_code=200
+        )
+
+    def test_weekarchiveview(self):
+        self.assertContains(
+            self.client.get('/testmodel/archive/{0:%Y/week/%U}/'.format(self.obj1.date)),
+            'WeekArchiveView Test Template',
+            status_code=200
+        )
+
+    def test_dayarchiveview(self):
+        self.assertContains(
+            self.client.get('/testmodel/archive/{0:%Y/%b/%d}/'.format(self.obj1.date)),
+            'DayArchiveView Test Template',
+            status_code=200
+        )
+
+    def test_todayarchiveview(self):
+        self.assertContains(
+            self.client.get('/testmodel/archive/today/'),
+            'TodayArchiveView Test Template',
+            status_code=200
+        )
+
+    def test_datedetailview(self):
+        self.assertContains(
+            self.client.get('/testmodel/archive/{0:%Y/%b/%d}/{1}'.format(self.obj1.date, self.obj1.pk)),
+            'DateDetailView Test Template',
+            status_code=200
+        )
+
+    # ==== Special imports ====
+    def test_import_archiveindexview(self):
+        from django_jinja.views.generic import ArchiveIndexView
+
+    def test_import_yeararchiveview(self):
+        from django_jinja.views.generic import YearArchiveView
+
+    def test_import_montharchiveview(self):
+        from django_jinja.views.generic import MonthArchiveView
+
+    def test_import_dayarchiveview(self):
+        from django_jinja.views.generic import DayArchiveView
+
+    def test_import_weekarchiveview(self):
+        from django_jinja.views.generic import WeekArchiveView
+
+    def test_import_todayarchiveview(self):
+        from django_jinja.views.generic import TodayArchiveView
+
+    def test_import_datedetailview(self):
+        from django_jinja.views.generic import DateDetailView
+
+    def test_import_detailview(self):
+        from django_jinja.views.generic import DetailView
+
+    def test_import_createview(self):
+        from django_jinja.views.generic import CreateView
+
+    def test_import_updateview(self):
+        from django_jinja.views.generic import UpdateView
+
+    def test_import_deleteview(self):
+        from django_jinja.views.generic import DeleteView
+
+    def test_import_listview(self):
+        from django_jinja.views.generic import ListView

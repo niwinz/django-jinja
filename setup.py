@@ -40,6 +40,9 @@ setup(
     ],
 
     install_requires = INSTALL_REQUIRES,
+    test_requires = [
+        "pytz",
+    ],
 
     classifiers = [
         "Development Status :: 5 - Production/Stable",
