@@ -40,7 +40,7 @@ setup(
     ],
 
     install_requires = INSTALL_REQUIRES,
-    test_requires = [
+    tests_require = [
         "pytz",
     ],
 
