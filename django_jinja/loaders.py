@@ -10,8 +10,6 @@ from django.conf import settings
 from django.template import TemplateDoesNotExist
 from django.template.loaders import app_directories
 from django.template.loaders import filesystem
-from django_jinja.base import env
-
 from . import base
 
 if hasattr(settings, "DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE"):
@@ -32,7 +30,7 @@ class LoaderMixin(object):
     def load_template(self, template_name, template_dirs=None):
         if self.match_template(template_name):
             try:
-                template = env.get_template(template_name)
+                template = base.env.get_template(template_name)
                 return template, template.filename
             except jinja2.TemplateNotFound:
                 raise TemplateDoesNotExist(template_name)
