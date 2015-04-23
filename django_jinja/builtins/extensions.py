@@ -59,13 +59,14 @@ class CsrfExtension(Extension):
         lineno = parser.stream.expect('name:csrf_token').lineno
         call = self.call_method(
             '_render',
-            [nodes.Name('csrf_token', 'load', lineno=lineno)],
+            [nodes.Name('csrf_token', 'load', lineno=lineno),
+             nodes.Name('request', 'load', lineno=lineno)],
             lineno=lineno
         )
         return nodes.Output([nodes.MarkSafe(call)])
 
-    def _render(self, csrf_token):
-        if csrf_token:
+    def _render(self, csrf_token, request):
+        if hasattr(request, 'csrf_processing_done') and request.csrf_processing_done and csrf_token:
             if csrf_token == 'NOTPROVIDED':
                 return Markup("")
 
