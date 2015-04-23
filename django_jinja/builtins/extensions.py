@@ -59,19 +59,22 @@ class CsrfExtension(Extension):
         lineno = parser.stream.expect('name:csrf_token').lineno
         call = self.call_method(
             '_render',
-            [nodes.Name('csrf_token', 'load', lineno=lineno),
-             nodes.Name('request', 'load', lineno=lineno)],
+            [nodes.Name('csrf_token', 'load', lineno=lineno)],
             lineno=lineno
         )
         return nodes.Output([nodes.MarkSafe(call)])
 
-    def _render(self, csrf_token, request):
-        if hasattr(request, 'csrf_processing_done') and request.csrf_processing_done and csrf_token:
-            if csrf_token == 'NOTPROVIDED':
-                return Markup("")
+    def _render(self, csrf_token):
+        # refs to https://github.com/niwibe/django-jinja/issues/119
+        try:
+            if csrf_token:
+                if csrf_token == 'NOTPROVIDED':
+                    return Markup("")
 
-            return Markup("<input type='hidden'"
-                          " name='csrfmiddlewaretoken' value='%s' />" % (csrf_token))
+                return Markup("<input type='hidden'"
+                              " name='csrfmiddlewaretoken' value='%s' />" % (csrf_token))
+        except AttributeError:
+            pass
 
         if settings.DEBUG:
             import warnings
