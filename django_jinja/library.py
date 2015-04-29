@@ -75,29 +75,6 @@ def filter(*args, **kwargs):
     return _register_function("filters", *args, **kwargs)
 
 
-class Library(object):
-    def __init__(self):
-        warnings.warn("Use Library class is deprecated and will be removed "
-                      "in future versions", DeprecationWarning, stacklevel=2)
-
-    def global_function(self, *args, **kwargs):
-        return _register_function("globals", *args, **kwargs)
-
-    def test(self, *args, **kwargs):
-        return _register_function("tests", *args, **kwargs)
-
-    def filter(self, *args, **kwargs):
-        return _register_function("filters", *args, **kwargs)
-
-    def __setitem__(self, item, value):
-        _env = _get_env()
-        _env.globals[item] = value
-
-    def __getitem__(self, item, value):
-        _env = _get_env()
-        return _env.globals[item]
-
-
 def render_with(template, fn=None):
     """
     Makes simple function works like

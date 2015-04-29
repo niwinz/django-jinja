@@ -38,7 +38,6 @@ class LoaderMixin(object):
             return super(LoaderMixin, self).load_template(template_name, template_dirs)
 
 
-
 class FileSystemLoader(LoaderMixin, filesystem.Loader):
     pass
 
