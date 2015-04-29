@@ -87,6 +87,7 @@ class Jinja2(BaseEngine):
         params = params.copy()
         options = params.pop("OPTIONS", {}).copy()
 
+        self.app_dirname = options.pop("app_dirname", "templates")
         super(Jinja2, self).__init__(params)
 
         newstyle_gettext = options.pop("newstyle_gettext", True)
