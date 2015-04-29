@@ -377,7 +377,7 @@ class TemplateDebugSignalsTest(TestCase):
 
 class BaseTests(TestCase):
     def test_match_template(self):
-        self.assertFalse(
+        self.assertTrue(
             match_template('admin/foo.html', regex=None, extension=None))
         self.assertFalse(
             match_template('admin/foo.html', regex=None, extension='.jinja'))
