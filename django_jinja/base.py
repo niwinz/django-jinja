@@ -259,6 +259,12 @@ def make_environment(defaults=None, clspath=None):
     initial_params.setdefault("extensions", [])
     initial_params["extensions"].extend(JINJA2_EXTENSIONS)
 
+    if JINJA2_UNDEFINED:
+        if isinstance(JINJA2_UNDEFINED, six.string_types):
+            initial_params["undefined"] = utils.load_class(JINJA2_UNDEFINED)
+        else:
+            initial_params["undefined"] = JINJA2_UNDEFINED
+
     if settings.DEBUG:
         initial_params.setdefault("undefined", jinja2.DebugUndefined)
     else:
