@@ -17,7 +17,6 @@ from django.shortcuts import render
 from django.template import RequestContext
 from django.template.loader import get_template
 from django.test import TestCase
-from django.test import override_settings
 from django.test import signals
 from django.test.client import RequestFactory
 from django_jinja.base import Template
@@ -28,6 +27,11 @@ from django_jinja.views.generic.base import Jinja2TemplateResponseMixin
 
 from .forms import TestForm
 from .models import TestModel
+
+if django.VERSION[:2] < (1, 7):
+    from django.test.utils import override_settings
+else:
+    from django.test import override_settings
 
 
 class RenderTemplatesTests(TestCase):
