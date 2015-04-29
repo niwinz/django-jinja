@@ -76,19 +76,7 @@ JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
 DEFAULT_JINJA2_TEMPLATE_EXTENSION = ".jinja"
 
 
-DEFAULT_EXTENSIONS = [
-    "jinja2.ext.do",
-    "jinja2.ext.loopcontrols",
-    "jinja2.ext.with_",
-    "jinja2.ext.i18n",
-    "jinja2.ext.autoescape",
-    "django_jinja.builtins.extensions.CsrfExtension",
-    "django_jinja.builtins.extensions.CacheExtension",
-    "django_jinja.builtins.extensions.TimezoneExtension",
-    "django_jinja.builtins.extensions.UrlsExtension",
-    "django_jinja.builtins.extensions.StaticFilesExtension",
-    "django_jinja.builtins.extensions.DjangoFiltersExtension",
-]
+from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 JINJA2_EXTENSIONS = DEFAULT_EXTENSIONS + [
     "django_jinja.builtins.extensions.DjangoExtraFiltersExtension",
