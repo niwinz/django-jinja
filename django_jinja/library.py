@@ -11,6 +11,7 @@ _local_env = {
     "globals": {},
     "tests": {},
     "filters": {},
+    "extensions": set([]),
 }
 
 
@@ -23,6 +24,9 @@ def _update_env(env):
     env.globals.update(_local_env["globals"])
     env.tests.update(_local_env["tests"])
     env.filters.update(_local_env["filters"])
+
+    for extension in _local_env["extensions"]:
+        env.add_extension(extension)
 
 
 def _attach_function(attr, func, name=None):
@@ -52,6 +56,11 @@ def _register_function(attr, name=None, fn=None):
         return _attach_function(attr, fn, name)
 
     raise RuntimeError("Invalid parameters")
+
+
+def extension(extension):
+    global _local_env
+    _local_env["extensions"].add(extensions)
 
 
 def global_function(*args, **kwargs):
