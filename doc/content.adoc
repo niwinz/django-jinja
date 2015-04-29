@@ -110,6 +110,9 @@ DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE = r'.*jinja$'
 DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE = r"^(?!admin/).*"
 ----
 
+Furthermore, the regex matching also can be combined with the extension based matching, allowing
+match by extension and regex in the same time.
+
 
 ==== Setup autoescape
 
@@ -148,6 +151,7 @@ import jinja2
 JINJA2_LOADER = jinja2.FileSystemLoader(["/some/path"])
 ----
 
+
 ==== Add additional extensions
 
 django-jinja, by default set up a great amount of extensions for make your experience
@@ -156,21 +160,9 @@ using `JINJA2_EXTENSIONS`:
 
 [source, python]
 ----
-JINJA2_EXTENSIONS = [
-    # The default extensions, you should include them
-    # if you are overwritting the settings.
-    "jinja2.ext.do",
-    "jinja2.ext.loopcontrols",
-    "jinja2.ext.with_",
-    "jinja2.ext.i18n",
-    "jinja2.ext.autoescape",
-    "django_jinja.builtins.extensions.CsrfExtension",
-    "django_jinja.builtins.extensions.CacheExtension",
-    "django_jinja.builtins.extensions.TimezoneExtension",
-    "django_jinja.builtins.extensions.UrlsExtension",
-    "django_jinja.builtins.extensions.StaticFilesExtension",
-    "django_jinja.builtins.extensions.DjangoFiltersExtension",
+from django_jinja.builtins import DEFAULT_EXTENSIONS
 
+JINJA2_EXTENSIONS = DEFAULT_EXTENSIONS + [
     # Your extensions here...
     "path.to.your.Extension"
 ]
@@ -209,11 +201,11 @@ with the rest of django. *django-jinja* comes to the rescue and add everything m
 
 *django-jinja* comes with that brief list of differences with django's built-in backend.
 
-* find the templates as usual in `"<appname>/templates"` directory instead of
-  `"<appname>/jinja2"` directory.
-* preload template tags
-* gettext message loading (i18n)
-* support for django context processors
+* find the templates as usual in `"<appname>/templates"` directory instead of `"<appname>/jinja2"` 
+  directory (you can overwrite this behavior, see below).
+* preload template tags.
+* gettext message loading (i18n).
+* support for django context processors.
 
 NOTE: the usage of context processors is not the recommended way anymore, and with *django-jinja*
 you can done it setting global data or global constants. See below, in the django 1.8 configuration
@@ -246,9 +238,10 @@ TEMPLATES = [
 ]
 ----
 
-NOTE: Is very important the order, because the django-jinja backend uses the same directory for the
-templates and acts as a middleware, if you put the django engine first every jinja template will
-be found by the django engine.
+NOTE: If you are using the default value for app templates directory for django-jinja backend,
+take cara about the order template engines, because the django-jinja backend by default uses
+the same directory for the templates that the django template engine. If you put the django engine 
+first every jinja template will be found by the django engine.
 
 
 === Advanced options
@@ -264,13 +257,14 @@ Additionaly, *django-jinja* exposes, more advanced matcher, using regular except
 }
 ----
 
-But is not excluyent with the `match_extension` settings, is complementary.
+Furthermore, the regex matching also can be combined with the extension based matching, allowing
+match by extension and regex in the same time.
 
 
 ==== Context processors support
 
 This a helper for make possible use django's contect processors with jinja2 backend
-for django 1.8. 
+for django 1.8.
 
 .Example setup a bunch of context processors:
 [source, python]
@@ -325,22 +319,10 @@ using `extensions` entry on backend options:
 
 [source, python]
 ----
-"OPTIONS": {
-    "extensions": [
-        # The default extensions, you should include them
-        # if you are overwritting the settings.
-        "jinja2.ext.do",
-        "jinja2.ext.loopcontrols",
-        "jinja2.ext.with_",
-        "jinja2.ext.i18n",
-        "jinja2.ext.autoescape",
-        "django_jinja.builtins.extensions.CsrfExtension",
-        "django_jinja.builtins.extensions.CacheExtension",
-        "django_jinja.builtins.extensions.TimezoneExtension",
-        "django_jinja.builtins.extensions.UrlsExtension",
-        "django_jinja.builtins.extensions.StaticFilesExtension",
-        "django_jinja.builtins.extensions.DjangoFiltersExtension",
+from django_jinja.builtins import DEFAULT_EXTENSIONS
 
+"OPTIONS": {
+    "extensions": DEFAULT_EXTENSIONS + [
         # Your extensions here...
         "path.to.your.Extension"
     ]
@@ -364,6 +346,19 @@ backend options:
 }
 ----
 
+==== Overwrite the default app templates directory
+
+As we said previously, django-jinja backend for django 1.8, uses the same directory for templates as
+the django template engine. But in some circumstances you may want to change it for use other
+directory. You can overwrite the default value with `app_dirname` option:
+
+[source, python]
+----
+"OPTIONS": {
+    "app_dirname": "jinja2",
+}
+----
+
 
 ==== Complete example
 
@@ -379,6 +374,7 @@ TEMPLATES = [
             # Match the template names ending in .html but not the ones in the admin folder.
             "match_extension": ".html",
             "match_regex": r"^(?!admin/).*",
+            "app_dirname": "templates",
 
             "newstyle_gettext": True,
             "tests": {
@@ -532,6 +528,10 @@ def myrenderwith(*args, **kwargs):
     Render result with jinja template. Usage: {{ myrenderwith() }}
     """
     return {"name": "Foo"}
+
+
+from .myextensions  import MyExtension
+library.extension(MyExtension)
 ----
 
 
