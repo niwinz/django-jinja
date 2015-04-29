@@ -245,7 +245,7 @@ def match_template(template_name, regex=None, extension=None):
     elif regex:
         return re.match(regex, template_name)
     else:
-        return False
+        return True
 
 
 def make_environment(defaults=None, clspath=None):
