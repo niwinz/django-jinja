@@ -71,7 +71,7 @@ class Jinja2(BaseEngine):
         from django.template import engines
 
         jinja_engines = [engine for engine in engines.all()
-                          if isinstance(engine, Jinja2)]
+                         if isinstance(engine, Jinja2)]
         if len(jinja_engines) == 1:
             # Unwrap the Jinja2 engine instance.
             return jinja_engines[0]
