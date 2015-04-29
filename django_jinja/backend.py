@@ -14,17 +14,21 @@ import sys
 from importlib import import_module
 
 import jinja2
+from django.conf import settings
 from django.core import signals
 from django.core.exceptions import ImproperlyConfigured
-from django.conf import settings
 from django.dispatch import receiver
+from django.middleware.csrf import get_token
 from django.template import RequestContext
 from django.template import TemplateDoesNotExist
 from django.template import TemplateSyntaxError
 from django.template.backends.base import BaseEngine
 from django.template.backends.utils import csrf_input_lazy
 from django.template.backends.utils import csrf_token_lazy
-from django.utils import lru_cache, six
+from django.utils import lru_cache
+from django.utils import six
+from django.utils.encoding import smart_text
+from django.utils.functional import SimpleLazyObject
 from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
 
@@ -43,9 +47,15 @@ class Template(object):
             context = {}
 
         if request is not None:
+            def _get_val():
+                token = get_token(request)
+                if token is None:
+                    return 'NOTPROVIDED'
+                else:
+                    return smart_text(token)
+
             context["request"] = request
-            context["csrf_input"] = csrf_input_lazy(request)
-            context["csrf_token"] = csrf_token_lazy(request)
+            context["csrf_token"] = SimpleLazyObject(_get_val)
 
             # Support for django context processors
             for processor in self.backend.context_processors:
