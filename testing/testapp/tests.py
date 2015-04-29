@@ -1,36 +1,42 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function, unicode_literals
+from __future__ import print_function
+from __future__ import unicode_literals
 
 import datetime
 import sys
-import django
 import unittest
 
-from django.core.exceptions import ImproperlyConfigured
-from django.http import HttpResponse
-from django.test import signals, TestCase
-from django.test.client import RequestFactory
-from django.template import RequestContext
-from django.core.urlresolvers import reverse
-from django.core.urlresolvers import NoReverseMatch
+import django
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
+from django.core.urlresolvers import NoReverseMatch
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 from django.shortcuts import render
-
-from django_jinja.base import dict_from_context, Template, match_template, get_match_extension
+from django.template import RequestContext
+from django.template.loader import get_template
+from django.test import TestCase
+from django.test import override_settings
+from django.test import signals
+from django.test.client import RequestFactory
+from django_jinja.base import Template
+from django_jinja.base import dict_from_context
+from django_jinja.base import get_match_extension
+from django_jinja.base import match_template
 from django_jinja.views.generic.base import Jinja2TemplateResponseMixin
 
 from .forms import TestForm
 from .models import TestModel
 
 
-class TemplateFunctionsTest(TestCase):
+class RenderTemplatesTests(TestCase):
     def setUp(self):
-        from django_jinja.base import env
-
         if django.VERSION[:2] >= (1, 8):
             from django.template import engines
             env = engines["jinja2"]
+        else:
+            from django_jinja.base import env
 
         self.env = env
         self.factory = RequestFactory()
@@ -230,27 +236,21 @@ class TemplateFunctionsTest(TestCase):
     def test_get_default_multiple(self):
         from django_jinja.backend import Jinja2
 
-        with self.modify_settings(TEMPLATES={
-            'append': [{"BACKEND": "django_jinja.backend.Jinja2",
-                "NAME": "jinja2dup",
-                "APP_DIRS": True,
-                "OPTIONS": {
-                    "context_processors": [
-                       "django.contrib.auth.context_processors.auth",
-                       "django.template.context_processors.debug",
-                       "django.template.context_processors.i18n",
-                       "django.template.context_processors.media",
-                       "django.template.context_processors.static",
-                       "django.template.context_processors.tz",
-                       "django.contrib.messages.context_processors.messages",
-                    ],
-                    "constants": {
-                       "foo": "bar",
-                    },
-                    "extensions": settings.JINJA2_EXTENSIONS
-                }}],
-        }):
-            with self.assertRaisesRegexp(ImproperlyConfigured, r'Several Jinja2 backends are configured'):
+        setting = {
+            "append": [
+                {
+                    "BACKEND": "django_jinja.backend.Jinja2",
+                    "NAME": "jinja2dup",
+                    "APP_DIRS": True,
+                    "OPTIONS": {
+                        "match_extension": ".jinjadup",
+                    }
+                }
+            ]
+        }
+
+        with self.modify_settings(TEMPLATES=setting):
+            with self.assertRaisesRegexp(ImproperlyConfigured, r'Several Jinja2 backends'):
                 Jinja2.get_default()
 
     @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
@@ -261,6 +261,29 @@ class TemplateFunctionsTest(TestCase):
         with self.settings(TEMPLATES=global_settings.TEMPLATES):
             with self.assertRaisesRegexp(ImproperlyConfigured, r'No Jinja2 backend is configured'):
                 Jinja2.get_default()
+
+
+    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
+    def test_overwrite_default_app_dirname(self):
+        setting = [
+            {
+                "BACKEND": "django_jinja.backend.Jinja2",
+                "NAME": "jinja2",
+                "APP_DIRS": True,
+                "OPTIONS": {
+                    "match_extension": None,
+                    "match_regex": None,
+                    "app_dirname": "jinja2",
+                }
+            }
+        ]
+
+        with override_settings(TEMPLATES=setting):
+            template = get_template("hola_mundo.html")
+            data = template.render({"name": "jinja2"})
+            self.assertEqual(data, "hola mundo de jinja2")
+
+
 
 class DjangoPipelineTestTest(TestCase):
     def setUp(self):
@@ -374,27 +397,20 @@ class BaseTests(TestCase):
 
     @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
     def test_get_match_extension_using(self):
-        with self.modify_settings(TEMPLATES={
-            'append': [{"BACKEND": "django_jinja.backend.Jinja2",
-                "NAME": "jinja2dup",
-                "APP_DIRS": True,
-                "OPTIONS": {
-                    "match_extension": ".jinjadup",
-                    "context_processors": [
-                       "django.contrib.auth.context_processors.auth",
-                       "django.template.context_processors.debug",
-                       "django.template.context_processors.i18n",
-                       "django.template.context_processors.media",
-                       "django.template.context_processors.static",
-                       "django.template.context_processors.tz",
-                       "django.contrib.messages.context_processors.messages",
-                    ],
-                    "constants": {
-                       "foo": "bar",
-                    },
-                    "extensions": settings.JINJA2_EXTENSIONS
-                }}],
-        }):
+        setting = {
+            "append": [
+                {
+                    "BACKEND": "django_jinja.backend.Jinja2",
+                    "NAME": "jinja2dup",
+                    "APP_DIRS": True,
+                    "OPTIONS": {
+                        "match_extension": ".jinjadup",
+                    }
+                }
+            ]
+        }
+
+        with self.modify_settings(TEMPLATES=setting):
             self.assertEquals(".jinja", get_match_extension(using='jinja2'))
             self.assertEquals(".jinjadup", get_match_extension(using="jinja2dup"))
 
@@ -436,27 +452,20 @@ class TemplateResponseTests(TestCase):
         class _View(Jinja2TemplateResponseMixin, self._BaseView):
             template_engine = 'jinja2dup'
 
-        with self.modify_settings(TEMPLATES={
-            'append': [{"BACKEND": "django_jinja.backend.Jinja2",
-                "NAME": "jinja2dup",
-                "APP_DIRS": True,
-                "OPTIONS": {
-                    "match_extension": ".jinjadup",
-                    "context_processors": [
-                       "django.contrib.auth.context_processors.auth",
-                       "django.template.context_processors.debug",
-                       "django.template.context_processors.i18n",
-                       "django.template.context_processors.media",
-                       "django.template.context_processors.static",
-                       "django.template.context_processors.tz",
-                       "django.contrib.messages.context_processors.messages",
-                    ],
-                    "constants": {
-                       "foo": "bar",
-                    },
-                    "extensions": settings.JINJA2_EXTENSIONS
-                }}],
-        }):
+        setting = {
+            "append": [
+                {
+                    "BACKEND": "django_jinja.backend.Jinja2",
+                    "NAME": "jinja2dup",
+                    "APP_DIRS": True,
+                    "OPTIONS": {
+                        "match_extension": ".jinjadup",
+                    }
+                }
+            ]
+        }
+
+        with self.modify_settings(TEMPLATES=setting):
             view = _View()
             self.assertEquals(
                 ['name1.html.jinjadup', 'name2.html.jinjadup', 'name3.html.jinja.jinjadup'],
