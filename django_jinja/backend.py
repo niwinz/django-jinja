@@ -111,17 +111,24 @@ class Jinja2(BaseEngine):
         extra_constants = options.pop("constants", {})
         translation_engine = options.pop("translation_engine", "django.utils.translation")
 
+        undefined = options.pop("undefined", None)
+        if undefined is not None:
+            if isinstance(undefined, six.string_types):
+                options["undefined"] = utils.load_class(undefined)
+            else:
+                options["undefined"] = undefined
+
+        if settings.DEBUG:
+            options.setdefault("undefined", jinja2.DebugUndefined)
+        else:
+            options.setdefault("undefined", jinja2.Undefined)
+
         environment_cls = import_string(environment_clspath)
 
         options.setdefault("loader", jinja2.FileSystemLoader(self.template_dirs))
         options.setdefault("extensions", builtins.DEFAULT_EXTENSIONS)
         options.setdefault("auto_reload", settings.DEBUG)
         options.setdefault("autoescape", True)
-
-        if settings.DEBUG:
-            options.setdefault("undefined", jinja2.DebugUndefined)
-        else:
-            options.setdefault("undefined", jinja2.Undefined)
 
         self.env = environment_cls(**options)
 
