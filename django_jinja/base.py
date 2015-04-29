@@ -15,24 +15,10 @@ from . import builtins
 from . import library
 from . import utils
 
-# Default jinja extension list
-DEFAULT_EXTENSIONS = [
-    "jinja2.ext.do",
-    "jinja2.ext.loopcontrols",
-    "jinja2.ext.with_",
-    "jinja2.ext.i18n",
-    "jinja2.ext.autoescape",
-    "django_jinja.builtins.extensions.CsrfExtension",
-    "django_jinja.builtins.extensions.CacheExtension",
-    "django_jinja.builtins.extensions.TimezoneExtension",
-    "django_jinja.builtins.extensions.UrlsExtension",
-    "django_jinja.builtins.extensions.StaticFilesExtension",
-    "django_jinja.builtins.extensions.DjangoFiltersExtension",
-]
-
 JINJA2_ENVIRONMENT_OPTIONS = getattr(settings, "JINJA2_ENVIRONMENT_OPTIONS", {})
-JINJA2_EXTENSIONS = getattr(settings, "JINJA2_EXTENSIONS", DEFAULT_EXTENSIONS)
+JINJA2_EXTENSIONS = getattr(settings, "JINJA2_EXTENSIONS", builtins.DEFAULT_EXTENSIONS)
 JINJA2_AUTOESCAPE = getattr(settings, "JINJA2_AUTOESCAPE", True)
+JINJA2_UNDEFINED = getattr(settings, "JINJA2_UNDEFINED", None)
 JINJA2_NEWSTYLE_GETTEXT = getattr(settings, "JINJA2_NEWSTYLE_GETTEXT", True)
 
 JINJA2_BYTECODE_CACHE_ENABLE = getattr(settings, "JINJA2_BYTECODE_CACHE_ENABLE", False)
