@@ -8,6 +8,7 @@ Version 1.4.0
 - Minor fixes on imports.
 - Add helper for set the "undefined" parameter in a easy way.
 - Add a simple way to add extensions from apps.
+- Fixed bug related to csrf_token.
 
 
 Version 1.3.3
