@@ -376,6 +376,9 @@ TEMPLATES = [
             "match_regex": r"^(?!admin/).*",
             "app_dirname": "templates",
 
+            # Can be set to "jinja2.Undefined" or any other subclass.
+            "undefined": None,
+
             "newstyle_gettext": True,
             "tests": {
                 "mytest": "path.to.my.test",
