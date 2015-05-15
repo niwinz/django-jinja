@@ -21,7 +21,7 @@ setup(
     keywords = "django, jinja2",
     author = "Andrey Antukh",
     author_email = "niwi@niwi.be",
-    url = "https://github.com/niwibe/django-jinja",
+    url = "https://github.com/niwinz/django-jinja",
     license = "BSD",
     packages = [
         "django_jinja",
