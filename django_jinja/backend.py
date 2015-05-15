@@ -149,6 +149,7 @@ class Jinja2(BaseEngine):
                                   constants=extra_constants)
 
         base._initialize_thirdparty(self.env)
+        base._initialize_bytecode_cache(self.env)
 
     def _initialize_builtins(self, filters=None, tests=None, globals=None, constants=None):
         def insert(data, name, value):
