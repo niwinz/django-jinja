@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
-
-from django.core.cache import get_cache
+import django
 from django.utils.functional import cached_property
 from jinja2 import BytecodeCache as _BytecodeCache
 
@@ -15,7 +14,12 @@ class BytecodeCache(_BytecodeCache):
 
     @cached_property
     def backend(self):
-        return get_cache(self._cache_name)
+        if django.VERSION[:2] < (1, 8):
+            from django.core.cache import get_cache
+            return get_cache(self._cache_name)
+        else:
+            from django.core.cache import caches
+            return caches[self._cache_name]
 
     def load_bytecode(self, bucket):
         key = 'jinja2_%s' % str(bucket.key)

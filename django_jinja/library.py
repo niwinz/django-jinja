@@ -60,7 +60,7 @@ def _register_function(attr, name=None, fn=None):
 
 def extension(extension):
     global _local_env
-    _local_env["extensions"].add(extensions)
+    _local_env["extensions"].add(extension)
 
 
 def global_function(*args, **kwargs):
