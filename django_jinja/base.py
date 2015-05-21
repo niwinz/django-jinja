@@ -7,8 +7,10 @@ import django
 import jinja2
 from django.conf import settings
 from django.template.context import BaseContext
-from django.test.signals import setting_changed
+from django.test import utils as django_utils
+from django.test.signals import setting_changed, template_rendered
 from django.utils import six
+from jinja2 import Template as Jinja2Template
 from jinja2.loaders import BaseLoader
 
 from . import builtins
@@ -149,6 +151,24 @@ def patch_django_for_autoescape():
 
     if not hasattr(ErrorDict, "__html__"):
         ErrorDict.__html__ = lambda self: six.text_type(self)
+
+
+def setup_test_environment():
+    if not hasattr(Jinja2Template, '_original_render'):
+        Jinja2Template._original_render = Jinja2Template.render
+        def instrumented_render(template_object, *args, **kwargs):
+            context = dict(*args, **kwargs)
+            template_rendered.send(sender=template_object,
+                                   template=template_object,
+                                   context=context)
+            return Jinja2Template._original_render(template_object, *args, **kwargs)
+        Jinja2Template.render = instrumented_render
+    django_utils._original_setup_test_environment()
+
+
+def patch_django_setup_test_environment():
+    django_utils._original_setup_test_environment = django_utils.setup_test_environment
+    django_utils.setup_test_environment = setup_test_environment
 
 
 def _initialize_thirdparty(env):
