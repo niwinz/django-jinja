@@ -288,6 +288,10 @@ class RenderTemplatesTests(TestCase):
             self.assertEqual(data, "hola mundo de jinja2")
 
 
+    def test_context_manipulation(self):
+        response = self.client.get(reverse("test-1"))
+        self.assertEqual(response.context["name"], "Jinja2")
+
 
 class DjangoPipelineTestTest(TestCase):
     def setUp(self):

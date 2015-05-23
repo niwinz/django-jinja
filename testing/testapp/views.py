@@ -24,6 +24,10 @@ class PipelineTestView(View):
     def get(self, request, data=None):
         return render_to_response("pipeline_test.jinja")
 
+class ContextManipulationTestView(View):
+    def get(self, request):
+        return render(request, "hello_world.jinja", {"name": "Jinja2"})
+
 # ==== generic.detail ====
 class DetailTestView(DetailView):
     model = TestModel
