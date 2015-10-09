@@ -141,7 +141,7 @@ JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
 
 django-jinja by default setups a proper template loader for load templates from
 django's `TEMPLATES_DIRS` and app specific templates. But in some circumstances you
-want override completely it. This can be done using the following entry on
+want to override it completely. This can be done using the following entry in
 your settings:
 
 [source, python]
