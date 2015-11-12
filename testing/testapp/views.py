@@ -15,8 +15,7 @@ from .models import TestModel
 
 class BasicTestView(View):
     def get(self, request, data=None):
-        data = render_to_string("hello_world.jinja", {"name": "Jinja2"},
-                                request=request)
+        data = render_to_string("hello_world.jinja", {"name": "Jinja2"})
         return HttpResponse(data)
 
 
