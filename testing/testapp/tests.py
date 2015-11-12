@@ -287,11 +287,16 @@ class RenderTemplatesTests(TestCase):
             data = template.render({"name": "jinja2"})
             self.assertEqual(data, "hola mundo de jinja2")
 
-    # @unittest.skipIf(django.VERSION[:2] >= (1, 8), "Not supported in Django < 1.8")
+    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
     def test_context_manipulation(self):
         response = self.client.get(reverse("test-1"))
         self.assertEqual(response.context["name"], "Jinja2")
 
+    @unittest.skipIf(django.VERSION[:2] >= (1, 7), "Not supported in Django < 1.8")
+    def test_context_manipulation(self):
+        with self.settings(TEMPLATE_DEBUG=True):
+            response = self.client.get(reverse("test-1"))
+            self.assertEqual(response.context["name"], "Jinja2")
 
 class DjangoPipelineTestTest(TestCase):
     def setUp(self):
