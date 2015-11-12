@@ -166,11 +166,6 @@ def setup_test_environment():
     django_utils._original_setup_test_environment()
 
 
-def patch_django_setup_test_environment():
-    django_utils._original_setup_test_environment = django_utils.setup_test_environment
-    django_utils.setup_test_environment = setup_test_environment
-
-
 def _initialize_thirdparty(env):
     """
     Iterate over all available apps in searching and preloading
