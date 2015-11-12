@@ -41,6 +41,7 @@ class Template(object):
     def __init__(self, template, backend):
         self.template = template
         self.backend = backend
+        self._debug = False
 
     def render(self, context=None, request=None):
         if context is None:
@@ -60,6 +61,27 @@ class Template(object):
             # Support for django context processors
             for processor in self.backend.context_processors:
                 context.update(processor(request))
+
+        if self._debug:
+            from django.test import signals
+            from django.template.context import BaseContext
+
+            # Define a "django" like context for emitatet the multi
+            # layered context object. This is mainly for apps like
+            # django-debug-toolbar that are very coupled to django's
+            # internal implementation of context.
+
+            if not isinstance(context, BaseContext):
+                class CompatibilityContext(dict):
+                    @property
+                    def dicts(self):
+                        return [self]
+
+                context = CompatibilityContext(context)
+
+            signals.template_rendered.send(sender=self, template=self,
+                                           context=context)
+
 
         return self.template.render(context)
 
@@ -110,6 +132,8 @@ class Jinja2(BaseEngine):
         extra_globals = options.pop("globals", {})
         extra_constants = options.pop("constants", {})
         translation_engine = options.pop("translation_engine", "django.utils.translation")
+
+        self.tmpl_debug = options.pop("debug", False)
 
         undefined = options.pop("undefined", None)
         if undefined is not None:
@@ -195,7 +219,9 @@ class Jinja2(BaseEngine):
             raise TemplateDoesNotExist("Template {} does not exists".format(template_name))
 
         try:
-            return Template(self.env.get_template(template_name), self)
+            template = Template(self.env.get_template(template_name), self)
+            template._debug = self.tmpl_debug
+            return template
         except jinja2.TemplateNotFound as exc:
             six.reraise(TemplateDoesNotExist, TemplateDoesNotExist(exc.args), sys.exc_info()[2])
         except jinja2.TemplateSyntaxError as exc:

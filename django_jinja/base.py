@@ -349,6 +349,7 @@ def testing_reinitialize_signal(setting, **kwargs):
         env = make_environment()
         initialize(env)
 
+
 # Global variable for store the environment for django <= 1.7
 env = None
 
