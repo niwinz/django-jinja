@@ -2,12 +2,14 @@ language: python
 sudo: false
 
 python:
+  - "3.5"
   - "3.4"
   - "3.3"
   - "2.7"
 
 env:
-  - DJANGO="django==1.8.0"
+  - DJANGO="django==1.8.6"
+  - DJANGO="https://www.djangoproject.com/download/1.9b1/tarball/"
 
 install:
   - pip install $DJANGO
