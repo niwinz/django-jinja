@@ -3,6 +3,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import os
 import datetime
 import sys
 import unittest
@@ -15,38 +16,26 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext
+from django.template import engines
 from django.template.loader import get_template
 from django.test import TestCase
 from django.test import signals
+from django.test import override_settings
 from django.test.client import RequestFactory
-from django_jinja.base import Template
 from django_jinja.base import dict_from_context
 from django_jinja.base import get_match_extension
 from django_jinja.base import match_template
+from django_jinja.backend import Template
 from django_jinja.views.generic.base import Jinja2TemplateResponseMixin
 
 from .forms import TestForm
 from .models import TestModel
 
-if django.VERSION[:2] < (1, 7):
-    from django.test.utils import override_settings
-else:
-    from django.test import override_settings
-
 
 class RenderTemplatesTests(TestCase):
     def setUp(self):
-        if django.VERSION[:2] >= (1, 8):
-            from django.template import engines
-            env = engines["jinja2"]
-        else:
-            from django_jinja.base import env
-
-        self.env = env
+        self.env = engines["jinja2"]
         self.factory = RequestFactory()
-
-    def tearDown(self):
-        pass
 
     def test_template_filters(self):
         filters_data = [
@@ -230,13 +219,11 @@ class RenderTemplatesTests(TestCase):
         self.assertEqual(response.status_code, 500)
         self.assertEqual(response.content, b"500")
 
-    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
     def test_get_default(self):
         from django_jinja.backend import Jinja2
         Jinja2.get_default.cache_clear()
         self.assertEqual(Jinja2.get_default(), self.env)
 
-    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
     def test_get_default_multiple(self):
         from django_jinja.backend import Jinja2
 
@@ -257,7 +244,6 @@ class RenderTemplatesTests(TestCase):
             with self.assertRaisesRegexp(ImproperlyConfigured, r'Several Jinja2 backends'):
                 Jinja2.get_default()
 
-    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
     def test_get_default_none(self):
         from django.conf import global_settings
         from django_jinja.backend import Jinja2
@@ -267,7 +253,6 @@ class RenderTemplatesTests(TestCase):
                 Jinja2.get_default()
 
 
-    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
     def test_overwrite_default_app_dirname(self):
         setting = [
             {
@@ -287,26 +272,14 @@ class RenderTemplatesTests(TestCase):
             data = template.render({"name": "jinja2"})
             self.assertEqual(data, "hola mundo de jinja2")
 
-    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
     def test_context_manipulation(self):
         response = self.client.get(reverse("test-1"))
         self.assertEqual(response.context["name"], "Jinja2")
 
-    @unittest.skipIf(django.VERSION[:2] >= (1, 7), "Not supported in Django < 1.8")
-    def test_context_manipulation(self):
-        with self.settings(TEMPLATE_DEBUG=True):
-            response = self.client.get(reverse("test-1"))
-            self.assertEqual(response.context["name"], "Jinja2")
 
 class DjangoPipelineTestTest(TestCase):
     def setUp(self):
-        from django_jinja.base import env
-
-        if django.VERSION[:2] >= (1, 8):
-            from django.template import engines
-            env = engines["jinja2"]
-
-        self.env = env
+        self.env = engines["jinja2"]
 
     def test_pipeline_js_safe(self):
         template = self.env.from_string("{{ compressed_js('test') }}")
@@ -333,62 +306,10 @@ class DjangoPipelineTestTest(TestCase):
         self.assertIn("/static/style.2.css", result)
 
 
-class TemplateDebugSignalsTest(TestCase):
-    def setUp(self):
-        signals.template_rendered.connect(self._listener)
-
-    def tearDown(self):
-        signals.template_rendered.disconnect(self._listener)
-        signals.template_rendered.disconnect(self._fail_listener)
-
-    def _listener(self, sender=None, template=None, **kwargs):
-        self.assertTrue(isinstance(sender, Template))
-        self.assertTrue(isinstance(template, Template))
-
-    def _fail_listener(self, *args, **kwargs):
-        self.fail("I shouldn't be called")
-
-    def test_render(self):
-        with self.settings(TEMPLATE_DEBUG=True):
-            tmpl = Template("OK")
-            tmpl.render()
-
-    def test_render_without_template_debug_setting(self):
-        signals.template_rendered.connect(self._fail_listener)
-
-        with self.settings(TEMPLATE_DEBUG=False):
-            tmpl = Template("OK")
-            tmpl.render()
-
-    def test_stream(self):
-        with self.settings(TEMPLATE_DEBUG=True):
-            tmpl = Template("OK")
-            tmpl.stream()
-
-    def test_stream_without_template_debug_setting(self):
-        signals.template_rendered.connect(self._fail_listener)
-
-        with self.settings(TEMPLATE_DEBUG=False):
-            tmpl = Template("OK")
-            tmpl.stream()
-
-    def test_template_used(self):
-        """
-        Test TestCase.assertTemplateUsed with django-jinja template
-        """
-        template_name = 'test.jinja'
-
-        def view(request, template_name):
-            tmpl = Template("{{ test }}")
-            return HttpResponse(tmpl.stream({"test": "success"}))
-
-        with self.settings(TEMPLATE_DEBUG=True):
-            request = RequestFactory().get('/')
-            response = view(request, template_name=template_name)
-            self.assertEqual(response.content, b"success")
-
-
 class BaseTests(TestCase):
+    def setUp(self):
+        self.env = engines["jinja2"]
+
     def test_match_template(self):
         self.assertTrue(
             match_template('admin/foo.html', regex=None, extension=None))
@@ -408,7 +329,6 @@ class BaseTests(TestCase):
             from django_jinja.backend import Jinja2
             self.assertEquals(Jinja2.get_default().match_extension, get_match_extension())
 
-    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
     def test_get_match_extension_using(self):
         setting = {
             "append": [
@@ -460,7 +380,6 @@ class TemplateResponseTests(TestCase):
             view.get_template_names()
         )
 
-    @unittest.skipIf(django.VERSION[:2] < (1, 8), "Not supported in Django < 1.8")
     def test_get_template_names_using(self):
         class _View(Jinja2TemplateResponseMixin, self._BaseView):
             template_engine = 'jinja2dup'

@@ -11,6 +11,8 @@ from __future__ import absolute_import
 
 import copy
 import sys
+import os
+import os.path as path
 from importlib import import_module
 
 import jinja2
@@ -34,6 +36,7 @@ from django.utils.module_loading import import_string
 
 from . import base
 from . import builtins
+from . import library
 from . import utils
 
 
@@ -133,7 +136,11 @@ class Jinja2(BaseEngine):
         extra_constants = options.pop("constants", {})
         translation_engine = options.pop("translation_engine", "django.utils.translation")
 
-        self.tmpl_debug = options.pop("debug", False)
+        tmpl_debug = options.pop("debug", settings.DEBUG)
+        bytecode_cache = options.pop("bytecode_cache", {})
+        bytecode_cache.setdefault("name", "default")
+        bytecode_cache.setdefault("enabled", False)
+        bytecode_cache.setdefault("backend", "django_jinja.cache.BytecodeCache")
 
         undefined = options.pop("undefined", None)
         if undefined is not None:
@@ -156,10 +163,6 @@ class Jinja2(BaseEngine):
 
         self.env = environment_cls(**options)
 
-        self._context_processors = context_processors
-        self._match_regex = match_regex
-        self._match_extension = match_extension
-
         # Initialize i18n support
         if settings.USE_I18N:
             translation = import_module(translation_engine)
@@ -167,13 +170,48 @@ class Jinja2(BaseEngine):
         else:
             self.env.install_null_translations(newstyle=newstyle_gettext)
 
+        self._context_processors = context_processors
+        self._match_regex = match_regex
+        self._match_extension = match_extension
+        self._tmpl_debug = tmpl_debug
+        self._bytecode_cache = bytecode_cache
+
         self._initialize_builtins(filters=extra_filters,
                                   tests=extra_tests,
                                   globals=extra_globals,
                                   constants=extra_constants)
 
-        base._initialize_thirdparty(self.env)
-        base._initialize_bytecode_cache(self.env)
+        self._initialize_thirdparty()
+        self._initialize_bytecode_cache()
+
+
+
+    def _initialize_bytecode_cache(self):
+        if self._bytecode_cache["enabled"]:
+            cls = utils.load_class(self._bytecode_cache["backend"])
+            self.env.bytecode_cache = cls(self._bytecode_cache["name"])
+
+    def _initialize_thirdparty(self):
+        """
+        Iterate over all available apps in searching and preloading
+        available template filters or functions for jinja2.
+        """
+        for app_path, mod_path in base._iter_templatetags_modules_list():
+            if not path.isdir(mod_path):
+                continue
+
+            for filename in filter(lambda x: x.endswith(".py") or x.endswith(".pyc"), os.listdir(mod_path)):
+                # Exclude __init__.py files
+                if filename == "__init__.py" or filename == "__init__.pyc":
+                    continue
+
+                file_mod_path = "%s.templatetags.%s" % (app_path, filename.rsplit(".", 1)[0])
+                try:
+                    import_module(file_mod_path)
+                except ImportError:
+                    pass
+
+            library._update_env(self.env)
 
     def _initialize_builtins(self, filters=None, tests=None, globals=None, constants=None):
         def insert(data, name, value):
@@ -211,8 +249,8 @@ class Jinja2(BaseEngine):
 
     def match_template(self, template_name):
         return base.match_template(template_name,
-                                   regex=self._match_regex,
-                                   extension=self._match_extension)
+                                   self._match_extension,
+                                   self._match_regex)
 
     def get_template(self, template_name):
         if not self.match_template(template_name):
@@ -220,12 +258,13 @@ class Jinja2(BaseEngine):
 
         try:
             template = Template(self.env.get_template(template_name), self)
-            template._debug = self.tmpl_debug
+            template._debug = self._tmpl_debug
             return template
         except jinja2.TemplateNotFound as exc:
             six.reraise(TemplateDoesNotExist, TemplateDoesNotExist(exc.args), sys.exc_info()[2])
         except jinja2.TemplateSyntaxError as exc:
             six.reraise(TemplateSyntaxError, TemplateSyntaxError(exc.args), sys.exc_info()[2])
+
 
 @receiver(signals.setting_changed)
 def _setting_changed(sender, setting, *args, **kwargs):

@@ -15,17 +15,18 @@ from .models import TestModel
 
 class BasicTestView(View):
     def get(self, request, data=None):
-        data = render_to_string("hello_world.jinja", {"name": "Jinja2"})
+        data = render_to_string("hello_world.jinja", {"name": "Jinja2"},
+                                request=request)
         return HttpResponse(data)
 
 
 class PipelineTestView(View):
     def get(self, request, data=None):
-        return render_to_response("pipeline_test.jinja")
+        return render_to_response("pipeline_test.jinja", request=request)
 
 class ContextManipulationTestView(View):
     def get(self, request):
-        return render(request, "hello_world.jinja", {"name": "Jinja2"})
+        return render(request, "hello_world.jinja", {"name": "Jinja2"}, request=request)
 
 # ==== generic.detail ====
 class DetailTestView(DetailView):
