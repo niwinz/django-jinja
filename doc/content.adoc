@@ -1,8 +1,8 @@
-= django-jinja - Jinja2 Template Engine for Django
+= django-jinja - jinja2 backend for Django
 Andrey Antukh, <niwi@niwi.be>
-1.4.2
+2.0.0
 :toc: left
-:numbered:
+:!numbered:
 :source-highlighter: pygments
 :pygments-style: friendly
 :sectlinks:
@@ -10,35 +10,53 @@ Andrey Antukh, <niwi@niwi.be>
 
 == Introduction
 
-django-jinja is a xref:license[BSD Licensed], simple and nonobstructive jinja2 integration with Django.
+django-jinja is a xref:license[BSD Licensed], simple and nonobstructive jinja2
+backend for Django.
 
-Jinja2 provides certain advantages over the native system of Django, for example, explicit calls to
-callable from templates, has better performance and has a plugin system, etc ...
+=== Rationale
 
-There are other projects that attempt do same thing: Djinja, Coffin, etc... Why one more?
+Jinja2 provides certain advantages over the native system of Django, for example,
+explicit calls to callable from templates, has better performance and has a plugin
+system, etc ...
 
-- Unlike Djinja, **django-jinja** is not intended to replace a Django template engine, but rather,
-  it complements the Django's template engine, giving the possibility to use both.
-- Unlike Coffin, the django-jinja codebase is much smaller and more modern. This way is much more
-  maintainable and easily understandable how the library works.
+Django comes with jinja backend, why I should use *django-jinja*?
 
+The Django builtin backend has very limited set of features if we compare it with
+the django template engine and in my opion is not very usable because it does not
+integrates well with the rest of django such as its filters, template tags and
+and preloading of templatetags among others.
 
-=== Features
+*django-jinja* comes to the rescue and add everything missing. This is a brief
+list of differences with django's built-in backend:
 
 - Auto-load templatetags compatible with Jinja2 on same way as Django.
+- Find the templates as usual in `"<appname>/templates"` directory instead
+  of `"<appname>/jinja2"`  directory (you can overwrite this behavior, see below).
 - Django templates can coexist with Jinja2 templates without any problems.
   It works as middleware, intercepts Jinja templates by file path pattern.
 - Django template filters and tags can mostly be used in Jinja2 templates.
-- I18n subsystem adapted for Jinja2 (makemessages now collects messages from Jinja templates)
+- I18n subsystem adapted for Jinja2 (makemessages now collects messages from
+  Jinja templates)
 - Compatible with python2 and python3 using same codebase.
 - jinja2 bytecode cache adapted for use django cache subsystem.
-- Django 1.8 support out of the box.
+- Support for django context processors.
 
-== Requirements
+
+[NOTE]
+====
+The usage of context processors is not the recommended way anymore, and with
+*django-jinja* you can done it setting global data or global constants. See below,
+in the django 1.8 configuration related section.
+====
+
+
+=== Requirements
 
 - Python 2.7, 3.3 or 3.4
-- Django 1.5, 1.6, 1.7 and 1.8
+- Django >= 1.8
 - jinja2 >= 2.7.0
+
+If you are using django < 1.8, you should use django-jinja 1.x versions.
 
 
 === Installation
@@ -50,6 +68,9 @@ The simplest way to install **django-jinja** is using **pip**:
 pip install django-jinja
 ----
 
+
+== Quick Start
+
 Add add it to django installed apps list:
 
 [source, python]
@@ -57,168 +78,7 @@ Add add it to django installed apps list:
 INSTALLED_APPS += ('django_jinja',)
 ----
 
-== User guide (django +++<=+++ 1.7)
-
-=== Introduction
-
-Since django-jinja supports two ways to setup (mainly for django <= 1.7 and django >= 1.8)
-this section tries expain how to setup it for django <= 1.7.
-
-
-=== Quick Setup
-
-The first step for configure _django-jinja_ is replace default
-django template loaders:
-
-[source, python]
-----
-TEMPLATE_LOADERS = (
-    'django_jinja.loaders.FileSystemLoader',
-    'django_jinja.loaders.AppLoader',
-)
-----
-
-django-jinja template loaders inherit's from a django template loaders and works like middleware,
-intercepts by predefined condition templates for render with jinja2 engine.
-
-The simplest condition is using file extensions:
-
-[source, python]
-----
-DEFAULT_JINJA2_TEMPLATE_EXTENSION = '.jinja'
-----
-
-With this settings, django-jinja intercepts all templates with `.jinja` extension and render them with
-jinja2 engine and templates that not matches the `.jinja` extension are forwarded to django templates
-engine.
-
-
-=== Advances settings
-
-==== Regex based template matching
-
-Additionaly, *django-jinja* exposes, more advanced matcher, using regular exceptions:
-
-[source, python]
-----
-# Same behavior of default intercept method
-# by extension but using regex (not recommended)
-DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE = r'.*jinja$'
-
-# More advanced method. Intercept all templates
-# except from django admin.
-DEFAULT_JINJA2_TEMPLATE_INTERCEPT_RE = r"^(?!admin/).*"
-----
-
-Furthermore, the regex matching also can be combined with the extension based matching, allowing
-match by extension and regex in the same time.
-
-
-==== Setup autoescape
-
-You can enable or disable autoescaping with `JINJA2_AUTOESCAPE` setting.
-
-[source, python]
-----
-# Enable/Disable autoescaping (default: True)
-JINJA2_AUTOESCAPE = True
-----
-
-
-==== Mute url resolve exceptions
-
-Sometimes, you want simply mute exceptions related to url resolving. You can mute exceptions
-with the following entry on your settings:
-
-[source, python]
-----
-# Mute reverse url exceptions (default: False)
-JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
-----
-
-
-==== Set custom loader
-
-django-jinja by default setups a proper template loader for load templates from
-django's `TEMPLATES_DIRS` and app specific templates. But in some circumstances you
-want to override it completely. This can be done using the following entry in
-your settings:
-
-[source, python]
-----
-# Set custom loader
-import jinja2
-JINJA2_LOADER = jinja2.FileSystemLoader(["/some/path"])
-----
-
-
-==== Add additional extensions
-
-django-jinja, by default set up a great amount of extensions for make your experience
-using jinja in django painless. But if you want add more extesions, you can done
-using `JINJA2_EXTENSIONS`:
-
-[source, python]
-----
-from django_jinja.builtins import DEFAULT_EXTENSIONS
-
-JINJA2_EXTENSIONS = DEFAULT_EXTENSIONS + [
-    # Your extensions here...
-    "path.to.your.Extension"
-]
-----
-
-
-==== Template bytecode cache
-
-*django-jinja* supports the Jinja2's template bytecode caching system. Including an implementation
-for makes use of Django's built-in cache framework.
-
-[source, python]
-----
-# Enable bytecode cache (default: False)
-JINJA2_BYTECODE_CACHE_ENABLE = False
-
-# Cache backend name for bytecode cache (default: "default")
-JINJA2_BYTECODE_CACHE_NAME = "default"
-
-# Specify custom bytecode cache subclass (default: None)
-JINJA2_BYTECODE_CACHE_BACKEND = "path.to.you.cache.class"
-----
-
-link:http://jinja.pocoo.org/docs/api/#bytecode-cache[More documentation about bytecode cache]
-
-
-== User guide (for django  +++>=+++ 1.8)
-
-=== Introduction
-
-Since django 1.8, multiple template engine support was added to django, and *django-jinja* comes
-with support for it. Implementing the backend interface and new configuration syntax.
-
-Django also comes with basic jinja backend, but it not has a lot of facilities and integrations
-with the rest of django. *django-jinja* comes to the rescue and add everything missing.
-
-*django-jinja* comes with that brief list of differences with django's built-in backend.
-
-* find the templates as usual in `"<appname>/templates"` directory instead of `"<appname>/jinja2"` 
-  directory (you can overwrite this behavior, see below).
-* preload template tags.
-* gettext message loading (i18n).
-* support for django context processors.
-
-NOTE: the usage of context processors is not the recommended way anymore, and with *django-jinja*
-you can done it setting global data or global constants. See below, in the django 1.8 configuration
-related section.
-
-WARNING: The settings variables used for configure django-jinja for django <= 1.7 does not works
-if you are using the django 1.8 backend.
-
-
-=== Quick Setup
-
-This is a quick example of how to configure _django-jinja_ with django 1.8 configuration
-formata:
+Followed to the basic template engine configuration:
 
 [source, python]
 ----
@@ -238,17 +98,23 @@ TEMPLATES = [
 ]
 ----
 
-NOTE: If you are using the default value for app templates directory for django-jinja backend,
-take cara about the order template engines, because the django-jinja backend by default uses
-the same directory for the templates that the django template engine. If you put the django engine 
-first every jinja template will be found by the django engine.
+[NOTE]
+====
+If you are using the default value for app templates directory for
+django-jinja backend, take cara about the order template engines, because the
+django-jinja backend by default uses the same directory for the templates that
+the django template engine. If you put the django engine first every jinja
+template will be found by the django engine.
+====
 
 
-=== Advanced options
+== User Guide
 
-==== Regex based template matching
 
-Additionaly, *django-jinja* exposes, more advanced matcher, using regular exceptions:
+=== Regex based template matching
+
+By default, *django-jinja* uses the extension as method for match templates, but if
+it is not enoght, you can complement it using regular experessions:
 
 [source, python]
 ----
@@ -257,11 +123,18 @@ Additionaly, *django-jinja* exposes, more advanced matcher, using regular except
 }
 ----
 
-Furthermore, the regex matching also can be combined with the extension based matching, allowing
-match by extension and regex in the same time.
+For disable the extension matching, just set `"match_extension"` to `None`:
+
+[source, python]
+----
+"OPTIONS": {
+    "match_extension": None,
+    "match_regex": r"^(?!admin/).*",
+}
+----
 
 
-==== Context processors support
+=== Context processors support
 
 This a helper for make possible use django's contect processors with jinja2 backend
 for django 1.8.
@@ -287,11 +160,18 @@ setup them if you do not have own. Furthermore, it is now not recommended way
 to setup variables in the context and the purpose of its existence is a help
 for migrations.
 
+[NOTE]
+====
+Take care that django (1.8.x and 1.9.x) lives with backward compatibility with
+old template api and this has its own tradeoffs. If you found you using functions
+like `render_to_string` or `render_to_response` from django, do not forget pass
+request parameter in order to make context processors work.
+====
 
-==== Custom filters, globals, constants and tests
 
-django-jinja backend offers a helper options for easy setup constants, global
-functions, tests and filters:
+=== Custom filters, globals, constants and tests
+
+This is a way to setup statically (in your settings) additional stuff for jinja:
 
 [source, python]
 ----
@@ -307,11 +187,12 @@ functions, tests and filters:
     },
     "globals": {
         "somefn": "path.to.functions.somefn",
-    },
+    }
+}
 ----
 
 
-==== Add additional extensions
+=== Add additional extensions
 
 django-jinja, by default set up a great amount of extensions for make your experience
 using jinja in django painless. But if you want add more extesions, you can done
@@ -331,7 +212,7 @@ from django_jinja.builtins import DEFAULT_EXTENSIONS
 ----
 
 
-==== Gettext Style
+=== Gettext Style
 
 Jinja2 implements two styles of gettext. You can read about it here:
 http://jinja.pocoo.org/docs/dev/extensions/#newstyle-gettext.
@@ -346,11 +227,13 @@ backend options:
 }
 ----
 
-==== Overwrite the default app templates directory
 
-As we said previously, django-jinja backend for django 1.8, uses the same directory for templates as
-the django template engine. But in some circumstances you may want to change it for use other
-directory. You can overwrite the default value with `app_dirname` option:
+=== Overwrite the default app templates directory
+
+As we said previously, django-jinja backend for django 1.8, uses the same
+directory for templates as the django template engine. But in some circumstances
+you may want to change it for use other directory. You can overwrite the default
+ value with `app_dirname` option:
 
 [source, python]
 ----
@@ -360,7 +243,7 @@ directory. You can overwrite the default value with `app_dirname` option:
 ----
 
 
-==== Complete example
+=== Complete example
 
 This is a complete configuration example with django-jinja's defaults:
 
@@ -405,6 +288,11 @@ TEMPLATES = [
                 "django_jinja.builtins.extensions.StaticFilesExtension",
                 "django_jinja.builtins.extensions.DjangoFiltersExtension",
             ],
+            "bytecode_cache": {
+                "name": "default",
+                "backend": "django_jinja.cache.BytecodeCache",
+                "enabled": False,
+            },
             "autoescape": True,
             "auto_reload": settings.DEBUG,
             "translation_engine": "django.utils.translation",
@@ -414,7 +302,7 @@ TEMPLATES = [
 ----
 
 
-== Differences
+== Differences with Django Template Engine
 
 === Url reversing
 
