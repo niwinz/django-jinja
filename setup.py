@@ -7,7 +7,7 @@ import sys
 
 INSTALL_REQUIRES = [
     "jinja2 >=2.5",
-    "django >=1.4",
+    "django >=1.8",
 ]
 
 if sys.version_info < (2, 7):
@@ -15,7 +15,7 @@ if sys.version_info < (2, 7):
 
 setup(
     name = "django-jinja",
-    version = "1.4.2",
+    version = "2.0.0",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     keywords = "django, jinja2",
@@ -56,7 +56,6 @@ setup(
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.2",
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
         "Topic :: Internet :: WWW/HTTP",
