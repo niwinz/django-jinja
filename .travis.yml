@@ -8,28 +8,17 @@ python:
 
 env:
   - DJANGO="django==1.8.0"
-  - DJANGO="django==1.7.4"
-  - DJANGO="django==1.6.10"
-  - DJANGO="django==1.5.12"
-  - DJANGO="django==1.4.19"
-
-matrix:
-  exclude:
-    - python: "3.3"
-      env: DJANGO="django==1.4.19"
-    - python: "3.4"
-      env: DJANGO="django==1.4.19"
 
 install:
-  - pip install $DJANGO --use-mirrors
-  - pip install jinja2 django-pipeline --use-mirrors
-  - pip install pytz --use-mirrors
+  - pip install $DJANGO
+  - pip install jinja2 django-pipeline
+  - pip install pytz
 script:
   - cd testing && python runtests.py
 
 notifications:
   email:
     recipients:
-      - niwi@niwi.be
+      - niwi@niwi.nz
     on_success: change
     on_failure: change
