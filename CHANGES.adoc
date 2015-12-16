@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 2.0.0
+-------------
+
+- Remove django < 1.8 compatibility.
+- Major code refactor for make it now more simpler.
+
+
 Version 1.4.2
 -------------
 
@@ -11,6 +18,7 @@ Version 1.4.1
 -------------
 
 - Add missing import on setup.py of views.
+
 
 Version 1.4.0
 -------------

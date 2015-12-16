@@ -56,7 +56,7 @@ in the django 1.8 configuration related section.
 - Django >= 1.8
 - jinja2 >= 2.7.0
 
-If you are using django < 1.8, you should use django-jinja 1.x versions.
+*If you are using django < 1.8, you should use django-jinja 1.x versions.*
 
 
 === Installation
