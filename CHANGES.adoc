@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 1.4.2
+-------------
+
+- Minor fix on extensions.
+
+
 Version 1.4.1
 -------------
 

@@ -1,6 +1,6 @@
 = django-jinja - Jinja2 Template Engine for Django
 Andrey Antukh, <niwi@niwi.be>
-1.4.1
+1.4.2
 :toc: left
 :numbered:
 :source-highlighter: pygments
