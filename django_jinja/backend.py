@@ -40,11 +40,23 @@ from . import library
 from . import utils
 
 
+class Origin(object):
+    """
+    A container to hold debug information as described in the template API
+    documentation.
+    """
+    def __init__(self, name, template_name):
+        self.name = name
+        self.template_name = template_name
+
+
 class Template(object):
     def __init__(self, template, backend):
         self.template = template
         self.backend = backend
+
         self._debug = False
+        self.origin = Origin(name=template.filename, template_name=template.name)
 
     def render(self, context=None, request=None):
         if context is None:
