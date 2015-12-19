@@ -77,7 +77,7 @@ class Template(object):
             for processor in self.backend.context_processors:
                 context.update(processor(request))
 
-        if self._debug:
+        if self.backend._tmpl_debug:
             from django.test import signals
             from django.template.context import BaseContext
 
