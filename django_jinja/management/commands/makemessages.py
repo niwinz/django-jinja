@@ -42,6 +42,8 @@ class Command(makemessages.Command):
     def handle(self, *args, **options):
         old_endblock_re = trans_real.endblock_re
         old_block_re = trans_real.block_re
+        old_constant_re = trans_real.constant_re
+
         old_templatize = trans_real.templatize
         # Extend the regular expressions that are used to detect
         # translation blocks with an "OR jinja-syntax" clause.
@@ -51,6 +53,7 @@ class Command(makemessages.Command):
             trans_real.block_re.pattern + '|' + r"""^-?\s*trans(?:\s+(?!'|")(?=.*?=.*?)|\s*-?$)""")
         trans_real.plural_re = re.compile(
             trans_real.plural_re.pattern + '|' + r"""^-?\s*pluralize(?:\s+.+|-?$)""")
+        trans_real.constant_re = re.compile(r"""_\(((?:".*?")|(?:'.*?')).*\)""")
 
         def my_templatize(src, origin=None):
             new_src = strip_whitespaces(src)
@@ -64,3 +67,4 @@ class Command(makemessages.Command):
             trans_real.endblock_re = old_endblock_re
             trans_real.block_re = old_block_re
             trans_real.templatize = old_templatize
+            trans_real.constant_re = old_constant_re
