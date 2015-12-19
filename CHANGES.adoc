@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 2.1.0
+-------------
+
+- Fix support for django debug toolbar 1.4
+- Improve syntax error reporting.
+- Improve debug instrumentation.
+
+
 Version 2.0.0
 -------------
 
