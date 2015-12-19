@@ -266,16 +266,21 @@ class Jinja2(BaseEngine):
 
     def get_template(self, template_name):
         if not self.match_template(template_name):
-            raise TemplateDoesNotExist("Template {} does not exists".format(template_name))
+            message = "Template {} does not exists".format(template_name)
+            raise TemplateDoesNotExist(message)
 
         try:
-            template = Template(self.env.get_template(template_name), self)
-            template._debug = self._tmpl_debug
-            return template
+            return Template(self.env.get_template(template_name), self)
         except jinja2.TemplateNotFound as exc:
-            six.reraise(TemplateDoesNotExist, TemplateDoesNotExist(exc.args), sys.exc_info()[2])
+            six.reraise(
+                TemplateDoesNotExist,
+                TemplateDoesNotExist(exc.name, backend=self),
+                sys.exc_info()[2],
+            )
         except jinja2.TemplateSyntaxError as exc:
-            six.reraise(TemplateSyntaxError, TemplateSyntaxError(exc.args), sys.exc_info()[2])
+            new = TemplateSyntaxError(exc.args)
+            new.template_debug = get_exception_info(exc)
+            six.reraise(TemplateSyntaxError, new, sys.exc_info()[2])
 
 
 @receiver(signals.setting_changed)
@@ -283,3 +288,30 @@ def _setting_changed(sender, setting, *args, **kwargs):
     """ Reset the Jinja2.get_default() cached when TEMPLATES changes. """
     if setting == "TEMPLATES":
         Jinja2.get_default.cache_clear()
+
+
+def get_exception_info(exception):
+    """
+    Formats exception information for display on the debug page using the
+    structure described in the template API documentation.
+    """
+    context_lines = 10
+    lineno = exception.lineno
+    lines = list(enumerate(exception.source.strip().split("\n"), start=1))
+    during = lines[lineno - 1][1]
+    total = len(lines)
+    top = max(0, lineno - context_lines - 1)
+    bottom = min(total, lineno + context_lines)
+
+    return {
+        'name': exception.filename,
+        'message': exception.message,
+        'source_lines': lines[top:bottom],
+        'line': lineno,
+        'before': '',
+        'during': during,
+        'after': '',
+        'total': total,
+        'top': top,
+        'bottom': bottom,
+    }
