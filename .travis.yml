@@ -9,7 +9,7 @@ python:
 
 env:
   - DJANGO="django==1.8.6"
-  - DJANGO="https://www.djangoproject.com/download/1.9b1/tarball/"
+  - DJANGO="django==1.9"
 
 install:
   - pip install $DJANGO
@@ -19,7 +19,7 @@ install:
 matrix:
   exclude:
     - python: "3.3"
-      env: DJANGO="https://www.djangoproject.com/download/1.9b1/tarball/"
+      env: DJANGO="django==1.9"
 
 script:
   - cd testing && python runtests.py
