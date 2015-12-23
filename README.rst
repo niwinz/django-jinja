@@ -16,7 +16,7 @@ Simple and nonobstructive jinja2 integration with Django.
     :target: https://pypi.python.org/pypi/django-jinja
 
 
-**Documentation:** http://niwinz.github.io/django-jinja/
+**Documentation:** http://niwinz.github.io/django-jinja/latest/
 
 
 How to install?
