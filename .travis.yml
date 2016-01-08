@@ -12,9 +12,7 @@ env:
   - DJANGO="django==1.9"
 
 install:
-  - pip install $DJANGO
-  - pip install jinja2 django-pipeline
-  - pip install pytz
+  - pip install $DJANGO jinja2 "django-pipeline<1.6" pytz
 
 matrix:
   exclude:
