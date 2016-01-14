@@ -19,7 +19,7 @@ Jinja2 provides certain advantages over the native system of Django, for example
 explicit calls to callable from templates, has better performance and has a plugin
 system, etc ...
 
-Django comes with jinja backend, why I should use *django-jinja*?
+Django comes with jinja backend, why should I use *django-jinja*?
 
 The Django builtin backend has very limited set of features if we compare it with
 the django template engine and in my opion is not very usable because it does not
@@ -71,7 +71,7 @@ pip install django-jinja
 
 == Quick Start
 
-Add add it to django installed apps list:
+Add it to django installed apps list:
 
 [source, python]
 ----
@@ -101,7 +101,7 @@ TEMPLATES = [
 [NOTE]
 ====
 If you are using the default value for app templates directory for
-django-jinja backend, take cara about the order template engines, because the
+django-jinja backend, take care to the template engines order, because the
 django-jinja backend by default uses the same directory for the templates that
 the django template engine. If you put the django engine first every jinja
 template will be found by the django engine.
@@ -113,8 +113,8 @@ template will be found by the django engine.
 
 === Regex based template matching
 
-By default, *django-jinja* uses the extension as method for match templates, but if
-it is not enoght, you can complement it using regular experessions:
+By default, *django-jinja* uses the extension as method to match templates, but if
+it is not enought, you can extend it using regular experessions:
 
 [source, python]
 ----
@@ -123,7 +123,7 @@ it is not enoght, you can complement it using regular experessions:
 }
 ----
 
-For disable the extension matching, just set `"match_extension"` to `None`:
+To disable the extension matching, just set `"match_extension"` to `None`:
 
 [source, python]
 ----
@@ -136,7 +136,7 @@ For disable the extension matching, just set `"match_extension"` to `None`:
 
 === Context processors support
 
-This a helper for make possible use django's contect processors with jinja2 backend
+It is a helper to use django's context processors with jinja2 backend
 for django 1.8.
 
 .Example setup a bunch of context processors:
@@ -194,8 +194,8 @@ This is a way to setup statically (in your settings) additional stuff for jinja:
 
 === Add additional extensions
 
-django-jinja, by default set up a great amount of extensions for make your experience
-using jinja in django painless. But if you want add more extesions, you can done
+django-jinja, by default set up a great amount of extensions to make your experience
+using jinja in django painless. But if you want to add more extesions, you can do it
 using `extensions` entry on backend options:
 
 [source, python]
@@ -232,7 +232,7 @@ backend options:
 
 As we said previously, django-jinja backend for django 1.8, uses the same
 directory for templates as the django template engine. But in some circumstances
-you may want to change it for use other directory. You can overwrite the default
+you may want to change it to use other directory. You can overwrite the default
  value with `app_dirname` option:
 
 [source, python]
@@ -315,7 +315,7 @@ a simple function called `url`.
 {{ url('ns:name', pk=obj.pk) }}
 ----
 
-This approach is very flexible, because we do not need additional options for set a result
+This approach is very flexible, because we do not need additional options to set a result
 if executing url in one variable. With jinja2 you can use the set template tag for it:
 
 [source, html+jinja]
@@ -349,7 +349,7 @@ it here: http://jinja.pocoo.org/docs/dev/templates/#i18n
 {% endtrans %}
 ----
 
-Additionally, django-jinja extends the django's `makemessages` command for make it work
+Additionally, django-jinja extends the django's `makemessages` command to make it work
 with jinja2 i18n tags.
 
 If you want more django like i18n related tags, you can use extensions from
