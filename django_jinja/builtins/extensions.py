@@ -133,6 +133,8 @@ class CacheExtension(Extension):
         if value is None:
             value = caller()
             cache.set(cache_key, force_text(value), expire_time)
+        else:
+            value = force_text(value)
 
         return value
 
