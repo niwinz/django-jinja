@@ -3,8 +3,12 @@
 import functools
 from importlib import import_module
 
+import django
 from django.utils.safestring import mark_safe
 from django.core.exceptions import ImproperlyConfigured
+
+
+DJANGO_18 = (django.VERSION[:2] == (1, 8))
 
 
 def load_class(path):

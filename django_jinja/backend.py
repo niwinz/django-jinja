@@ -276,9 +276,15 @@ class Jinja2(BaseEngine):
         try:
             return Template(self.env.get_template(template_name), self)
         except jinja2.TemplateNotFound as exc:
+
+            if utils.DJANGO_18:
+                exc = TemplateDoesNotExist(exc.name)
+            else:
+                exc = TemplateDoesNotExist(exc.name, backend=self)
+
             six.reraise(
                 TemplateDoesNotExist,
-                TemplateDoesNotExist(exc.name, backend=self),
+                exc,
                 sys.exc_info()[2],
             )
         except jinja2.TemplateSyntaxError as exc:
