@@ -172,7 +172,14 @@ class Jinja2(BaseEngine):
 
         environment_cls = import_string(environment_clspath)
 
-        options.setdefault("loader", jinja2.FileSystemLoader(self.template_dirs))
+        if isinstance(options.get("loader"), six.string_types):
+            # Allow to specify a loader as string
+            loader_cls = import_string(options.pop("loader"))
+        else:
+            # Backward compatible default
+            loader_cls = jinja2.FileSystemLoader
+
+        options.setdefault("loader", loader_cls(self.template_dirs))
         options.setdefault("extensions", builtins.DEFAULT_EXTENSIONS)
         options.setdefault("auto_reload", settings.DEBUG)
         options.setdefault("autoescape", True)
