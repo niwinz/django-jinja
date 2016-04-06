@@ -27,6 +27,7 @@ from django.template import TemplateSyntaxError
 from django.template.backends.base import BaseEngine
 from django.template.backends.utils import csrf_input_lazy
 from django.template.backends.utils import csrf_token_lazy
+from django.template.context import BaseContext
 from django.utils import lru_cache
 from django.utils import six
 from django.utils.encoding import smart_text
@@ -66,6 +67,8 @@ class Template(object):
         if context is None:
             context = {}
 
+        context = base.dict_from_context(context)
+
         if request is not None:
             def _get_val():
                 token = get_token(request)
@@ -83,7 +86,6 @@ class Template(object):
 
         if self.backend._tmpl_debug:
             from django.test import signals
-            from django.template.context import BaseContext
 
             # Define a "django" like context for emitatet the multi
             # layered context object. This is mainly for apps like
