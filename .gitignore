@@ -12,3 +12,4 @@ versiontools-*.egg
 .settings
 
 doc/index.html
+.tox
