@@ -289,7 +289,7 @@ class RenderTemplatesTests(TestCase):
     def test_context_manipulation(self):
         response = self.client.get(reverse("test-1"))
         self.assertEqual(response.context["name"], "Jinja2")
-
+        self.assertTemplateUsed(response, 'hello_world.jinja')
 
 class DjangoPipelineTestTest(TestCase):
     def setUp(self):
