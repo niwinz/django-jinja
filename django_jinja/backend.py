@@ -56,7 +56,6 @@ class Template(object):
         self.template = template
         self.backend = backend
 
-        self._debug = False
         self.origin = Origin(name=template.filename, template_name=template.name)
 
     @property
