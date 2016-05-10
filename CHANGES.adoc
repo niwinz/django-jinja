@@ -5,6 +5,7 @@ Version 2.1.3
 -------------
 
 - Fix support passing in django template contexts.
+- Fix template name matching on tests.
 
 
 Version 2.1.2
