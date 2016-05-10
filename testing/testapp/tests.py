@@ -22,7 +22,6 @@ from django.test import TestCase
 from django.test import signals
 from django.test import override_settings
 from django.test.client import RequestFactory
-from django_jinja.base import dict_from_context
 from django_jinja.base import get_match_extension
 from django_jinja.base import match_template
 from django_jinja.backend import Template
@@ -104,6 +103,21 @@ class RenderTemplatesTests(TestCase):
         result = template.render({})
         self.assertEqual(result, "<strong>Foo</strong>")
 
+    def test_django_context(self):
+        """
+        Test that Django context objects (which are stacks of dicts)
+        can be passed directly to Jinja2 templates.
+        """
+        template = self.env.from_string("{{ greeting }}, {{ name }}")
+        request = self.factory.get('/')
+        ctx = RequestContext(request, {"greeting": "Hello", "name": "stranger"})
+        with ctx.push(greeting="Hi"):
+            with ctx.push(name="friend"):
+                rendered1 = template.render(ctx)
+        rendered2 = template.render(ctx)
+        self.assertEqual(rendered1, "Hi, friend")
+        self.assertEqual(rendered2, "Hello, stranger")
+
     def test_autoscape_with_form(self):
         form = TestForm()
         template = self.env.from_string("{{ form.as_p() }}")
@@ -178,7 +192,7 @@ class RenderTemplatesTests(TestCase):
             result = template.render({}, request)
 
         else:
-            context = dict_from_context(RequestContext(request))
+            context = RequestContext(request)
             template = self.env.from_string(template_content)
             result = template.render(context)
 
@@ -188,7 +202,7 @@ class RenderTemplatesTests(TestCase):
         template_content = "{% cache 200 'fooo' %}fóäo bar{% endcache %}"
 
         request = self.factory.get('/customer/details')
-        context = dict_from_context(RequestContext(request))
+        context = RequestContext(request)
 
         template = self.env.from_string(template_content)
         result = template.render(context)

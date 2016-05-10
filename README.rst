@@ -27,3 +27,14 @@ You can install it with pip:
 .. code-block:: shell
 
     pip install django-jinja
+
+How to run tests as a developer
+-------------------------------
+
+Install the Tox automation tool (outside a virtualenv), then
+
+.. code-block:: shell
+
+    tox
+
+Tox will create virtualenvs for different interpreter versions and run the test suite.
