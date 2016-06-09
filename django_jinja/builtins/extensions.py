@@ -188,6 +188,7 @@ class DjangoFiltersExtension(Extension):
         environment.filters["slugify"] = filters.slugify
         environment.filters["stringformat"] = filters.stringformat
         environment.filters["truncatechars"] = filters.truncatechars
+        environment.filters["truncatechars_html"] = filters.truncatechars_html
         environment.filters["truncatewords"] = filters.truncatewords
         environment.filters["truncatewords_html"] = filters.truncatewords_html
         environment.filters["urlizetrunc"] = filters.urlizetrunc
