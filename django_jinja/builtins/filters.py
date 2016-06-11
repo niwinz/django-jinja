@@ -39,6 +39,7 @@ from django.template.defaultfilters import make_list
 from django.template.defaultfilters import stringformat
 from django.template.defaultfilters import title
 from django.template.defaultfilters import truncatechars
+from django.template.defaultfilters import truncatechars_html
 from django.template.defaultfilters import truncatewords
 from django.template.defaultfilters import truncatewords_html
 from django.template.defaultfilters import upper

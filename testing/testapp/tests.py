@@ -45,6 +45,7 @@ class RenderTemplatesTests(TestCase):
             ("{{ num|floatformat(3) }}", {'num': 34.23234}, '34.232'),
             ("{{ 'hola'|capfirst }}", {}, "Hola"),
             ("{{ 'hola mundo'|truncatechars(5) }}", {}, "ho..."),
+            ("{{ 'hola mundo'|truncatechars_html(5) }}", {}, "ho..."),
             ("{{ 'hola mundo'|truncatewords(1) }}", {}, "hola ..."),
             ("{{ 'hola mundo'|truncatewords_html(1) }}", {}, "hola ..."),
             ("{{ 'hola mundo'|wordwrap(1) }}", {}, "hola\nmundo"),
