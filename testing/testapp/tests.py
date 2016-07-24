@@ -54,7 +54,6 @@ class RenderTemplatesTests(TestCase):
             ("{{ 'hello'|ljust(10) }}", {}, "hello     "),
             ("{{ 'hello'|rjust(10) }}", {}, "     hello"),
             ("{{ 'hello\nworld'|linebreaksbr }}", {}, "hello<br />world"),
-            ("{{ '<div>hello</div>'|removetags('div') }}", {}, "hello"),
             ("{{ '<div>hello</div>'|striptags }}", {}, "hello"),
             ("{{ list|join(',') }}", {'list':['a','b']}, 'a,b'),
             ("{{ 3|add(2) }}", {}, "5"),
