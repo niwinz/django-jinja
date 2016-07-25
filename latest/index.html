@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.2">
+<meta name="generator" content="Asciidoctor 1.5.4">
 <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
 <title>django-jinja - jinja2 backend for Django</title>
 <style>
@@ -80,7 +80,7 @@
 <h1>django-jinja - jinja2 backend for Django</h1>
 <div class="details">
 <span id="author" class="author">Andrey Antukh, &lt;niwi@niwi.be&gt;</span><br>
-<span id="revdate">2.1.1</span>
+<span id="revdate">2.2.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -143,7 +143,7 @@ explicit calls to callable from templates, has better performance and has a plug
 system, etc &#8230;&#8203;</p>
 </div>
 <div class="paragraph">
-<p>Django comes with jinja backend, why I should use <strong>django-jinja</strong>?</p>
+<p>Django comes with jinja backend, why should I use <strong>django-jinja</strong>?</p>
 </div>
 <div class="paragraph">
 <p>The Django builtin backend has very limited set of features if we compare it with
@@ -208,7 +208,7 @@ in the django 1.8 configuration related section.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Python 2.7, 3.3 or 3.4</p>
+<p>Python 2.7, 3.4 and 3.5</p>
 </li>
 <li>
 <p>Django &gt;= 1.8</p>
@@ -239,7 +239,7 @@ in the django 1.8 configuration related section.</p>
 <h2 id="_quick_start"><a class="link" href="#_quick_start">Quick Start</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Add add it to django installed apps list:</p>
+<p>Add it to django installed apps list:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -276,7 +276,7 @@ in the django 1.8 configuration related section.</p>
 <td class="content">
 <div class="paragraph">
 <p>If you are using the default value for app templates directory for
-django-jinja backend, take cara about the order template engines, because the
+django-jinja backend, take care to the template engines order, because the
 django-jinja backend by default uses the same directory for the templates that
 the django template engine. If you put the django engine first every jinja
 template will be found by the django engine.</p>
@@ -293,8 +293,8 @@ template will be found by the django engine.</p>
 <div class="sect2">
 <h3 id="_regex_based_template_matching"><a class="link" href="#_regex_based_template_matching">Regex based template matching</a></h3>
 <div class="paragraph">
-<p>By default, <strong>django-jinja</strong> uses the extension as method for match templates, but if
-it is not enoght, you can complement it using regular experessions:</p>
+<p>By default, <strong>django-jinja</strong> uses the extension as method to match templates, but if
+it is not enought, you can extend it using regular experessions:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -304,7 +304,7 @@ it is not enoght, you can complement it using regular experessions:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>For disable the extension matching, just set <code>"match_extension"</code> to <code>None</code>:</p>
+<p>To disable the extension matching, just set <code>"match_extension"</code> to <code>None</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -318,7 +318,7 @@ it is not enoght, you can complement it using regular experessions:</p>
 <div class="sect2">
 <h3 id="_context_processors_support"><a class="link" href="#_context_processors_support">Context processors support</a></h3>
 <div class="paragraph">
-<p>This a helper for make possible use django&#8217;s contect processors with jinja2 backend
+<p>It is a helper to use django&#8217;s context processors with jinja2 backend
 for django 1.8.</p>
 </div>
 <div class="listingblock">
@@ -388,8 +388,8 @@ request parameter in order to make context processors work.</p>
 <div class="sect2">
 <h3 id="_add_additional_extensions"><a class="link" href="#_add_additional_extensions">Add additional extensions</a></h3>
 <div class="paragraph">
-<p>django-jinja, by default set up a great amount of extensions for make your experience
-using jinja in django painless. But if you want add more extesions, you can done
+<p>django-jinja, by default set up a great amount of extensions to make your experience
+using jinja in django painless. But if you want to add more extesions, you can do it
 using <code>extensions</code> entry on backend options:</p>
 </div>
 <div class="listingblock">
@@ -428,7 +428,7 @@ backend options:</p>
 <div class="paragraph">
 <p>As we said previously, django-jinja backend for django 1.8, uses the same
 directory for templates as the django template engine. But in some circumstances
-you may want to change it for use other directory. You can overwrite the default
+you may want to change it to use other directory. You can overwrite the default
  value with <code>app_dirname</code> option:</p>
 </div>
 <div class="listingblock">
@@ -517,7 +517,7 @@ a simple function called <code>url</code>.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This approach is very flexible, because we do not need additional options for set a result
+<p>This approach is very flexible, because we do not need additional options to set a result
 if executing url in one variable. With jinja2 you can use the set template tag for it:</p>
 </div>
 <div class="listingblock">
@@ -555,7 +555,7 @@ it here: <a href="http://jinja.pocoo.org/docs/dev/templates/#i18n" class="bare">
 </div>
 </div>
 <div class="paragraph">
-<p>Additionally, django-jinja extends the django&#8217;s <code>makemessages</code> command for make it work
+<p>Additionally, django-jinja extends the django&#8217;s <code>makemessages</code> command to make it work
 with jinja2 i18n tags.</p>
 </div>
 <div class="paragraph">
@@ -828,7 +828,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-12-19 20:44:24 EET
+Last updated 2016-07-25 13:33:40 EEST
 </div>
 </div>
 </body>
