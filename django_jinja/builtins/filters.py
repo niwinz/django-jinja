@@ -55,7 +55,6 @@ from django.template.defaultfilters import center
 from django.template.defaultfilters import cut
 from django.template.defaultfilters import linebreaks_filter
 from django.template.defaultfilters import linebreaksbr
-from django.template.defaultfilters import removetags
 from django.template.defaultfilters import striptags
 from django.template.defaultfilters import join
 from django.template.defaultfilters import length

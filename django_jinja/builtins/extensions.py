@@ -197,7 +197,6 @@ class DjangoFiltersExtension(Extension):
         environment.filters["cut"] = filters.cut
         environment.filters["linebreaksbr"] = filters.linebreaksbr
         environment.filters["linebreaks"] = filters.linebreaks_filter
-        environment.filters["removetags"] = filters.removetags
         environment.filters["striptags"] = filters.striptags
         environment.filters["add"] = filters.add
         environment.filters["date"] = filters.date
