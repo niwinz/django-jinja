@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 2.2.0
+-------------
+
+- Remove `removetags` filter (making compatible with django 1.10).
+
+
 Version 2.1.3
 -------------
 
