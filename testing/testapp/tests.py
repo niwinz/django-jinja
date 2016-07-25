@@ -8,11 +8,17 @@ import datetime
 import sys
 import unittest
 
+try:
+    import unittest.mock as mock
+except ImportError:
+    import mock
+
 import django
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import NoReverseMatch
 from django.core.urlresolvers import reverse
+from django.middleware import csrf
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext
@@ -181,22 +187,26 @@ class RenderTemplatesTests(TestCase):
     def test_csrf_01(self):
         template_content = "{% csrf_token %}"
 
-        request = self.factory.get('/customer/details')
-        if sys.version_info[0] < 3:
-            request.META["CSRF_COOKIE"] = b'1234123123'
-        else:
-            request.META["CSRF_COOKIE"] = '1234123123'
+        with mock.patch("django.middleware.csrf.get_token",
+                        return_value="123123") as m:
 
-        if django.VERSION[:2] >= (1, 8):
-            template = self.env.from_string(template_content)
-            result = template.render({}, request)
+            request = self.factory.get('/customer/details')
+            token = csrf.get_token(request)
 
-        else:
-            context = RequestContext(request)
-            template = self.env.from_string(template_content)
-            result = template.render(context)
+            if django.VERSION[:2] >= (1, 8):
+                template = self.env.from_string(template_content)
+                result = template.render({}, request)
 
-        self.assertEqual(result, "<input type='hidden' name='csrfmiddlewaretoken' value='1234123123' />")
+            else:
+                context = RequestContext(request)
+                template = self.env.from_string(template_content)
+                result = template.render(context)
+
+            expected = ("<input type='hidden' name='csrfmiddlewaretoken'"
+                        " value='{}' />").format(token)
+
+        self.assertEqual(token, "123123")
+        self.assertEqual(result, expected)
 
     def test_cache_01(self):
         template_content = "{% cache 200 'fooo' %}fóäo bar{% endcache %}"

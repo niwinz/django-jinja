@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django_jinja import views
 
 from .views import BasicTestView
@@ -9,7 +9,7 @@ from .views import CreateTestView, DeleteTestView, DetailTestView, UpdateTestVie
 from .views import ListTestView
 from .views import ArchiveIndexTestView, YearArchiveTestView, MonthArchiveTestView, WeekArchiveTestView, DayArchiveTestView, TodayArchiveTestView, DateDetailTestView
 
-urlpatterns = patterns("",
+urlpatterns = [
     url(r"^test1/$", BasicTestView.as_view(), name="test-1"),
     url(r"^test1/(?P<data>\d+)/$", BasicTestView.as_view(), name="test-1"),
     url(r"^test-pipeline/$", PipelineTestView.as_view(), name="pipeline-test"),
@@ -29,5 +29,5 @@ urlpatterns = patterns("",
     url(r"^testmodel/archive/(?P<year>\d{4})/(?P<month>[\w-]+)/$", MonthArchiveTestView.as_view()),
     url(r"^testmodel/archive/(?P<year>\d{4})/(?P<month>[\w-]+)/(?P<day>\d+)/$", DayArchiveTestView.as_view()),
     url(r"^testmodel/archive/today/$", TodayArchiveTestView.as_view()),
-    url(r"^testmodel/archive/(?P<year>\d{4})/(?P<month>[\w-]+)/(?P<day>\d+)/(?P<pk>\d+)$", DateDetailTestView.as_view()),
-)
+    url(r"^testmodel/archive/(?P<year>\d{4})/(?P<month>[\w-]+)/(?P<day>\d+)/(?P<pk>\d+)$", DateDetailTestView.as_view())
+]

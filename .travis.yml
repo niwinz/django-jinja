@@ -12,7 +12,7 @@ env:
   - DJANGO="django==1.10rc1"
 
 install:
-  - pip install $DJANGO jinja2 "django-pipeline<1.6" pytz
+  - pip install $DJANGO jinja2 "django-pipeline<1.6" pytz mock
 
 script:
   - cd testing && python runtests.py
