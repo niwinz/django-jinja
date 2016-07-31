@@ -34,6 +34,7 @@ from django.utils.encoding import smart_text
 from django.utils.functional import SimpleLazyObject
 from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
+from django.utils.safestring import mark_safe
 
 from . import base
 from . import builtins
@@ -102,7 +103,7 @@ class Template(object):
                                            context=context)
 
 
-        return self.template.render(context)
+        return mark_safe(self.template.render(context))
 
 
 class Jinja2(BaseEngine):
