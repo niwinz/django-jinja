@@ -4,20 +4,15 @@ sudo: false
 python:
   - "3.5"
   - "3.4"
-  - "3.3"
   - "2.7"
 
 env:
-  - DJANGO="django==1.8.6"
-  - DJANGO="django==1.9"
+  - DJANGO="django==1.8.14"
+  - DJANGO="django==1.9.8"
+  - DJANGO="django==1.10rc1"
 
 install:
-  - pip install $DJANGO jinja2 "django-pipeline<1.6" pytz
-
-matrix:
-  exclude:
-    - python: "3.3"
-      env: DJANGO="django==1.9"
+  - pip install $DJANGO jinja2 "django-pipeline<1.6" pytz mock
 
 script:
   - cd testing && python runtests.py

@@ -20,7 +20,7 @@ from django.conf import settings
 from django.core import signals
 from django.core.exceptions import ImproperlyConfigured
 from django.dispatch import receiver
-from django.middleware.csrf import get_token
+from django.middleware import csrf
 from django.template import RequestContext
 from django.template import TemplateDoesNotExist
 from django.template import TemplateSyntaxError
@@ -69,7 +69,7 @@ class Template(object):
 
         if request is not None:
             def _get_val():
-                token = get_token(request)
+                token = csrf.get_token(request)
                 if token is None:
                     return 'NOTPROVIDED'
                 else:
