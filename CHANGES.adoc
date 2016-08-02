@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 2.2.1
+-------------
+
+- Fix compatibility issues with django 1.9.
+
+
 Version 2.2.0
 -------------
 
