@@ -7,8 +7,13 @@ import django
 from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.cache import cache
-from django.core.urlresolvers import NoReverseMatch
-from django.core.urlresolvers import reverse
+try:
+    from django.urls import NoReverseMatch
+    from django.urls import reverse
+except ImportError:
+    from django.core.urlresolvers import NoReverseMatch
+    from django.core.urlresolvers import reverse
+
 from django.utils.formats import localize
 from django.utils.translation import pgettext
 from django.utils.translation import ugettext
