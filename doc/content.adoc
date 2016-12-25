@@ -13,6 +13,7 @@ Andrey Antukh, <niwi@niwi.be>
 django-jinja is a xref:license[BSD Licensed], simple and nonobstructive jinja2
 backend for Django.
 
+
 === Rationale
 
 Jinja2 provides certain advantages over the native system of Django, for example,
@@ -552,7 +553,7 @@ License
 
 [source,text]
 ----
-Copyright (c) 2011-2015 Andre Antukh <niwi@niwi.be>
+Copyright (c) 2011-2017 Andre Antukh <niwi@niwi.be>
 
 All rights reserved.
 

@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 2.2.2
+-------------
+
+- Fix many warnings for django 2.0
+
+
 Version 2.2.1
 -------------
 
