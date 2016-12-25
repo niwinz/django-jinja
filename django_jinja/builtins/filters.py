@@ -5,7 +5,10 @@ try:
 except ImportError:
     from django.utils.encoding import force_unicode as force_text
 
-from django.core.urlresolvers import reverse as django_reverse
+try:
+    from django.urls import reverse as django_reverse
+except ImportError:
+    from django.core.urlresolvers import reverse as django_reverse
 from django.contrib.staticfiles.storage import staticfiles_storage
 from jinja2 import Markup
 
