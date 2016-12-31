@@ -10,9 +10,6 @@ Simple and nonobstructive jinja2 integration with Django.
 .. image:: https://img.shields.io/pypi/v/django-jinja.svg?style=flat
     :target: https://pypi.python.org/pypi/django-jinja
 
-.. image:: https://img.shields.io/pypi/dm/django-jinja.svg?style=flat
-    :target: https://pypi.python.org/pypi/django-jinja
-
 
 **Documentation:** http://niwinz.github.io/django-jinja/latest/
 
