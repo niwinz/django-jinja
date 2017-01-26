@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import re
-import os
 import os.path as path
-from importlib import import_module
+import re
 
-import django
-from django.conf import settings
 from django.template.context import BaseContext
 from django.utils import six
+from importlib import import_module
 
 
 def dict_from_context(context):
@@ -100,6 +97,26 @@ def get_match_extension(using=None):
         engine = engines[using]
 
     return engine.match_extension
+
+
+def get_default_extension(using=None):
+    """Get the default extension used for template files.
+
+    Used in ErrorViews for example.
+    If using is given, then it defaults back to get_match_extension.
+
+    Args:
+        using: Template backend used (default: {None})
+
+    Returns:
+        Default extension used.
+        str
+    """
+    from .backend import Jinja2
+
+    if using is not None:
+        return get_match_extension(using=using)
+    return Jinja2.get_default().default_extension
 
 
 def match_template(template_name, extension, regex):

@@ -5,7 +5,7 @@ from django import http
 from django.template import RequestContext, loader
 from django.views.generic import View
 
-from ..base import get_match_extension
+from ..base import get_default_extension
 
 
 class GenericView(View):
@@ -47,24 +47,24 @@ class ErrorView(GenericView):
     def patch(self, request, *args, **kwargs):
         return self.get(request, *args, **kwargs)
 
-    match_extension = get_match_extension() or ".jinja"
+    default_extension = get_default_extension() or ".jinja"
 
 
 class PageNotFound(ErrorView):
-    tmpl_name = "404" + ErrorView.match_extension
+    tmpl_name = "404" + ErrorView.default_extension
     response_cls = http.HttpResponseNotFound
 
 
 class PermissionDenied(ErrorView):
-    tmpl_name = "403" + ErrorView.match_extension
+    tmpl_name = "403" + ErrorView.default_extension
     response_cls = http.HttpResponseForbidden
 
 
 class BadRequest(ErrorView):
-    tmpl_name = "400" + ErrorView.match_extension
+    tmpl_name = "400" + ErrorView.default_extension
     response_cls = http.HttpResponseBadRequest
 
 
 class ServerError(ErrorView):
-    tmpl_name = "500" + ErrorView.match_extension
+    tmpl_name = "500" + ErrorView.default_extension
     response_cls = http.HttpResponseServerError
