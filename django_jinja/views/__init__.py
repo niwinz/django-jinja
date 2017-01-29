@@ -57,7 +57,7 @@ class PageNotFound(ErrorView):
     response_cls = http.HttpResponseNotFound
 
     def tmpl_name(self):
-        return "403" + (get_match_extension() or ".jinja")
+        return "404" + (get_match_extension() or ".jinja")
 
 
 class PermissionDenied(ErrorView):
