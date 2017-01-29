@@ -3,7 +3,11 @@
 import django
 from django import http
 from django.template import RequestContext, loader
-from django.views.generic import View
+
+try:
+    from django.views import View
+except ImportError:
+    from django.views.generic import View
 
 from ..base import get_match_extension
 
@@ -28,7 +32,6 @@ class GenericView(View):
 
 
 class ErrorView(GenericView):
-
     def head(self, request, *args, **kwargs):
         return self.get(request, *args, **kwargs)
 
@@ -47,24 +50,34 @@ class ErrorView(GenericView):
     def patch(self, request, *args, **kwargs):
         return self.get(request, *args, **kwargs)
 
-    match_extension = get_match_extension() or ".jinja"
-
 
 class PageNotFound(ErrorView):
-    tmpl_name = "404" + ErrorView.match_extension
     response_cls = http.HttpResponseNotFound
+
+    @property
+    def tmpl_name(self):
+        return "404" + (get_match_extension() or ".jinja")
 
 
 class PermissionDenied(ErrorView):
-    tmpl_name = "403" + ErrorView.match_extension
     response_cls = http.HttpResponseForbidden
+
+    @property
+    def tmpl_name(self):
+        return "403" + (get_match_extension() or ".jinja")
 
 
 class BadRequest(ErrorView):
-    tmpl_name = "400" + ErrorView.match_extension
     response_cls = http.HttpResponseBadRequest
+
+    @property
+    def tmpl_name(self):
+        return "400" + (get_match_extension() or ".jinja")
 
 
 class ServerError(ErrorView):
-    tmpl_name = "500" + ErrorView.match_extension
     response_cls = http.HttpResponseServerError
+
+    @property
+    def tmpl_name(self):
+        return "500" + (get_match_extension() or ".jinja")
