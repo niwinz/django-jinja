@@ -9,7 +9,8 @@ python:
 env:
   - DJANGO="django==1.8.14"
   - DJANGO="django==1.9.8"
-  - DJANGO="django==1.10rc1"
+  - DJANGO="django==1.10.5"
+  - DJANGO="django==1.11b1"
 
 install:
   - pip install $DJANGO jinja2 "django-pipeline<1.6" pytz mock
