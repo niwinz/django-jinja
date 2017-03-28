@@ -20,17 +20,17 @@ Jinja2 provides certain advantages over the native system of Django, for example
 explicit calls to callable from templates, has better performance and has a plugin
 system, etc ...
 
-Django comes with jinja backend, why should I use *django-jinja*?
+Django comes with a jinja backend, why should I use *django-jinja*?
 
-The Django builtin backend has very limited set of features if we compare it with
+The Django builtin backend has a very limited set of features if we compare it with
 the django template engine and in my opion is not very usable because it does not
-integrates well with the rest of django such as its filters, template tags and
-and preloading of templatetags among others.
+integrate well with the rest of django such as its filters, template tags and
+preloading of templatetags among others.
 
-*django-jinja* comes to the rescue and add everything missing. This is a brief
+*django-jinja* comes to the rescue and adds everything missing. This is a brief
 list of differences with django's built-in backend:
 
-- Auto-load templatetags compatible with Jinja2 on same way as Django.
+- Auto-load templatetags compatible with Jinja2 the same way as Django.
 - Find the templates as usual in `"<appname>/templates"` directory instead
   of `"<appname>/jinja2"`  directory (you can overwrite this behavior, see below).
 - Django templates can coexist with Jinja2 templates without any problems.
@@ -39,7 +39,7 @@ list of differences with django's built-in backend:
 - I18n subsystem adapted for Jinja2 (makemessages now collects messages from
   Jinja templates)
 - Compatible with python2 and python3 using same codebase.
-- jinja2 bytecode cache adapted for use django cache subsystem.
+- jinja2 bytecode cache adapted for using django's cache subsystem.
 - Support for django context processors.
 
 
@@ -79,7 +79,7 @@ Add it to django installed apps list:
 INSTALLED_APPS += ('django_jinja',)
 ----
 
-Followed to the basic template engine configuration:
+Followed by the basic template engine configuration:
 
 [source, python]
 ----
@@ -101,9 +101,9 @@ TEMPLATES = [
 
 [NOTE]
 ====
-If you are using the default value for app templates directory for
-django-jinja backend, take care to the template engines order, because the
-django-jinja backend by default uses the same directory for the templates that
+If you are using the default value for the app templates directory of the
+django-jinja backend, take care of the template engines order, because the
+django-jinja backend by default uses the same directory for the templates as
 the django template engine. If you put the django engine first every jinja
 template will be found by the django engine.
 ====
@@ -115,7 +115,7 @@ template will be found by the django engine.
 === Regex based template matching
 
 By default, *django-jinja* uses the extension as method to match templates, but if
-it is not enought, you can extend it using regular experessions:
+it is not enough, you can extend it using regular experessions:
 
 [source, python]
 ----
@@ -156,16 +156,16 @@ for django 1.8.
 }
 ----
 
-As usual, this is a default list of context processors and you can forget
-setup them if you do not have own. Furthermore, it is now not recommended way
+As usual, this is a default list of context processors and you can skip
+setting them if you do not have your own. Furthermore, it is now not the recommended way
 to setup variables in the context and the purpose of its existence is a help
 for migrations.
 
 [NOTE]
 ====
-Take care that django (1.8.x and 1.9.x) lives with backward compatibility with
-old template api and this has its own tradeoffs. If you found you using functions
-like `render_to_string` or `render_to_response` from django, do not forget pass
+Remeber that django (1.8.x and 1.9.x) is backward compatibile with
+the old template api and this has its own tradeoffs. If you find yourself using functions
+like `render_to_string` or `render_to_response` from django, do not forget to pass the
 request parameter in order to make context processors work.
 ====
 
@@ -195,9 +195,9 @@ This is a way to setup statically (in your settings) additional stuff for jinja:
 
 === Add additional extensions
 
-django-jinja, by default set up a great amount of extensions to make your experience
+django-jinja, by default sets up a great amount of extensions to make your experience
 using jinja in django painless. But if you want to add more extesions, you can do it
-using `extensions` entry on backend options:
+using the `extensions` entry of the backend options:
 
 [source, python]
 ----
@@ -233,8 +233,8 @@ backend options:
 
 As we said previously, django-jinja backend for django 1.8, uses the same
 directory for templates as the django template engine. But in some circumstances
-you may want to change it to use other directory. You can overwrite the default
- value with `app_dirname` option:
+you may want to change it to use another directory. You can overwrite the default
+value with the `app_dirname` option:
 
 [source, python]
 ----
@@ -307,7 +307,7 @@ TEMPLATES = [
 
 === Url reversing
 
-django-jinja comes with helpers for reverse urls. Instead of using the django's approach, it uses
+django-jinja comes with helpers for reverse urls. Instead of using django's approach, it uses
 a simple function called `url`.
 
 .Reverse urls in templates
@@ -326,7 +326,7 @@ if executing url in one variable. With jinja2 you can use the set template tag f
 
 === Static files
 
-Like urls, the static files can be resolved with simple `static` function available globally
+Like urls, static files can be resolved with the simple `static` function available globally
 in jinja context:
 
 .Example resolving static files
@@ -338,7 +338,7 @@ in jinja context:
 
 === i18n support
 
-django-jinja inherits the jinja2 approach for handle translation strings. You can read more about
+django-jinja inherits the jinja2 approach for handling translation strings. You can read more about
 it here: http://jinja.pocoo.org/docs/dev/templates/#i18n
 
 [source, html+jinja]
@@ -350,17 +350,17 @@ it here: http://jinja.pocoo.org/docs/dev/templates/#i18n
 {% endtrans %}
 ----
 
-Additionally, django-jinja extends the django's `makemessages` command to make it work
+Additionally, django-jinja extends django's `makemessages` command to make it work
 with jinja2 i18n tags.
 
-If you want more django like i18n related tags, you can use extensions from
+If you want more django-like i18n-related tags, you can use extensions from
 https://github.com/MoritzS/jinja2-django-tags.
 
 
 === Replace jinja filters with django versions
 
-Django and Jinja overlaps in a little subset of template filters. For handle proper this, django-jinja
-gets the decistion to use the jinja versions. But if you want a django version of them, you should use
+Django and Jinja overlap in a little subset of template filters. To properly handle this, django-jinja
+uses the jinja versions by default. But if you want a django version of them, you should use
 the "django_jinja.builtins.extensions.DjangoExtraFiltersExtension" extension.
 
 The affected filters are: title, upper, lower, urlencode, urlize, wordcount, wordwrap, center
@@ -453,9 +453,9 @@ handler500 = views.ServerError.as_view()
 
 == Builtin contrib modules
 
-*django-jinja* comes with some additional contrib modules that adapts limited set of external
-django apps for use it easy from jinja templates. Please note that in order to use any of these
-contrib modules, you'll need to install the relevant dependent package yourself first.
+*django-jinja* comes with some additional contrib modules that adapt a limited set of external
+django apps for easy use from jinja templates. Please note that in order to use any of these
+contrib modules, you'll need to install the relevant dependent packages yourself first.
 
 
 [NOTE]
@@ -476,7 +476,7 @@ library for Django (official description).
 
 [WARNING]
 ====
-This plugin is deprecated, *django-pipeline* is come with good jinja support and it
+This plugin is deprecated, *django-pipeline* comes with good jinja support and it
 should be used.
 
 You can use the native *django-pipeline* suport for jinja using the
@@ -536,7 +536,7 @@ INSTALLED_APPS += ('django_jinja.contrib._subdomains',)
 humanize
 ~~~~~~~~
 
-Django comes with humanize library that exposes some useful template filters.
+Django comes with the humanize library that exposes some useful template filters.
 
 .Activate plugin (settings.py)
 [source, python]
