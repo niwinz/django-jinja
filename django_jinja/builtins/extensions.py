@@ -70,12 +70,16 @@ class CsrfExtension(Extension):
         return nodes.Output([nodes.MarkSafe(call)])
 
     def _render(self, csrf_token):
-        if csrf_token:
-            if csrf_token == 'NOTPROVIDED':
-                return Markup("")
+        # refs to https://github.com/niwibe/django-jinja/issues/119
+        try:
+            if csrf_token:
+                if csrf_token == 'NOTPROVIDED':
+                    return Markup("")
 
-            return Markup("<input type='hidden'"
-                          " name='csrfmiddlewaretoken' value='%s' />" % (csrf_token))
+                return Markup("<input type='hidden'"
+                              " name='csrfmiddlewaretoken' value='%s' />" % (csrf_token))
+        except AttributeError:
+            pass
 
         if settings.DEBUG:
             import warnings
