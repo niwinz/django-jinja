@@ -61,9 +61,9 @@ class Command(makemessages.Command):
             trans_real.plural_re.pattern + '|' + r"""^-?\s*pluralize(?:\s+.+|-?$)""")
         trans_real.constant_re = re.compile(r"""_\(((?:".*?(?<!\\)")|(?:'.*?(?<!\\)')).*\)""")
 
-        def my_templatize(src, origin=None):
+        def my_templatize(src, origin=None, **kwargs):
             new_src = strip_whitespaces(src)
-            return old_templatize(new_src, origin)
+            return old_templatize(new_src, origin, **kwargs)
 
         trans_real.templatize = my_templatize
 
