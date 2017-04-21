@@ -547,6 +547,27 @@ INSTALLED_APPS += ('django_jinja.contrib._humanize',)
 link:https://docs.djangoproject.com/en/dev/ref/contrib/humanize/[Complete list of available filters]
 
 
+django-widget-tweaks
+~~~~~~~~~~~~~~~~~~~~
+
+link:https://github.com/kmike/django-widget-tweaks[widget_tweaks] allows to
+tweak the form field rendering in templates, not in python-level form definitions.
+CSS classes and HTML attributes can be altered.
+
+.Activate plugin (settings.py)
+[source, python]
+----
+INSTALLED_APPS += ('django_jinja.contrib._widget_tweaks',)
+----
+
+.Usage
+[source, html+jinja]
+----
+{{ render_field(form.username, class="cool", placeholder="Your bloody user name") }}
+{{ form.password | add_class("secret") | attr("password") }}
+----
+
+
 .[[license]]
 License
 -------

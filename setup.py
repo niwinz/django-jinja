@@ -37,6 +37,8 @@ setup(
         "django_jinja.contrib._humanize.templatetags",
         "django_jinja.contrib._subdomains",
         "django_jinja.contrib._subdomains.templatetags",
+        "django_jinja.contrib._widget_tweaks",
+        "django_jinja.contrib._widget_tweaks.templatetags",
         "django_jinja.views",
         "django_jinja.views.generic",
     ],
