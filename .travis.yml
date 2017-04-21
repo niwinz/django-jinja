@@ -2,15 +2,16 @@ language: python
 sudo: false
 
 python:
+  - "3.6"
   - "3.5"
   - "3.4"
   - "2.7"
 
 env:
-  - DJANGO="django==1.8.14"
-  - DJANGO="django==1.9.8"
-  - DJANGO="django==1.10.5"
-  - DJANGO="django==1.11b1"
+  - DJANGO="django==1.8.18"
+  - DJANGO="django==1.9.13"
+  - DJANGO="django==1.10.7"
+  - DJANGO="django==1.11"
 
 install:
   - pip install $DJANGO jinja2 "django-pipeline<1.6" pytz mock
