@@ -99,7 +99,7 @@ class Template(object):
 
                 context = CompatibilityContext(context)
 
-            signals.template_rendered.send(sender=self, template=self,
+            signals.template_rendered.send(sender=self, template=self.template,
                                            context=context)
 
 
