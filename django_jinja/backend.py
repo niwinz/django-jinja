@@ -102,7 +102,6 @@ class Template(object):
             signals.template_rendered.send(sender=self, template=self,
                                            context=context)
 
-
         return mark_safe(self._template.render(context))
 
 
@@ -207,8 +206,6 @@ class Jinja2(BaseEngine):
 
         self._initialize_thirdparty()
         self._initialize_bytecode_cache()
-
-
 
     def _initialize_bytecode_cache(self):
         if self._bytecode_cache["enabled"]:
