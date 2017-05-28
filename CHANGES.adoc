@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 2.3.1
+-------------
+
+- Add minor fixes allowing creating templatetags that can load jinja2
+  templates into django templates (refer to issues #94 and #201 for
+  more information).
+
+
 Version 2.3.0
 -------------
 
