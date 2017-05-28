@@ -54,13 +54,13 @@ class Origin(object):
 
 class Template(object):
     def __init__(self, template, backend):
-        self.template = template
+        self._template = template
         self.backend = backend
         self.origin = Origin(name=template.filename, template_name=template.name)
 
     @property
     def name(self):
-        return self.template.name
+        return self._template.name
 
     def render(self, context=None, request=None):
         if context is None:
@@ -102,8 +102,7 @@ class Template(object):
             signals.template_rendered.send(sender=self, template=self,
                                            context=context)
 
-
-        return mark_safe(self.template.render(context))
+        return mark_safe(self._template.render(context))
 
 
 class Jinja2(BaseEngine):
@@ -207,8 +206,6 @@ class Jinja2(BaseEngine):
 
         self._initialize_thirdparty()
         self._initialize_bytecode_cache()
-
-
 
     def _initialize_bytecode_cache(self):
         if self._bytecode_cache["enabled"]:
