@@ -144,6 +144,9 @@ class Jinja2(BaseEngine):
         newstyle_gettext = options.pop("newstyle_gettext", True)
         context_processors = options.pop("context_processors", [])
         match_extension = options.pop("match_extension", ".jinja")
+        default_extension = options.pop("default_extension", match_extension)
+        if default_extension is None:
+            default_extension = ".jinja"
         match_regex = options.pop("match_regex", None)
         environment_clspath = options.pop("environment", "jinja2.Environment")
         extra_filters = options.pop("filters", {})
@@ -196,6 +199,7 @@ class Jinja2(BaseEngine):
         self._context_processors = context_processors
         self._match_regex = match_regex
         self._match_extension = match_extension
+        self._default_extension = default_extension
         self._tmpl_debug = tmpl_debug
         self._bytecode_cache = bytecode_cache
 
@@ -264,6 +268,10 @@ class Jinja2(BaseEngine):
     @property
     def match_extension(self):
         return self._match_extension
+
+    @property
+    def default_extension(self):
+        return self._default_extension
 
     def from_string(self, template_code):
         return Template(self.env.from_string(template_code), self)
