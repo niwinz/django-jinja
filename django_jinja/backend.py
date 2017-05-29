@@ -79,6 +79,9 @@ class Template(object):
             context["request"] = request
             context["csrf_token"] = SimpleLazyObject(_get_val)
 
+            if 'user' not in context:
+                context["user"] = request.user
+
             # Support for django context processors
             for processor in self.backend.context_processors:
                 context.update(processor(request))
