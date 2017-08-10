@@ -38,10 +38,12 @@ else:
 strip_whitespace_right = re.compile(r"(%s-?\s*(trans|pluralize).*?-%s)\s+" % (BLOCK_TAG_START, BLOCK_TAG_END), re.U)
 strip_whitespace_left = re.compile(r"\s+(%s-\s*(endtrans|pluralize).*?-?%s)" % (BLOCK_TAG_START, BLOCK_TAG_END), re.U)
 
+
 def strip_whitespaces(src):
     src = strip_whitespace_left.sub(r'\1', src)
     src = strip_whitespace_right.sub(r'\1', src)
     return src
+
 
 class Command(makemessages.Command):
 
@@ -59,7 +61,7 @@ class Command(makemessages.Command):
             trans_real.block_re.pattern + '|' + r"""^-?\s*trans(?:\s+(?!'|")(?=.*?=.*?)|\s*-?$)""")
         trans_real.plural_re = re.compile(
             trans_real.plural_re.pattern + '|' + r"""^-?\s*pluralize(?:\s+.+|-?$)""")
-        trans_real.constant_re = re.compile(r"""_\(((?:".*?(?<!\\)")|(?:'.*?(?<!\\)')).*\)""")
+        trans_real.constant_re = re.compile(r"""_\(((?:".*?(?<!\\)")|(?:'.*?(?<!\\)')).*?\)""")
 
         def my_templatize(src, origin=None, **kwargs):
             new_src = strip_whitespaces(src)
