@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 2.4.0
+-------------
+
+- Revert the 2.3.1 change because importing jinja templates from
+  django is not intended feature and that change breaks the django
+  template object signature.
+
+
 Version 2.3.1
 -------------
 
