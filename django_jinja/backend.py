@@ -56,6 +56,8 @@ class Template(object):
     def __init__(self, template, backend):
         self.template = template
         self.backend = backend
+
+        self.name = template.name
         self.origin = Origin(
             name=template.filename, template_name=template.name
         )
