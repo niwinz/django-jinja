@@ -54,13 +54,11 @@ class Origin(object):
 
 class Template(object):
     def __init__(self, template, backend):
-        self._template = template
+        self.template = template
         self.backend = backend
-        self.origin = Origin(name=template.filename, template_name=template.name)
-
-    @property
-    def name(self):
-        return self._template.name
+        self.origin = Origin(
+            name=template.filename, template_name=template.name
+        )
 
     def render(self, context=None, request=None):
         if context is None:
@@ -99,10 +97,11 @@ class Template(object):
 
                 context = CompatibilityContext(context)
 
-            signals.template_rendered.send(sender=self, template=self,
+            signals.template_rendered.send(sender=self,
+                                           template=self,
                                            context=context)
 
-        return mark_safe(self._template.render(context))
+        return mark_safe(self.template.render(context))
 
 
 class Jinja2(BaseEngine):
