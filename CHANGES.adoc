@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 2.4.1
+-------------
+
+- Minor improvements on `makemessages`.
+
+
 Version 2.4.0
 -------------
 
