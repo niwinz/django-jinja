@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Version 2.4.2
+-------------
+
+- Added `Template.stream` method to use with StreamingHttpResponse.
+
+
 Version 2.4.1
 -------------
 
