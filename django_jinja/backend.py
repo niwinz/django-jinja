@@ -63,7 +63,7 @@ class Template(object):
         )
 
     def render(self, context=None, request=None):
-        return self._process_template(self.template.render, context, request)
+        return mark_safe(self._process_template(self.template.render, context, request))
 
     def stream(self, context=None, request=None):
         return self._process_template(self.template.stream, context, request)
