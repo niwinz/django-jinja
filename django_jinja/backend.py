@@ -63,6 +63,12 @@ class Template(object):
         )
 
     def render(self, context=None, request=None):
+        return self._process_template(self.template.render, context, request)
+
+    def stream(self, context=None, request=None):
+        return self._process_template(self.template.stream, context, request)
+
+    def _process_template(self, handler, context=None, request=None):
         if context is None:
             context = {}
 
@@ -103,7 +109,7 @@ class Template(object):
                                            template=self,
                                            context=context)
 
-        return mark_safe(self.template.render(context))
+        return handler(context)
 
 
 class Jinja2(BaseEngine):

@@ -7,7 +7,7 @@ import sys
 
 INSTALL_REQUIRES = [
     "jinja2 >=2.5",
-    "django >=1.8",
+    "django >=1.8, <2.0",
 ]
 
 if sys.version_info < (2, 7):

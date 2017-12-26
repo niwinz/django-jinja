@@ -4,6 +4,7 @@ from django.conf.urls import include, url
 from django_jinja import views
 
 from .views import BasicTestView
+from .views import StreamingTestView
 from .views import PipelineTestView
 from .views import CreateTestView, DeleteTestView, DetailTestView, UpdateTestView
 from .views import ListTestView
@@ -16,6 +17,7 @@ urlpatterns = [
     url(r"^test/404$", views.PageNotFound.as_view(), name="page-404"),
     url(r"^test/403$", views.PermissionDenied.as_view(), name="page-403"),
     url(r"^test/500$", views.ServerError.as_view(), name="page-500"),
+    url(r"^test-streaming/$", StreamingTestView.as_view(), name='streaming-test'),
 
     url(r"^testmodel/$", ListTestView.as_view()),
     url(r"^testmodel/create$", CreateTestView.as_view()),

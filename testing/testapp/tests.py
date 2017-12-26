@@ -35,6 +35,7 @@ from django_jinja.views.generic.base import Jinja2TemplateResponseMixin
 
 from .forms import TestForm
 from .models import TestModel
+from .views import StreamingTestView
 
 
 class RenderTemplatesTests(TestCase):
@@ -300,6 +301,20 @@ class RenderTemplatesTests(TestCase):
         response = self.client.get(reverse("test-1"))
         self.assertEqual(response.context["name"], "Jinja2")
         self.assertTemplateUsed(response, 'hello_world.jinja')
+
+    def test_streaming_response(self):
+        template = "streaming_test.jinja"
+        context = {"view": StreamingTestView, "name": "Streaming Jinja2"}
+        response = self.client.get(reverse('streaming-test'))
+        self.assertEqual(response.context["name"], context["name"])
+        self.assertEqual(response.context["view"], context["view"])
+        self.assertTemplateUsed(response, template)
+        template = get_template(template)
+        self.assertEqual(
+            ''.join(response.streaming_content),
+            template.render(context)
+        )
+
 
 class DjangoPipelineTestTest(TestCase):
     def setUp(self):
