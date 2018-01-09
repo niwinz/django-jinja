@@ -311,8 +311,8 @@ class RenderTemplatesTests(TestCase):
         self.assertTemplateUsed(response, template)
         template = get_template(template)
         self.assertEqual(
-            ''.join(response.streaming_content),
-            template.render(context)
+            b''.join(response.streaming_content),
+            template.render(context).encode()
         )
 
 
