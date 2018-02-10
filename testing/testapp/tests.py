@@ -3,10 +3,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
 import datetime
-import sys
-import unittest
 
 try:
     import unittest.mock as mock
@@ -16,21 +13,21 @@ except ImportError:
 import django
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import NoReverseMatch
-from django.core.urlresolvers import reverse
+try:
+    from django.core.urlresolvers import reverse
+except ImportError:
+    # Django 2.0.
+    from django.urls import reverse
 from django.middleware import csrf
-from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext
 from django.template import engines
 from django.template.loader import get_template
 from django.test import TestCase
-from django.test import signals
 from django.test import override_settings
 from django.test.client import RequestFactory
 from django_jinja.base import get_match_extension
 from django_jinja.base import match_template
-from django_jinja.backend import Template
 from django_jinja.views.generic.base import Jinja2TemplateResponseMixin
 
 from .forms import TestForm
@@ -183,6 +180,21 @@ class RenderTemplatesTests(TestCase):
         self.assertEqual(response.content, b"foobar")
 
         settings.DEBUG = prev_debug_value
+
+    def test_debug_tag(self):
+        """Test for {% debug %}"""
+        tmpl = self.env.from_string('''Hello{% debug %}Bye''')
+        out = tmpl.render()
+        out = out.replace('&#39;', "'").replace('&lt;', '<').replace('&gt;', '>')
+        #
+        # Check that some of the built-in items exist in the debug output...
+        #
+        assert "'context'" in out
+        assert "'cycler'" in out
+        assert "'filters'" in out
+        assert "'abs'" in out
+        assert "'tests'" in out
+        assert "'!='" in out
 
     def test_csrf_01(self):
         template_content = "{% csrf_token %}"
