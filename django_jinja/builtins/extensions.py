@@ -1,12 +1,15 @@
 from __future__ import unicode_literals
 
-import traceback
 import logging
+import pprint
+import sys
 
 import django
 from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.cache import cache
+from jinja2.nodes import ContextReference
+
 try:
     from django.urls import NoReverseMatch
     from django.urls import reverse
@@ -142,6 +145,60 @@ class CacheExtension(Extension):
             value = force_text(value)
 
         return value
+
+
+class DebugExtension(Extension):
+    """
+    A ``{% debug %}`` tag that dumps the available variables, filters and tests.
+    Typical usage like this:
+
+    .. codeblock:: html+jinja
+        <pre>{% debug %}</pre>
+
+    produces output like this:
+
+    ::
+        {'context': {'_': <function _gettext_alias at 0x7f9ceabde488>,
+                 'csrf_token': <SimpleLazyObject: 'lfPE7al...q3bykS4txKfb3'>,
+                 'cycler': <class 'jinja2.utils.Cycler'>,
+                 ...
+                 'view': <polls.views_auth.Login object at 0x7f9cea2cbe48>},
+        'filters': ['abs', 'add', 'addslashes', 'attr', 'batch', 'bootstrap',
+                 'bootstrap_classes', 'bootstrap_horizontal',
+                 'bootstrap_inline', ... 'yesno'],
+        'tests': ['callable', 'checkbox_field', 'defined', 'divisibleby',
+               'escaped', 'even', 'iterable', 'lower', 'mapping',
+               'multiple_checkbox_field', ... 'string', 'undefined', 'upper']}
+
+    """
+    tags = set(['debug'])
+
+    def __init__(self, environment):
+        super(DebugExtension, self).__init__(environment)
+
+    def parse(self, parser):
+        lineno = parser.stream.expect('name:debug').lineno
+        context = ContextReference()
+        call = self.call_method('_render', [context], lineno=lineno)
+        return nodes.Output([nodes.MarkSafe(call)])
+
+    def _render(self, context):
+        result = {
+            'filters': sorted(self.environment.filters.keys()),
+            'tests': sorted(self.environment.tests.keys()),
+            'context': context.get_all()
+        }
+        #
+        # We set the depth since the intent is basically to show the top few
+        # names. TODO: provide user control over this?
+        #
+        if sys.version_info[:2] >= (3, 4):
+            text = pprint.pformat(result, depth=3, compact=True)
+        else:
+            text = pprint.pformat(result, depth=3)
+        text = Markup.escape(text)
+        return text
+
 
 class StaticFilesExtension(Extension):
     def __init__(self, environment):
