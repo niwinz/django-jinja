@@ -216,7 +216,7 @@ class UrlsExtension(Extension):
         environment.globals["url"] = self._url_reverse
 
     @contextfunction
-    def _url_reverse(self, name, *args, **kwargs):
+    def _url_reverse(self, context, name, *args, **kwargs):
         try:
             current_app = context["request"].current_app
         except AttributeError:
