@@ -22,6 +22,7 @@ from django.utils.translation import pgettext
 from django.utils.translation import ugettext
 from jinja2 import Markup
 from jinja2 import TemplateSyntaxError
+from jinja2 import contextfunction
 from jinja2 import lexer
 from jinja2 import nodes
 from jinja2.ext import Extension
@@ -214,9 +215,19 @@ class UrlsExtension(Extension):
         super(UrlsExtension, self).__init__(environment)
         environment.globals["url"] = self._url_reverse
 
+    @contextfunction
     def _url_reverse(self, name, *args, **kwargs):
         try:
-            return reverse(name, args=args, kwargs=kwargs)
+            current_app = context["request"].current_app
+        except AttributeError:
+            try:
+                current_app = context["request"].resolver_match.namespace
+            except AttributeError:
+                current_app = None
+        except KeyError:
+            current_app = None
+        try:
+            return reverse(name, args=args, kwargs=kwargs, current_app=current_app)
         except NoReverseMatch as exc:
             logger.error('Error: %s', exc)
             if not JINJA2_MUTE_URLRESOLVE_EXCEPTIONS:
