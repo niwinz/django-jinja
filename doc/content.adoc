@@ -426,6 +426,7 @@ from .myextensions  import MyExtension
 library.extension(MyExtension)
 ----
 
+This only works within a Django app. If you don't have an app for your project, create an app specifically for this purpose and put your templatetags there. 
 
 === Render 4xx/500 pages with jinja
 
