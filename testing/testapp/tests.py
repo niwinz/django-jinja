@@ -13,11 +13,8 @@ except ImportError:
 import django
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-try:
-    from django.core.urlresolvers import reverse
-except ImportError:
-    # Django 2.0.
-    from django.urls import reverse
+from django.urls import NoReverseMatch
+from django.urls import reverse
 from django.middleware import csrf
 from django.shortcuts import render
 from django.template import RequestContext
