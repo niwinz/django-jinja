@@ -37,8 +37,8 @@ def _iter_templatetags_modules_list():
         try:
             mod = import_module(app_path + ".templatetags")
             # Empty folders can lead to unexpected behavior with Python 3.
-            # We make sure to have the `__file__` attribute.
-            if hasattr(mod, '__file__'):
+            # We make sure to have a `__file__` attribute that isn't None.
+            if getattr(mod, '__file__', None):
                 yield (app_path, path.dirname(mod.__file__))
         except ImportError:
             pass
