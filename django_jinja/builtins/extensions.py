@@ -78,8 +78,10 @@ class CsrfExtension(Extension):
             if csrf_token == 'NOTPROVIDED':
                 return Markup("")
 
+            # Django 2.1 and higher does not render the closing slash for void elements. Emulate this behavior:
+            void_slash = ' /' if django.VERSION < (2, 1) else ''
             return Markup("<input type='hidden'"
-                          " name='csrfmiddlewaretoken' value='%s' />" % (csrf_token))
+                          " name='csrfmiddlewaretoken' value='%s'%s>" % (csrf_token, void_slash))
 
         if settings.DEBUG:
             import warnings
