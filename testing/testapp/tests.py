@@ -31,6 +31,10 @@ from .forms import TestForm
 from .models import TestModel
 
 
+# In Django 2.1, rendered widgets no longer includes a closing slash on void elements, e.g. <br>.
+VOID_ENDING = ' />' if django.VERSION < (2, 1) else '>'
+
+
 class RenderTemplatesTests(TestCase):
     def setUp(self):
         self.env = engines["jinja2"]
@@ -53,7 +57,7 @@ class RenderTemplatesTests(TestCase):
             ("{{ 'hola mundo'|slugify }}", {}, "hola-mundo"),
             ("{{ 'hello'|ljust(10) }}", {}, "hello     "),
             ("{{ 'hello'|rjust(10) }}", {}, "     hello"),
-            ("{{ 'hello\nworld'|linebreaksbr }}", {}, "hello<br />world"),
+            ("{{ 'hello\nworld'|linebreaksbr }}", {}, "hello<br{}world".format(VOID_ENDING)),
             ("{{ '<div>hello</div>'|striptags }}", {}, "hello"),
             ("{{ list|join(',') }}", {'list':['a','b']}, 'a,b'),
             ("{{ 3|add(2) }}", {}, "5"),
@@ -124,7 +128,7 @@ class RenderTemplatesTests(TestCase):
         result = template.render({"form": form})
 
         self.assertIn('maxlength="2"', result)
-        self.assertIn("/>", result)
+        self.assertIn(VOID_ENDING.strip(), result)
 
     def test_autoscape_with_form_field(self):
         form = TestForm()
@@ -132,7 +136,7 @@ class RenderTemplatesTests(TestCase):
         result = template.render({"form": form})
 
         self.assertIn('maxlength="2"', result)
-        self.assertIn("/>", result)
+        self.assertIn(VOID_ENDING.strip(), result)
 
     def test_autoscape_with_form_errors(self):
         form = TestForm({"name": "foo"})
@@ -166,7 +170,7 @@ class RenderTemplatesTests(TestCase):
     def test_autoescape_03(self):
         template = self.env.from_string("{{ foo|linebreaksbr }}")
         result = template.render({"foo": "<script>alert(1)</script>\nfoo"})
-        self.assertEqual(result, "&lt;script&gt;alert(1)&lt;/script&gt;<br />foo")
+        self.assertEqual(result, "&lt;script&gt;alert(1)&lt;/script&gt;<br{}foo".format(VOID_ENDING))
 
     def test_debug_var_when_render_shortcut_is_used(self):
         prev_debug_value = settings.DEBUG
@@ -212,7 +216,7 @@ class RenderTemplatesTests(TestCase):
                 result = template.render(context)
 
             expected = ("<input type='hidden' name='csrfmiddlewaretoken'"
-                        " value='{}' />").format(token)
+                        " value='{}'{}").format(token, VOID_ENDING)
 
         self.assertEqual(token, "123123")
         self.assertEqual(result, expected)
