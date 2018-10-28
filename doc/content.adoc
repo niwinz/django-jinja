@@ -10,7 +10,7 @@ Andrey Antukh, <niwi@niwi.be>
 
 == Introduction
 
-django-jinja is a xref:license[BSD Licensed], simple and nonobstructive jinja2
+django-jinja is a xref:license[BSD Licensed], simple and non-obstructive jinja2
 backend for Django.
 
 
@@ -23,9 +23,9 @@ system, etc ...
 Django comes with a jinja backend, why should I use *django-jinja*?
 
 The Django builtin backend has a very limited set of features if we compare it with
-the django template engine and in my opion is not very usable because it does not
+the django template engine and in my opinion is not very usable because it does not
 integrate well with the rest of django such as its filters, template tags and
-preloading of templatetags among others.
+preloading of templatetags, among others.
 
 *django-jinja* comes to the rescue and adds everything missing. This is a brief
 list of differences with django's built-in backend:
@@ -38,7 +38,7 @@ list of differences with django's built-in backend:
 - Django template filters and tags can mostly be used in Jinja2 templates.
 - I18n subsystem adapted for Jinja2 (makemessages now collects messages from
   Jinja templates)
-- Compatible with python2 and python3 using same codebase.
+- Compatible with python2 and python3 using the same codebase.
 - jinja2 bytecode cache adapted for using django's cache subsystem.
 - Support for django context processors.
 
@@ -53,7 +53,7 @@ in the django 1.8 configuration related section.
 
 === Requirements
 
-- Python 2.7, 3.4 and 3.5
+- Python 2.7, 3.4+
 - Django >= 1.8
 - jinja2 >= 2.7.0
 
@@ -72,7 +72,7 @@ pip install django-jinja
 
 == Quick Start
 
-Add it to django installed apps list:
+Add it to Django's installed apps list:
 
 [source, python]
 ----
@@ -114,8 +114,8 @@ template will be found by the django engine.
 
 === Regex based template matching
 
-By default, *django-jinja* uses the extension as method to match templates, but if
-it is not enough, you can extend it using regular experessions:
+By default, *django-jinja* uses the file extension as the method to match
+templates, but if it is not enough, you can extend it using regular expressions:
 
 [source, python]
 ----
@@ -140,7 +140,7 @@ To disable the extension matching, just set `"match_extension"` to `None`:
 It is a helper to use django's context processors with jinja2 backend
 for django 1.8.
 
-.Example setup a bunch of context processors:
+.Example: set up a bunch of context processors:
 [source, python]
 ----
 "OPTIONS": {
@@ -163,8 +163,8 @@ for migrations.
 
 [NOTE]
 ====
-Remeber that django (1.8.x and 1.9.x) is backward compatibile with
-the old template api and this has its own tradeoffs. If you find yourself using functions
+Remember that django (1.8.x and 1.9.x) is backward compatible with
+the old template api and this has its own trade-offs. If you find yourself using functions
 like `render_to_string` or `render_to_response` from django, do not forget to pass the
 request parameter in order to make context processors work.
 ====
@@ -368,7 +368,7 @@ The affected filters are: title, upper, lower, urlencode, urlize, wordcount, wor
 join, length, random, default, filesizeformat, pprint.
 
 
-=== Registring filters in a "django" way.
+=== Registering filters in a "django" way.
 
 django-jinja comes with facilities for loading template filters, globals and tests
 from django applications.
@@ -427,7 +427,7 @@ from .myextensions  import MyExtension
 library.extension(MyExtension)
 ----
 
-This only works within a Django app. If you don't have an app for your project, create an app specifically for this purpose and put your templatetags there. 
+This only works within a Django app. If you don't have an app for your project, create an app specifically for this purpose and put your templatetags there.
 
 === Render 4xx/500 pages with jinja
 
