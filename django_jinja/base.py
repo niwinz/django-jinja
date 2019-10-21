@@ -8,7 +8,6 @@ from importlib import import_module
 import django
 from django.conf import settings
 from django.template.context import BaseContext
-from django.utils import six
 
 
 def dict_from_context(context):
@@ -56,28 +55,28 @@ def patch_django_for_autoescape():
 
     if hasattr(safestring, "SafeText"):
         if not hasattr(safestring.SafeText, "__html__"):
-            safestring.SafeText.__html__ = lambda self: six.text_type(self)
+            safestring.SafeText.__html__ = lambda self: str(self)
 
     if hasattr(safestring, "SafeString"):
         if not hasattr(safestring.SafeString, "__html__"):
-            safestring.SafeString.__html__ = lambda self: six.text_type(self)
+            safestring.SafeString.__html__ = lambda self: str(self)
 
     if hasattr(safestring, "SafeUnicode"):
         if not hasattr(safestring.SafeUnicode, "__html__"):
-            safestring.SafeUnicode.__html__ = lambda self: six.text_type(self)
+            safestring.SafeUnicode.__html__ = lambda self: str(self)
 
     if hasattr(safestring, "SafeBytes"):
         if not hasattr(safestring.SafeBytes, "__html__"):
-            safestring.SafeBytes.__html__ = lambda self: six.text_type(self)
+            safestring.SafeBytes.__html__ = lambda self: str(self)
 
     if not hasattr(BoundField, "__html__"):
-        BoundField.__html__ = lambda self: six.text_type(self)
+        BoundField.__html__ = lambda self: str(self)
 
     if not hasattr(ErrorList, "__html__"):
-        ErrorList.__html__ = lambda self: six.text_type(self)
+        ErrorList.__html__ = lambda self: str(self)
 
     if not hasattr(ErrorDict, "__html__"):
-        ErrorDict.__html__ = lambda self: six.text_type(self)
+        ErrorDict.__html__ = lambda self: str(self)
 
 
 def get_match_extension(using=None):
