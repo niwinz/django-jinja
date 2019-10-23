@@ -124,7 +124,8 @@ class RenderTemplatesTests(TestCase):
         result = template.render({"form": form})
 
         self.assertIn('maxlength="2"', result)
-        self.assertIn("/>", result)
+        # Django 2.2 does not use "/>" for input html.
+        self.assertIn("><", result)
 
     def test_autoscape_with_form_field(self):
         form = TestForm()
@@ -132,7 +133,8 @@ class RenderTemplatesTests(TestCase):
         result = template.render({"form": form})
 
         self.assertIn('maxlength="2"', result)
-        self.assertIn("/>", result)
+        # Django 2.2 does not use "/>" for input html.
+        self.assertIn("><", result)
 
     def test_autoscape_with_form_errors(self):
         form = TestForm({"name": "foo"})
@@ -166,7 +168,10 @@ class RenderTemplatesTests(TestCase):
     def test_autoescape_03(self):
         template = self.env.from_string("{{ foo|linebreaksbr }}")
         result = template.render({"foo": "<script>alert(1)</script>\nfoo"})
-        self.assertEqual(result, "&lt;script&gt;alert(1)&lt;/script&gt;<br />foo")
+        self.assertTrue(result in [
+            "&lt;script&gt;alert(1)&lt;/script&gt;<br />foo",  # Django 1.11
+            "&lt;script&gt;alert(1)&lt;/script&gt;<br>foo",    # Django 2.2
+        ])
 
     def test_debug_var_when_render_shortcut_is_used(self):
         prev_debug_value = settings.DEBUG
