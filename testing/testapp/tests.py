@@ -54,7 +54,8 @@ class RenderTemplatesTests(TestCase):
             ("{{ 'hola mundo'|slugify }}", {}, "hola-mundo"),
             ("{{ 'hello'|ljust(10) }}", {}, "hello     "),
             ("{{ 'hello'|rjust(10) }}", {}, "     hello"),
-            ("{{ 'hello\nworld'|linebreaksbr }}", {}, "hello<br />world"),
+            # Django 2.2 does not close br tag.
+            ("{{ 'hello\nworld'|linebreaksbr }}", {}, ["hello<br />world", "hello<br>world"]),
             ("{{ '<div>hello</div>'|striptags }}", {}, "hello"),
             ("{{ list|join(',') }}", {'list':['a','b']}, 'a,b'),
             ("{{ 3|add(2) }}", {}, "5"),
