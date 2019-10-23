@@ -44,8 +44,9 @@ class RenderTemplatesTests(TestCase):
             ("{{ num|floatformat }}", {'num': 34.23234}, '34.2'),
             ("{{ num|floatformat(3) }}", {'num': 34.23234}, '34.232'),
             ("{{ 'hola'|capfirst }}", {}, "Hola"),
-            ("{{ 'hola mundo'|truncatechars(5) }}", {}, "ho..."),
-            ("{{ 'hola mundo'|truncatechars_html(5) }}", {}, "ho..."),
+            # The list of Django 1.11 truncator / Django 2.2 truncator result.
+            ("{{ 'hola mundo'|truncatechars(5) }}", {}, ["ho...", "hola…"]),
+            ("{{ 'hola mundo'|truncatechars_html(5) }}", {}, ["ho...", "hola…"]),
             ("{{ 'hola mundo'|truncatewords(1) }}", {}, "hola ..."),
             ("{{ 'hola mundo'|truncatewords_html(1) }}", {}, "hola ..."),
             ("{{ 'hola mundo'|wordwrap(1) }}", {}, "hola\nmundo"),
@@ -67,7 +68,10 @@ class RenderTemplatesTests(TestCase):
             print("- Testing: ", template_str, "with:", kwargs)
             template = self.env.from_string(template_str)
             _result = template.render(kwargs)
-            self.assertEqual(_result, result)
+            if isinstance(result, str):
+                self.assertEqual(_result, result)
+            else:
+                self.assertTrue(_result in result)
 
     def test_string_interpolation(self):
         template = self.env.from_string("{{ 'Hello %s!' % name }}")
