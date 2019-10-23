@@ -47,8 +47,8 @@ class RenderTemplatesTests(TestCase):
             # The list of Django 1.11 truncator / Django 2.2 truncator result.
             ("{{ 'hola mundo'|truncatechars(5) }}", {}, ["ho...", "hola…"]),
             ("{{ 'hola mundo'|truncatechars_html(5) }}", {}, ["ho...", "hola…"]),
-            ("{{ 'hola mundo'|truncatewords(1) }}", {}, "hola ..."),
-            ("{{ 'hola mundo'|truncatewords_html(1) }}", {}, "hola ..."),
+            ("{{ 'hola mundo'|truncatewords(1) }}", {}, ["hola ...", "hola …"]),
+            ("{{ 'hola mundo'|truncatewords_html(1) }}", {}, ["hola ...", "hola …"]),
             ("{{ 'hola mundo'|wordwrap(1) }}", {}, "hola\nmundo"),
             ("{{ 'hola mundo'|title }}", {}, "Hola Mundo"),
             ("{{ 'hola mundo'|slugify }}", {}, "hola-mundo"),
