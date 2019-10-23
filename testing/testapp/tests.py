@@ -125,7 +125,7 @@ class RenderTemplatesTests(TestCase):
 
         self.assertIn('maxlength="2"', result)
         # Django 2.2 does not use "/>" for input html.
-        self.assertIn("><", result)
+        self.assertIn("<input ", result)
 
     def test_autoscape_with_form_field(self):
         form = TestForm()
@@ -134,7 +134,7 @@ class RenderTemplatesTests(TestCase):
 
         self.assertIn('maxlength="2"', result)
         # Django 2.2 does not use "/>" for input html.
-        self.assertIn("><", result)
+        self.assertIn("<input ", result)
 
     def test_autoscape_with_form_errors(self):
         form = TestForm({"name": "foo"})
