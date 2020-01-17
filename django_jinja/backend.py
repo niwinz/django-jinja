@@ -13,6 +13,7 @@ import copy
 import sys
 import os
 import os.path as path
+import functools
 from importlib import import_module
 
 import jinja2
@@ -28,8 +29,6 @@ from django.template.backends.base import BaseEngine
 from django.template.backends.utils import csrf_input_lazy
 from django.template.backends.utils import csrf_token_lazy
 from django.template.context import BaseContext
-from django.utils import lru_cache
-from django.utils import six
 from django.utils.encoding import smart_text
 from django.utils.functional import SimpleLazyObject
 from django.utils.functional import cached_property
@@ -110,7 +109,7 @@ class Jinja2(BaseEngine):
     app_dirname = "templates"
 
     @staticmethod
-    @lru_cache.lru_cache()
+    @functools.lru_cache()
     def get_default():
         """
         When only one django-jinja backend is configured, returns it.
@@ -161,7 +160,7 @@ class Jinja2(BaseEngine):
 
         undefined = options.pop("undefined", None)
         if undefined is not None:
-            if isinstance(undefined, six.string_types):
+            if isinstance(undefined, str):
                 options["undefined"] = utils.load_class(undefined)
             else:
                 options["undefined"] = undefined
@@ -173,7 +172,7 @@ class Jinja2(BaseEngine):
 
         environment_cls = import_string(environment_clspath)
 
-        if isinstance(options.get("loader"), six.string_types):
+        if isinstance(options.get("loader"), str):
             # Allow to specify a loader as string
             loader_cls = import_string(options.pop("loader"))
         else:
@@ -237,7 +236,7 @@ class Jinja2(BaseEngine):
 
     def _initialize_builtins(self, filters=None, tests=None, globals=None, constants=None):
         def insert(data, name, value):
-            if isinstance(value, six.string_types):
+            if isinstance(value, str):
                 data[name] = import_string(value)
             else:
                 data[name] = value
@@ -288,7 +287,7 @@ class Jinja2(BaseEngine):
             else:
                 exc = TemplateDoesNotExist(exc.name, backend=self)
 
-            six.reraise(
+            utils.reraise(
                 TemplateDoesNotExist,
                 exc,
                 sys.exc_info()[2],
@@ -296,7 +295,7 @@ class Jinja2(BaseEngine):
         except jinja2.TemplateSyntaxError as exc:
             new = TemplateSyntaxError(exc.args)
             new.template_debug = get_exception_info(exc)
-            six.reraise(TemplateSyntaxError, new, sys.exc_info()[2])
+            utils.reraise(TemplateSyntaxError, new, sys.exc_info()[2])
 
 
 @receiver(signals.setting_changed)
