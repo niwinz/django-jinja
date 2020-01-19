@@ -7,7 +7,7 @@ import sys
 
 INSTALL_REQUIRES = [
     "jinja2 >=2.5",
-    "django >=1.8",
+    "django >=1.11, <3.1",
 ]
 
 if sys.version_info < (2, 7):
@@ -15,12 +15,12 @@ if sys.version_info < (2, 7):
 
 setup(
     name = "django-jinja",
-    version = "2.4.1",
+    version = "2.4.2",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     keywords = "django, jinja2",
     author = "Andrey Antukh",
-    author_email = "niwi@niwi.be",
+    author_email = "auvipy@gmail.com",
     url = "https://github.com/niwinz/django-jinja",
     license = "BSD",
     packages = [

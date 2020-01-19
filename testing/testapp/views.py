@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from django.views.generic import View
-from django.http import HttpResponse
+from django.http import HttpResponse, StreamingHttpResponse
 from django.shortcuts import render_to_response
+from django.template import loader
 from django.template.loader import render_to_string
 
 from django_jinja.views.generic.detail import DetailView
@@ -80,3 +81,9 @@ class DateDetailTestView(DateDetailView):
     model = TestModel
     date_field = 'date'
     template_name_suffix = '_date_detail'
+
+class StreamingTestView(View):
+    def get(self, request, *args, **kwargs):
+        context = {"name": "Streaming Jinja2", "view": type(self)}
+        template = loader.get_template('streaming_test.jinja')
+        return StreamingHttpResponse(template.stream(context, request), content_type='text/html')
