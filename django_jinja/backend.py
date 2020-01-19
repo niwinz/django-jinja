@@ -312,7 +312,13 @@ def get_exception_info(exception):
     """
     context_lines = 10
     lineno = exception.lineno
-    lines = list(enumerate(exception.source.strip().split("\n"), start=1))
+    if exception.source is None:
+        if os.path.exists(exception.filename):
+            with open(exception.filename, "r") as f:
+                source = f.read()
+    else:
+        source = exception.source
+    lines = list(enumerate(source.strip().split("\n"), start=1))
     during = lines[lineno - 1][1]
     total = len(lines)
     top = max(0, lineno - context_lines - 1)
