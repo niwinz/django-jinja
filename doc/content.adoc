@@ -196,7 +196,7 @@ This is a way to setup statically (in your settings) additional stuff for jinja:
 === Add additional extensions
 
 django-jinja, by default sets up a great amount of extensions to make your experience
-using jinja in django painless. But if you want to add more extesions, you can do it
+using jinja in django painless. But if you want to add more extensions, you can do it
 using the `extensions` entry of the backend options:
 
 [source, python]
@@ -284,6 +284,7 @@ TEMPLATES = [
                 "jinja2.ext.autoescape",
                 "django_jinja.builtins.extensions.CsrfExtension",
                 "django_jinja.builtins.extensions.CacheExtension",
+                "django_jinja.builtins.extensions.DebugExtension",
                 "django_jinja.builtins.extensions.TimezoneExtension",
                 "django_jinja.builtins.extensions.UrlsExtension",
                 "django_jinja.builtins.extensions.StaticFilesExtension",
@@ -426,6 +427,7 @@ from .myextensions  import MyExtension
 library.extension(MyExtension)
 ----
 
+This only works within a Django app. If you don't have an app for your project, create an app specifically for this purpose and put your templatetags there. 
 
 === Render 4xx/500 pages with jinja
 

@@ -7,7 +7,7 @@ import sys
 
 INSTALL_REQUIRES = [
     "jinja2 >=2.5",
-    "django >=1.8, <2.0",
+    "django >=1.11, <3.1",
 ]
 
 if sys.version_info < (2, 7):
@@ -20,7 +20,7 @@ setup(
     long_description = "",
     keywords = "django, jinja2",
     author = "Andrey Antukh",
-    author_email = "niwi@niwi.be",
+    author_email = "auvipy@gmail.com",
     url = "https://github.com/niwinz/django-jinja",
     license = "BSD",
     packages = [
@@ -56,8 +56,8 @@ setup(
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.3",
-        "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Topic :: Internet :: WWW/HTTP",

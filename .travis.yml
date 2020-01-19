@@ -1,23 +1,25 @@
 language: python
 sudo: false
+cache: pip
 
-python:
-  - "3.6"
-  - "3.5"
-  - "3.4"
-  - "2.7"
-
-env:
-  - DJANGO="django==1.8.18"
-  - DJANGO="django==1.9.13"
-  - DJANGO="django==1.10.7"
-  - DJANGO="django==1.11"
+matrix:
+  include:
+    - python: 3.5
+      env: TOXENV=py35-django111
+    - python: 3.6
+      env: TOXENV=py36-django111
+    - python: 3.5
+      env: TOXENV=py35-django22
+    - python: 3.6
+      env: TOXENV=py36-django22
+    - python: 3.7
+      env: TOXENV=py37-django22
 
 install:
-  - pip install $DJANGO jinja2 "django-pipeline<1.6" pytz mock
+  - pip install tox
 
 script:
-  - cd testing && python runtests.py
+  - tox
 
 notifications:
   email:

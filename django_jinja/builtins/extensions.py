@@ -1,12 +1,15 @@
 from __future__ import unicode_literals
 
-import traceback
 import logging
+import pprint
+import sys
 
 import django
 from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.cache import cache
+from jinja2.nodes import ContextReference
+
 try:
     from django.urls import NoReverseMatch
     from django.urls import reverse
@@ -19,6 +22,7 @@ from django.utils.translation import pgettext
 from django.utils.translation import ugettext
 from jinja2 import Markup
 from jinja2 import TemplateSyntaxError
+from jinja2 import contextfunction
 from jinja2 import lexer
 from jinja2 import nodes
 from jinja2.ext import Extension
@@ -143,6 +147,60 @@ class CacheExtension(Extension):
 
         return value
 
+
+class DebugExtension(Extension):
+    """
+    A ``{% debug %}`` tag that dumps the available variables, filters and tests.
+    Typical usage like this:
+
+    .. codeblock:: html+jinja
+        <pre>{% debug %}</pre>
+
+    produces output like this:
+
+    ::
+        {'context': {'_': <function _gettext_alias at 0x7f9ceabde488>,
+                 'csrf_token': <SimpleLazyObject: 'lfPE7al...q3bykS4txKfb3'>,
+                 'cycler': <class 'jinja2.utils.Cycler'>,
+                 ...
+                 'view': <polls.views_auth.Login object at 0x7f9cea2cbe48>},
+        'filters': ['abs', 'add', 'addslashes', 'attr', 'batch', 'bootstrap',
+                 'bootstrap_classes', 'bootstrap_horizontal',
+                 'bootstrap_inline', ... 'yesno'],
+        'tests': ['callable', 'checkbox_field', 'defined', 'divisibleby',
+               'escaped', 'even', 'iterable', 'lower', 'mapping',
+               'multiple_checkbox_field', ... 'string', 'undefined', 'upper']}
+
+    """
+    tags = set(['debug'])
+
+    def __init__(self, environment):
+        super(DebugExtension, self).__init__(environment)
+
+    def parse(self, parser):
+        lineno = parser.stream.expect('name:debug').lineno
+        context = ContextReference()
+        call = self.call_method('_render', [context], lineno=lineno)
+        return nodes.Output([nodes.MarkSafe(call)])
+
+    def _render(self, context):
+        result = {
+            'filters': sorted(self.environment.filters.keys()),
+            'tests': sorted(self.environment.tests.keys()),
+            'context': context.get_all()
+        }
+        #
+        # We set the depth since the intent is basically to show the top few
+        # names. TODO: provide user control over this?
+        #
+        if sys.version_info[:2] >= (3, 4):
+            text = pprint.pformat(result, depth=3, compact=True)
+        else:
+            text = pprint.pformat(result, depth=3)
+        text = Markup.escape(text)
+        return text
+
+
 class StaticFilesExtension(Extension):
     def __init__(self, environment):
         super(StaticFilesExtension, self).__init__(environment)
@@ -157,9 +215,19 @@ class UrlsExtension(Extension):
         super(UrlsExtension, self).__init__(environment)
         environment.globals["url"] = self._url_reverse
 
-    def _url_reverse(self, name, *args, **kwargs):
+    @contextfunction
+    def _url_reverse(self, context, name, *args, **kwargs):
         try:
-            return reverse(name, args=args, kwargs=kwargs)
+            current_app = context["request"].current_app
+        except AttributeError:
+            try:
+                current_app = context["request"].resolver_match.namespace
+            except AttributeError:
+                current_app = None
+        except KeyError:
+            current_app = None
+        try:
+            return reverse(name, args=args, kwargs=kwargs, current_app=current_app)
         except NoReverseMatch as exc:
             logger.error('Error: %s', exc)
             if not JINJA2_MUTE_URLRESOLVE_EXCEPTIONS:

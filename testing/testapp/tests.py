@@ -3,10 +3,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
 import datetime
-import sys
-import unittest
 
 try:
     import unittest.mock as mock
@@ -16,21 +13,18 @@ except ImportError:
 import django
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import NoReverseMatch
-from django.core.urlresolvers import reverse
+from django.urls import NoReverseMatch
+from django.urls import reverse
 from django.middleware import csrf
-from django.http import HttpResponse
 from django.shortcuts import render
 from django.template import RequestContext
 from django.template import engines
 from django.template.loader import get_template
 from django.test import TestCase
-from django.test import signals
 from django.test import override_settings
 from django.test.client import RequestFactory
 from django_jinja.base import get_match_extension
 from django_jinja.base import match_template
-from django_jinja.backend import Template
 from django_jinja.views.generic.base import Jinja2TemplateResponseMixin
 
 from .forms import TestForm
@@ -51,16 +45,18 @@ class RenderTemplatesTests(TestCase):
             ("{{ num|floatformat }}", {'num': 34.23234}, '34.2'),
             ("{{ num|floatformat(3) }}", {'num': 34.23234}, '34.232'),
             ("{{ 'hola'|capfirst }}", {}, "Hola"),
-            ("{{ 'hola mundo'|truncatechars(5) }}", {}, "ho..."),
-            ("{{ 'hola mundo'|truncatechars_html(5) }}", {}, "ho..."),
-            ("{{ 'hola mundo'|truncatewords(1) }}", {}, "hola ..."),
-            ("{{ 'hola mundo'|truncatewords_html(1) }}", {}, "hola ..."),
+            # The list of Django 1.11 truncator / Django 2.2 truncator result.
+            ("{{ 'hola mundo'|truncatechars(5) }}", {}, ["ho...", "hola…"]),
+            ("{{ 'hola mundo'|truncatechars_html(5) }}", {}, ["ho...", "hola…"]),
+            ("{{ 'hola mundo'|truncatewords(1) }}", {}, ["hola ...", "hola …"]),
+            ("{{ 'hola mundo'|truncatewords_html(1) }}", {}, ["hola ...", "hola …"]),
             ("{{ 'hola mundo'|wordwrap(1) }}", {}, "hola\nmundo"),
             ("{{ 'hola mundo'|title }}", {}, "Hola Mundo"),
             ("{{ 'hola mundo'|slugify }}", {}, "hola-mundo"),
             ("{{ 'hello'|ljust(10) }}", {}, "hello     "),
             ("{{ 'hello'|rjust(10) }}", {}, "     hello"),
-            ("{{ 'hello\nworld'|linebreaksbr }}", {}, "hello<br />world"),
+            # Django 2.2 does not close br tag.
+            ("{{ 'hello\nworld'|linebreaksbr }}", {}, ["hello<br />world", "hello<br>world"]),
             ("{{ '<div>hello</div>'|striptags }}", {}, "hello"),
             ("{{ list|join(',') }}", {'list':['a','b']}, 'a,b'),
             ("{{ 3|add(2) }}", {}, "5"),
@@ -74,7 +70,10 @@ class RenderTemplatesTests(TestCase):
             print("- Testing: ", template_str, "with:", kwargs)
             template = self.env.from_string(template_str)
             _result = template.render(kwargs)
-            self.assertEqual(_result, result)
+            if isinstance(result, str):
+                self.assertEqual(_result, result)
+            else:
+                self.assertTrue(_result in result)
 
     def test_string_interpolation(self):
         template = self.env.from_string("{{ 'Hello %s!' % name }}")
@@ -131,7 +130,8 @@ class RenderTemplatesTests(TestCase):
         result = template.render({"form": form})
 
         self.assertIn('maxlength="2"', result)
-        self.assertIn("/>", result)
+        # Django 2.2 does not use "/>" for input html.
+        self.assertIn("<input ", result)
 
     def test_autoscape_with_form_field(self):
         form = TestForm()
@@ -139,7 +139,8 @@ class RenderTemplatesTests(TestCase):
         result = template.render({"form": form})
 
         self.assertIn('maxlength="2"', result)
-        self.assertIn("/>", result)
+        # Django 2.2 does not use "/>" for input html.
+        self.assertIn("<input ", result)
 
     def test_autoscape_with_form_errors(self):
         form = TestForm({"name": "foo"})
@@ -173,7 +174,10 @@ class RenderTemplatesTests(TestCase):
     def test_autoescape_03(self):
         template = self.env.from_string("{{ foo|linebreaksbr }}")
         result = template.render({"foo": "<script>alert(1)</script>\nfoo"})
-        self.assertEqual(result, "&lt;script&gt;alert(1)&lt;/script&gt;<br />foo")
+        self.assertTrue(result in [
+            "&lt;script&gt;alert(1)&lt;/script&gt;<br />foo",  # Django 1.11
+            "&lt;script&gt;alert(1)&lt;/script&gt;<br>foo",    # Django 2.2
+        ])
 
     def test_debug_var_when_render_shortcut_is_used(self):
         prev_debug_value = settings.DEBUG
@@ -184,6 +188,21 @@ class RenderTemplatesTests(TestCase):
         self.assertEqual(response.content, b"foobar")
 
         settings.DEBUG = prev_debug_value
+
+    def test_debug_tag(self):
+        """Test for {% debug %}"""
+        tmpl = self.env.from_string('''Hello{% debug %}Bye''')
+        out = tmpl.render()
+        out = out.replace('&#39;', "'").replace('&lt;', '<').replace('&gt;', '>')
+        #
+        # Check that some of the built-in items exist in the debug output...
+        #
+        assert "'context'" in out
+        assert "'cycler'" in out
+        assert "'filters'" in out
+        assert "'abs'" in out
+        assert "'tests'" in out
+        assert "'!='" in out
 
     def test_csrf_01(self):
         template_content = "{% csrf_token %}"

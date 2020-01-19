@@ -1,11 +1,15 @@
 # -*- coding: utf-8 -*-
 
 import django
-
-from django.conf import settings
-from django.views.generic import View
-from django.template import loader, RequestContext
 from django import http
+from django.template import RequestContext, loader
+
+try:
+    from django.views import View
+except ImportError:
+    from django.views.generic import View
+
+from ..base import get_match_extension
 
 
 class GenericView(View):
@@ -18,11 +22,13 @@ class GenericView(View):
 
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
+        template_name = callable(self.tmpl_name) and self.tmpl_name() or self.tmpl_name
+
         if django.VERSION[:2] < (1, 8):
-            output = loader.render_to_string(self.tmpl_name, context,
+            output = loader.render_to_string(template_name, context,
                                              context_instance=RequestContext(request))
         else:
-            output = loader.render_to_string(self.tmpl_name, context, request=request)
+            output = loader.render_to_string(template_name, context, request=request)
 
         return self.response_cls(output, content_type=self.content_type)
 
@@ -48,20 +54,28 @@ class ErrorView(GenericView):
 
 
 class PageNotFound(ErrorView):
-    tmpl_name = "404" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
     response_cls = http.HttpResponseNotFound
+
+    def tmpl_name(self):
+        return "404" + (get_match_extension() or ".jinja")
 
 
 class PermissionDenied(ErrorView):
-    tmpl_name = "403" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
     response_cls = http.HttpResponseForbidden
+
+    def tmpl_name(self):
+        return "403" + (get_match_extension() or ".jinja")
 
 
 class BadRequest(ErrorView):
-    tmpl_name = "400" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
     response_cls = http.HttpResponseBadRequest
+
+    def tmpl_name(self):
+        return "400" + (get_match_extension() or ".jinja")
 
 
 class ServerError(ErrorView):
-    tmpl_name = "500" + getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja')
     response_cls = http.HttpResponseServerError
+
+    def tmpl_name(self):
+        return "500" + (get_match_extension() or ".jinja")
