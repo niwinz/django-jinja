@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
 try:
-    from django.utils.encoding import force_text
+    from django.utils.encoding import force_str
 except ImportError:
-    from django.utils.encoding import force_unicode as force_text
+    from django.utils.encoding import force_unicode as force_str
 
 try:
     from django.urls import reverse as django_reverse
@@ -81,7 +81,7 @@ except ImportError:
     from django.template.defaultfilters import slugify as djslugify
 
 def slugify(value):
-    return djslugify(force_text(value))
+    return djslugify(force_str(value))
 
 from functools import partial
 linebreaksbr = partial(linebreaksbr, autoescape=True)

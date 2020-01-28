@@ -28,10 +28,10 @@ from jinja2 import nodes
 from jinja2.ext import Extension
 
 try:
-    from django.utils.encoding import force_text
+    from django.utils.encoding import force_str
     from django.utils.encoding import force_bytes
 except ImportError:
-    from django.utils.encoding import force_unicode as force_text
+    from django.utils.encoding import force_unicode as force_str
     from django.utils.encoding import smart_str as force_bytes
 
 
@@ -141,9 +141,9 @@ class CacheExtension(Extension):
         value = cache.get(cache_key)
         if value is None:
             value = caller()
-            cache.set(cache_key, force_text(value), expire_time)
+            cache.set(cache_key, force_str(value), expire_time)
         else:
-            value = force_text(value)
+            value = force_str(value)
 
         return value
 
