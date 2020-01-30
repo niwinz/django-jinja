@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import django
 from django import http
 from django.template import RequestContext, loader

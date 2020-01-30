@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.views.generic import View
 from django.http import HttpResponse, StreamingHttpResponse
 from django.shortcuts import render_to_response
