@@ -53,7 +53,7 @@ in the django 1.8 configuration related section.
 
 === Requirements
 
-- Python 2.7, 3.4+
+- Python >= 3.5
 - Django >= 1.8
 - jinja2 >= 2.7.0
 
