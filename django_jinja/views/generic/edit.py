@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.views.generic.edit import CreateView as _django_CreateView
 from django.views.generic.edit import DeleteView as _django_DeleteView
 from django.views.generic.edit import UpdateView as _django_UpdateView

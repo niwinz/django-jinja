@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 import functools
 from importlib import import_module
 

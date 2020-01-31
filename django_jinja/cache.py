@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import django
 from django.utils.functional import cached_property
 from jinja2 import BytecodeCache as _BytecodeCache

@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import unicode_literals, absolute_import
-
 import jinja2
 
 from django.contrib.staticfiles.storage import staticfiles_storage

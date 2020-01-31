@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.contrib.humanize.templatetags import humanize
 from django_jinja import library
 

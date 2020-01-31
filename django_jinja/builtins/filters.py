@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 try:
     from django.utils.encoding import force_str
 except ImportError:

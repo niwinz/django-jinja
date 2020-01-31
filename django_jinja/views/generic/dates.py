@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from django.views.generic.dates import ArchiveIndexView as _django_ArchiveIndexView
 from django.views.generic.dates import YearArchiveView as _django_YearArchiveView
 from django.views.generic.dates import MonthArchiveView as _django_MonthArchiveView

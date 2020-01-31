@@ -7,8 +7,6 @@ This is an implementation of django backend inteface for use
 django_jinja easy with django 1.8.
 """
 
-from __future__ import absolute_import
-
 import copy
 import sys
 import os
