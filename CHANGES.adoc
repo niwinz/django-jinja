@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Version 2.5.0
+-------------
+
+- Fix compatibility issues with Django 3.0, minimum version now 1.11.
+- Dropped support for Python 2.7, 3.4, adding support through 3.8.
+
+
 Version 2.4.2
 -------------
 
