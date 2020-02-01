@@ -285,6 +285,15 @@ class Jinja2(BaseEngine):
         try:
             return Template(self.env.get_template(template_name), self)
         except jinja2.TemplateNotFound as exc:
+            # Unlike django's template engine, jinja2 doesn't like windows-style path separators.
+            # But because django does, its docs encourage the usage of os.path.join().
+            # Rather than insisting that our users switch to posixpath.join(), this try block
+            # will attempt to retrieve the template path again with forward slashes on windows:
+            if os.name == 'nt' and '\\' in template_name:
+                try:
+                    return self.get_template(template_name.replace("\\", "/"))
+                except jinja2.TemplateNotFound:
+                    pass
 
             if utils.DJANGO_18:
                 exc = TemplateDoesNotExist(exc.name)
