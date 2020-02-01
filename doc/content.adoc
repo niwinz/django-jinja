@@ -54,10 +54,26 @@ in the django 1.8 configuration related section.
 === Requirements
 
 - Python >= 3.5
-- Django >= 1.8
+- Django >= 1.11
 - jinja2 >= 2.7.0
 
-*If you are using django < 1.8, you should use django-jinja 1.x versions.*
+If you are using older versions of Django or Python, you need an older version of django-jinja:
+
+|===
+|django-jinja |supported python versions |supported django versions
+
+|==1.4.2
+|2.7, 3.3, 3.4
+|1.5, 1.6, 1.7, 1.8
+
+|==2.4.1
+|2.7, 3.4, 3.5
+|1.8, 1.11
+
+|>=2.5.0
+|3.5 (not django 3.0), 3.6, 3.7, 3.8
+|1.11, 2.2, 3.0
+|===
 
 
 === Installation
