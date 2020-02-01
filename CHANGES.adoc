@@ -1,6 +1,19 @@
 Changelog
 =========
 
+Unreleased Changes
+------------------
+
+- Fixed loading template names with backslashes on Windows (#249).
+
+
+Version 2.6.0
+-------------
+
+- Documented compatibility changes made in version 2.5.0.
+- Cut new release to reflect this in package metadata.
+
+
 Version 2.5.0
 -------------
 

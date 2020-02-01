@@ -1,6 +1,6 @@
 = django-jinja - jinja2 backend for Django
 Andrey Antukh, <niwi@niwi.be>
-2.3.1
+2.6.0
 :toc: left
 :!numbered:
 :source-highlighter: pygments
