@@ -1,7 +1,6 @@
 import jinja2
 
 from django.contrib.staticfiles.storage import staticfiles_storage
-from django.template.loader import render_to_string
 
 from pipeline.conf import settings
 from pipeline.utils import guess_type

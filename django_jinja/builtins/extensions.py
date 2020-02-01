@@ -2,58 +2,23 @@ import logging
 import pprint
 import sys
 
-import django
 from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.cache import cache
+from django.core.cache.utils import make_template_fragment_key
+from django.urls import NoReverseMatch
+from django.urls import reverse
+from django.utils.encoding import force_str
 from jinja2.nodes import ContextReference
-
-try:
-    from django.urls import NoReverseMatch
-    from django.urls import reverse
-except ImportError:
-    from django.core.urlresolvers import NoReverseMatch
-    from django.core.urlresolvers import reverse
-
-from django.utils.formats import localize
-from django.utils.translation import pgettext
-from django.utils.translation import ugettext
 from jinja2 import Markup
 from jinja2 import TemplateSyntaxError
 from jinja2 import contextfunction
-from jinja2 import lexer
 from jinja2 import nodes
 from jinja2.ext import Extension
-
-try:
-    from django.utils.encoding import force_str
-    from django.utils.encoding import force_bytes
-except ImportError:
-    from django.utils.encoding import force_unicode as force_str
-    from django.utils.encoding import smart_str as force_bytes
 
 
 JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = getattr(settings, "JINJA2_MUTE_URLRESOLVE_EXCEPTIONS", False)
 logger = logging.getLogger(__name__)
-
-
-
-# Compatibility with django <= 1.5
-
-if django.VERSION[:2] <= (1, 5):
-    import hashlib
-    from django.utils.http import urlquote
-
-    def make_template_fragment_key(fragm_name, vary_on):
-        args_map = map(urlquote, vary_on)
-        args_map = map(lambda x: force_bytes(x), args_map)
-
-        args_string = b':'.join(args_map)
-        args_hash = hashlib.md5(args_string).hexdigest()
-
-        return 'template.cache.{0}.{1}'.format(fragm_name, args_hash)
-else:
-    from django.core.cache.utils import make_template_fragment_key
 
 
 class CsrfExtension(Extension):
@@ -191,12 +156,8 @@ class DebugExtension(Extension):
         # We set the depth since the intent is basically to show the top few
         # names. TODO: provide user control over this?
         #
-        if sys.version_info[:2] >= (3, 4):
-            text = pprint.pformat(result, depth=3, compact=True)
-        else:
-            text = pprint.pformat(result, depth=3)
-        text = Markup.escape(text)
-        return text
+        text = pprint.pformat(result, depth=3, compact=True)
+        return Markup.escape(text)
 
 
 class StaticFilesExtension(Extension):

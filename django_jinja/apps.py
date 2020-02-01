@@ -1,6 +1,5 @@
-import django
-
 from django.apps import AppConfig
+
 from django_jinja import base
 
 

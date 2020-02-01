@@ -1,14 +1,10 @@
 import datetime
 
-try:
-    import unittest.mock as mock
-except ImportError:
-    import mock
+from unittest import mock
 
-import django
+from django.conf import global_settings
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.urls import NoReverseMatch
 from django.urls import reverse
 from django.middleware import csrf
 from django.shortcuts import render
@@ -18,6 +14,8 @@ from django.template.loader import get_template
 from django.test import TestCase
 from django.test import override_settings
 from django.test.client import RequestFactory
+from django.utils import timezone
+from django_jinja.backend import Jinja2
 from django_jinja.base import get_match_extension
 from django_jinja.base import match_template
 from django_jinja.views.generic.base import Jinja2TemplateResponseMixin
@@ -208,14 +206,8 @@ class RenderTemplatesTests(TestCase):
             request = self.factory.get('/customer/details')
             token = csrf.get_token(request)
 
-            if django.VERSION[:2] >= (1, 8):
-                template = self.env.from_string(template_content)
-                result = template.render({}, request)
-
-            else:
-                context = RequestContext(request)
-                template = self.env.from_string(template_content)
-                result = template.render(context)
+            template = self.env.from_string(template_content)
+            result = template.render({}, request)
 
             expected = ("<input type='hidden' name='csrfmiddlewaretoken'"
                         " value='{}' />").format(token)
@@ -259,13 +251,10 @@ class RenderTemplatesTests(TestCase):
         self.assertEqual(response.content, b"500")
 
     def test_get_default(self):
-        from django_jinja.backend import Jinja2
         Jinja2.get_default.cache_clear()
         self.assertEqual(Jinja2.get_default(), self.env)
 
     def test_get_default_multiple(self):
-        from django_jinja.backend import Jinja2
-
         setting = {
             "append": [
                 {
@@ -284,9 +273,6 @@ class RenderTemplatesTests(TestCase):
                 Jinja2.get_default()
 
     def test_get_default_none(self):
-        from django.conf import global_settings
-        from django_jinja.backend import Jinja2
-
         with self.settings(TEMPLATES=global_settings.TEMPLATES):
             with self.assertRaisesRegexp(ImproperlyConfigured, r'No Jinja2 backend is configured'):
                 Jinja2.get_default()
@@ -376,11 +362,7 @@ class BaseTests(TestCase):
             match_template('admin/foo.html', regex=r"^(?!admin/.*)", extension=None))
 
     def test_get_match_extension(self):
-        if django.VERSION[:2] < (1, 8):
-            self.assertEquals(getattr(settings, 'DEFAULT_JINJA2_TEMPLATE_EXTENSION', '.jinja'), get_match_extension())
-        else:
-            from django_jinja.backend import Jinja2
-            self.assertEquals(Jinja2.get_default().match_extension, get_match_extension())
+        self.assertEquals(Jinja2.get_default().match_extension, get_match_extension())
 
     def test_get_match_extension_using(self):
         setting = {
@@ -459,8 +441,6 @@ class TemplateResponseTests(TestCase):
 
 class GenericViewTests(TestCase):
     def setUp(self):
-        from django.utils import timezone
-
         self.obj1 = TestModel.objects.create(date=timezone.now())
         self.obj2 = TestModel.objects.create(date=timezone.now())
 
