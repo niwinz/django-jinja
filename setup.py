@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 
 from setuptools import setup
-import sys
 
 
 INSTALL_REQUIRES = [
     "jinja2 >=2.10",
     "django >=1.11, <3.1",
 ]
-
-if sys.version_info < (2, 7):
-    INSTALL_REQUIRES.append("importlib")
 
 setup(
     name = "django-jinja",

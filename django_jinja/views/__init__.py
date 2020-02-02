@@ -1,11 +1,6 @@
-import django
 from django import http
-from django.template import RequestContext, loader
-
-try:
-    from django.views import View
-except ImportError:
-    from django.views.generic import View
+from django.template import loader
+from django.views import View
 
 from ..base import get_match_extension
 
@@ -21,13 +16,7 @@ class GenericView(View):
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
         template_name = callable(self.tmpl_name) and self.tmpl_name() or self.tmpl_name
-
-        if django.VERSION[:2] < (1, 8):
-            output = loader.render_to_string(template_name, context,
-                                             context_instance=RequestContext(request))
-        else:
-            output = loader.render_to_string(template_name, context, request=request)
-
+        output = loader.render_to_string(template_name, context, request=request)
         return self.response_cls(output, content_type=self.content_type)
 
 

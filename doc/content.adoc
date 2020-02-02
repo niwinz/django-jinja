@@ -1,6 +1,6 @@
 = django-jinja - jinja2 backend for Django
 Andrey Antukh, <niwi@niwi.be>
-2.3.1
+2.6.0
 :toc: left
 :!numbered:
 :source-highlighter: pygments
@@ -55,7 +55,7 @@ in the django 1.8 configuration related section.
 
 - Python >= 3.5
 - Django >= 1.11
-- jinja2 >= 2.7.0
+- jinja2 >= 2.10
 
 If you are using older versions of Django or Python, you need an older version of django-jinja:
 
