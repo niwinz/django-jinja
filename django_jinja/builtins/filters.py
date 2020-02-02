@@ -1,14 +1,6 @@
-try:
-    from django.utils.encoding import force_str
-except ImportError:
-    from django.utils.encoding import force_unicode as force_str
-
-try:
-    from django.urls import reverse as django_reverse
-except ImportError:
-    from django.core.urlresolvers import reverse as django_reverse
+from django.utils.encoding import force_str
+from django.urls import reverse as django_reverse
 from django.contrib.staticfiles.storage import staticfiles_storage
-from jinja2 import Markup
 
 
 def reverse(value, *args, **kwargs):
@@ -73,10 +65,7 @@ from django.template.defaultfilters import filesizeformat
 from django.template.defaultfilters import pprint
 from django.template.defaultfilters import pluralize
 
-try:
-    from django.utils.text import slugify as djslugify
-except ImportError:
-    from django.template.defaultfilters import slugify as djslugify
+from django.utils.text import slugify as djslugify
 
 def slugify(value):
     return djslugify(force_str(value))

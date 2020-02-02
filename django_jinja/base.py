@@ -1,10 +1,7 @@
 import re
-import os
 import os.path as path
 from importlib import import_module
 
-import django
-from django.conf import settings
 from django.template.context import BaseContext
 
 

@@ -7,7 +7,6 @@ This is an implementation of django backend inteface for use
 django_jinja easy with django 1.8.
 """
 
-import copy
 import sys
 import os
 import os.path as path
@@ -20,12 +19,9 @@ from django.core import signals
 from django.core.exceptions import ImproperlyConfigured
 from django.dispatch import receiver
 from django.middleware import csrf
-from django.template import RequestContext
 from django.template import TemplateDoesNotExist
 from django.template import TemplateSyntaxError
 from django.template.backends.base import BaseEngine
-from django.template.backends.utils import csrf_input_lazy
-from django.template.backends.utils import csrf_token_lazy
 from django.template.context import BaseContext
 from django.utils.encoding import smart_text
 from django.utils.functional import SimpleLazyObject
@@ -295,10 +291,7 @@ class Jinja2(BaseEngine):
                 except jinja2.TemplateNotFound:
                     pass
 
-            if utils.DJANGO_18:
-                exc = TemplateDoesNotExist(exc.name)
-            else:
-                exc = TemplateDoesNotExist(exc.name, backend=self)
+            exc = TemplateDoesNotExist(exc.name, backend=self)
 
             utils.reraise(
                 TemplateDoesNotExist,
