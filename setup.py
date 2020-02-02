@@ -17,6 +17,7 @@ setup(
     version = "2.6.0",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
+    long_description_content_type='text/markdown',
     keywords = "django, jinja2",
     author = "Andrey Antukh",
     author_email = "auvipy@gmail.com",
