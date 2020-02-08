@@ -2,91 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 1.5.5">
+<meta name="generator" content="Asciidoctor 2.0.10">
 <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
 <title>django-jinja - jinja2 backend for Django</title>
-<style>
-.listingblock .pygments .hll { background-color: #ffffcc }
-.listingblock .pygments, .listingblock .pygments code { background: #f0f0f0; }
-.listingblock .pygments .tok-c { color: #60a0b0; font-style: italic } /* Comment */
-.listingblock .pygments .tok-err { border: 1px solid #FF0000 } /* Error */
-.listingblock .pygments .tok-k { color: #007020; font-weight: bold } /* Keyword */
-.listingblock .pygments .tok-o { color: #666666 } /* Operator */
-.listingblock .pygments .tok-ch { color: #60a0b0; font-style: italic } /* Comment.Hashbang */
-.listingblock .pygments .tok-cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
-.listingblock .pygments .tok-cp { color: #007020 } /* Comment.Preproc */
-.listingblock .pygments .tok-cpf { color: #60a0b0; font-style: italic } /* Comment.PreprocFile */
-.listingblock .pygments .tok-c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
-.listingblock .pygments .tok-cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
-.listingblock .pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
-.listingblock .pygments .tok-ge { font-style: italic } /* Generic.Emph */
-.listingblock .pygments .tok-gr { color: #FF0000 } /* Generic.Error */
-.listingblock .pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
-.listingblock .pygments .tok-gi { color: #00A000 } /* Generic.Inserted */
-.listingblock .pygments .tok-go { color: #888888 } /* Generic.Output */
-.listingblock .pygments .tok-gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
-.listingblock .pygments .tok-gs { font-weight: bold } /* Generic.Strong */
-.listingblock .pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
-.listingblock .pygments .tok-gt { color: #0044DD } /* Generic.Traceback */
-.listingblock .pygments .tok-kc { color: #007020; font-weight: bold } /* Keyword.Constant */
-.listingblock .pygments .tok-kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
-.listingblock .pygments .tok-kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
-.listingblock .pygments .tok-kp { color: #007020 } /* Keyword.Pseudo */
-.listingblock .pygments .tok-kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
-.listingblock .pygments .tok-kt { color: #902000 } /* Keyword.Type */
-.listingblock .pygments .tok-m { color: #40a070 } /* Literal.Number */
-.listingblock .pygments .tok-s { color: #4070a0 } /* Literal.String */
-.listingblock .pygments .tok-na { color: #4070a0 } /* Name.Attribute */
-.listingblock .pygments .tok-nb { color: #007020 } /* Name.Builtin */
-.listingblock .pygments .tok-nc { color: #0e84b5; font-weight: bold } /* Name.Class */
-.listingblock .pygments .tok-no { color: #60add5 } /* Name.Constant */
-.listingblock .pygments .tok-nd { color: #555555; font-weight: bold } /* Name.Decorator */
-.listingblock .pygments .tok-ni { color: #d55537; font-weight: bold } /* Name.Entity */
-.listingblock .pygments .tok-ne { color: #007020 } /* Name.Exception */
-.listingblock .pygments .tok-nf { color: #06287e } /* Name.Function */
-.listingblock .pygments .tok-nl { color: #002070; font-weight: bold } /* Name.Label */
-.listingblock .pygments .tok-nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
-.listingblock .pygments .tok-nt { color: #062873; font-weight: bold } /* Name.Tag */
-.listingblock .pygments .tok-nv { color: #bb60d5 } /* Name.Variable */
-.listingblock .pygments .tok-ow { color: #007020; font-weight: bold } /* Operator.Word */
-.listingblock .pygments .tok-w { color: #bbbbbb } /* Text.Whitespace */
-.listingblock .pygments .tok-mb { color: #40a070 } /* Literal.Number.Bin */
-.listingblock .pygments .tok-mf { color: #40a070 } /* Literal.Number.Float */
-.listingblock .pygments .tok-mh { color: #40a070 } /* Literal.Number.Hex */
-.listingblock .pygments .tok-mi { color: #40a070 } /* Literal.Number.Integer */
-.listingblock .pygments .tok-mo { color: #40a070 } /* Literal.Number.Oct */
-.listingblock .pygments .tok-sa { color: #4070a0 } /* Literal.String.Affix */
-.listingblock .pygments .tok-sb { color: #4070a0 } /* Literal.String.Backtick */
-.listingblock .pygments .tok-sc { color: #4070a0 } /* Literal.String.Char */
-.listingblock .pygments .tok-dl { color: #4070a0 } /* Literal.String.Delimiter */
-.listingblock .pygments .tok-sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
-.listingblock .pygments .tok-s2 { color: #4070a0 } /* Literal.String.Double */
-.listingblock .pygments .tok-se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
-.listingblock .pygments .tok-sh { color: #4070a0 } /* Literal.String.Heredoc */
-.listingblock .pygments .tok-si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
-.listingblock .pygments .tok-sx { color: #c65d09 } /* Literal.String.Other */
-.listingblock .pygments .tok-sr { color: #235388 } /* Literal.String.Regex */
-.listingblock .pygments .tok-s1 { color: #4070a0 } /* Literal.String.Single */
-.listingblock .pygments .tok-ss { color: #517918 } /* Literal.String.Symbol */
-.listingblock .pygments .tok-bp { color: #007020 } /* Name.Builtin.Pseudo */
-.listingblock .pygments .tok-fm { color: #06287e } /* Name.Function.Magic */
-.listingblock .pygments .tok-vc { color: #bb60d5 } /* Name.Variable.Class */
-.listingblock .pygments .tok-vg { color: #bb60d5 } /* Name.Variable.Global */
-.listingblock .pygments .tok-vi { color: #bb60d5 } /* Name.Variable.Instance */
-.listingblock .pygments .tok-vm { color: #bb60d5 } /* Name.Variable.Magic */
-.listingblock .pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
-</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Liberation+Mono:400|Roboto+Slab:400,700"/>
-<link rel="stylesheet" href="https://www.niwi.nz/_assets/asciidoctor-styles/simple-red-titles/stylesheet.css"/>
+<link rel="stylesheet" href="_assets/simple-red-titles/stylesheet.css"/>
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
 <h1>django-jinja - jinja2 backend for Django</h1>
 <div class="details">
 <span id="author" class="author">Andrey Antukh, &lt;niwi@niwi.be&gt;</span><br>
-<span id="revdate">2.3.1</span>
+<span id="revdate">2.6.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -116,8 +45,8 @@
 <li><a href="#_static_files">Static files</a></li>
 <li><a href="#_i18n_support">i18n support</a></li>
 <li><a href="#_replace_jinja_filters_with_django_versions">Replace jinja filters with django versions</a></li>
-<li><a href="#_registring_filters_in_a_django_way">Registring filters in a "django" way.</a></li>
-<li><a href="#_render_4xx_500_pages_with_jinja">Render 4xx/500 pages with jinja</a></li>
+<li><a href="#_registering_filters_in_a_django_way">Registering filters in a "django" way.</a></li>
+<li><a href="#_render_4xx500_pages_with_jinja">Render 4xx/500 pages with jinja</a></li>
 </ul>
 </li>
 <li><a href="#_known_issues">Known Issues</a></li>
@@ -138,7 +67,7 @@
 <h2 id="_introduction"><a class="link" href="#_introduction">Introduction</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>django-jinja is a <a href="#license">BSD Licensed</a>, simple and nonobstructive jinja2
+<p>django-jinja is a <a href="#license">BSD Licensed</a>, simple and non-obstructive jinja2
 backend for Django.</p>
 </div>
 <div class="sect2">
@@ -153,9 +82,9 @@ system, etc &#8230;&#8203;</p>
 </div>
 <div class="paragraph">
 <p>The Django builtin backend has a very limited set of features if we compare it with
-the django template engine and in my opion is not very usable because it does not
+the django template engine and in my opinion is not very usable because it does not
 integrate well with the rest of django such as its filters, template tags and
-preloading of templatetags among others.</p>
+preloading of templatetags, among others.</p>
 </div>
 <div class="paragraph">
 <p><strong>django-jinja</strong> comes to the rescue and adds everything missing. This is a brief
@@ -182,7 +111,7 @@ It works as middleware, intercepts Jinja templates by file path pattern.</p>
 Jinja templates)</p>
 </li>
 <li>
-<p>Compatible with python2 and python3 using same codebase.</p>
+<p>Compatible with python2 and python3 using the same codebase.</p>
 </li>
 <li>
 <p>jinja2 bytecode cache adapted for using django&#8217;s cache subsystem.</p>
@@ -214,19 +143,50 @@ in the django 1.8 configuration related section.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Python 2.7, 3.4 and 3.5</p>
+<p>Python &gt;= 3.5</p>
 </li>
 <li>
-<p>Django &gt;= 1.8</p>
+<p>Django &gt;= 1.11</p>
 </li>
 <li>
-<p>jinja2 &gt;= 2.7.0</p>
+<p>jinja2 &gt;= 2.10</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p><strong>If you are using django &lt; 1.8, you should use django-jinja 1.x versions.</strong></p>
+<p>If you are using older versions of Django or Python, you need an older version of django-jinja:</p>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">django-jinja</th>
+<th class="tableblock halign-left valign-top">supported python versions</th>
+<th class="tableblock halign-left valign-top">supported django versions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">==1.4.2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.7, 3.3, 3.4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.5, 1.6, 1.7, 1.8</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">==2.4.1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.7, 3.4, 3.5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.8, 1.11</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&gt;=2.5.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3.5 (not django 3.0), 3.6, 3.7, 3.8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.11, 2.2, 3.0</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_installation"><a class="link" href="#_installation">Installation</a></h3>
@@ -235,7 +195,7 @@ in the django 1.8 configuration related section.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="bash">pip install django-jinja</code></pre>
+<pre class="pygments highlight"><code data-lang="bash"><span></span>pip install django-jinja</code></pre>
 </div>
 </div>
 </div>
@@ -245,11 +205,11 @@ in the django 1.8 configuration related section.</p>
 <h2 id="_quick_start"><a class="link" href="#_quick_start">Quick Start</a></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Add it to django installed apps list:</p>
+<p>Add it to Django&#8217;s installed apps list:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja&#39;</span><span class="tok-p">,)</span></code></pre>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja&#39;</span><span class="tok-p">,)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -257,7 +217,7 @@ in the django 1.8 configuration related section.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-n">TEMPLATES</span> <span class="tok-o">=</span> <span class="tok-p">[</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">TEMPLATES</span> <span class="tok-o">=</span> <span class="tok-p">[</span>
     <span class="tok-p">{</span>
         <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.backend.Jinja2&quot;</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-bp">True</span><span class="tok-p">,</span>
@@ -299,12 +259,12 @@ template will be found by the django engine.</p>
 <div class="sect2">
 <h3 id="_regex_based_template_matching"><a class="link" href="#_regex_based_template_matching">Regex based template matching</a></h3>
 <div class="paragraph">
-<p>By default, <strong>django-jinja</strong> uses the extension as method to match templates, but if
-it is not enough, you can extend it using regular experessions:</p>
+<p>By default, <strong>django-jinja</strong> uses the file extension as the method to match
+templates, but if it is not enough, you can extend it using regular expressions:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
     <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-sa">r</span><span class="tok-s2">&quot;^(?!admin/).*&quot;</span><span class="tok-p">,</span> <span class="tok-c1"># this is additive to match_extension</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -314,7 +274,7 @@ it is not enough, you can extend it using regular experessions:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
     <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-bp">None</span><span class="tok-p">,</span>
     <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-sa">r</span><span class="tok-s2">&quot;^(?!admin/).*&quot;</span><span class="tok-p">,</span>
 <span class="tok-p">}</span></code></pre>
@@ -328,9 +288,9 @@ it is not enough, you can extend it using regular experessions:</p>
 for django 1.8.</p>
 </div>
 <div class="listingblock">
-<div class="title">Example setup a bunch of context processors:</div>
+<div class="title">Example: set up a bunch of context processors:</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
     <span class="tok-s2">&quot;context_processors&quot;</span><span class="tok-p">:</span> <span class="tok-p">[</span>
         <span class="tok-s2">&quot;django.contrib.auth.context_processors.auth&quot;</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;django.template.context_processors.debug&quot;</span><span class="tok-p">,</span>
@@ -357,8 +317,8 @@ for migrations.</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Remeber that django (1.8.x and 1.9.x) is backward compatibile with
-the old template api and this has its own tradeoffs. If you find yourself using functions
+<p>Remember that django (1.8.x and 1.9.x) is backward compatible with
+the old template api and this has its own trade-offs. If you find yourself using functions
 like <code>render_to_string</code> or <code>render_to_response</code> from django, do not forget to pass the
 request parameter in order to make context processors work.</p>
 </div>
@@ -374,7 +334,7 @@ request parameter in order to make context processors work.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
     <span class="tok-s2">&quot;tests&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
         <span class="tok-s2">&quot;mytest&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;path.to.tests.mytestfn&quot;</span><span class="tok-p">,</span>
     <span class="tok-p">},</span>
@@ -395,12 +355,12 @@ request parameter in order to make context processors work.</p>
 <h3 id="_add_additional_extensions"><a class="link" href="#_add_additional_extensions">Add additional extensions</a></h3>
 <div class="paragraph">
 <p>django-jinja, by default sets up a great amount of extensions to make your experience
-using jinja in django painless. But if you want to add more extesions, you can do it
+using jinja in django painless. But if you want to add more extensions, you can do it
 using the <code>extensions</code> entry of the backend options:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-kn">from</span> <span class="tok-nn">django_jinja.builtins</span> <span class="tok-kn">import</span> <span class="tok-n">DEFAULT_EXTENSIONS</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-kn">from</span> <span class="tok-nn">django_jinja.builtins</span> <span class="tok-kn">import</span> <span class="tok-n">DEFAULT_EXTENSIONS</span>
 
 <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
     <span class="tok-s2">&quot;extensions&quot;</span><span class="tok-p">:</span> <span class="tok-n">DEFAULT_EXTENSIONS</span> <span class="tok-o">+</span> <span class="tok-p">[</span>
@@ -423,7 +383,7 @@ backend options:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
     <span class="tok-s2">&quot;newstyle_gettext&quot;</span><span class="tok-p">:</span> <span class="tok-bp">True</span><span class="tok-p">,</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -439,7 +399,7 @@ value with the <code>app_dirname</code> option:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
     <span class="tok-s2">&quot;app_dirname&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;jinja2&quot;</span><span class="tok-p">,</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -452,7 +412,7 @@ value with the <code>app_dirname</code> option:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-n">TEMPLATES</span> <span class="tok-o">=</span> <span class="tok-p">[</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">TEMPLATES</span> <span class="tok-o">=</span> <span class="tok-p">[</span>
     <span class="tok-p">{</span>
         <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.backend.Jinja2&quot;</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-bp">True</span><span class="tok-p">,</span>
@@ -486,6 +446,7 @@ value with the <code>app_dirname</code> option:</p>
                 <span class="tok-s2">&quot;jinja2.ext.autoescape&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;django_jinja.builtins.extensions.CsrfExtension&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;django_jinja.builtins.extensions.CacheExtension&quot;</span><span class="tok-p">,</span>
+                <span class="tok-s2">&quot;django_jinja.builtins.extensions.DebugExtension&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;django_jinja.builtins.extensions.TimezoneExtension&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;django_jinja.builtins.extensions.UrlsExtension&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;django_jinja.builtins.extensions.StaticFilesExtension&quot;</span><span class="tok-p">,</span>
@@ -519,7 +480,7 @@ a simple function called <code>url</code>.</p>
 <div class="listingblock">
 <div class="title">Reverse urls in templates</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span class="tok-cp">{{</span> <span class="tok-nv">url</span><span class="tok-o">(</span><span class="tok-s1">&#39;ns:name&#39;</span><span class="tok-o">,</span> <span class="tok-nv">pk</span><span class="tok-o">=</span><span class="tok-nv">obj.pk</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
+<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{{</span> <span class="tok-nv">url</span><span class="tok-o">(</span><span class="tok-s1">&#39;ns:name&#39;</span><span class="tok-o">,</span> <span class="tok-nv">pk</span><span class="tok-o">=</span><span class="tok-nv">obj.pk</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -528,7 +489,7 @@ if executing url in one variable. With jinja2 you can use the set template tag f
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span class="tok-cp">{%</span> <span class="tok-k">set</span> <span class="tok-nv">myurl</span><span class="tok-o">=</span><span class="tok-nv">url</span><span class="tok-o">(</span><span class="tok-s2">&quot;ns:name&quot;</span><span class="tok-o">,</span> <span class="tok-nv">pk</span><span class="tok-o">=</span><span class="tok-nv">obj.pk</span><span class="tok-o">)</span> <span class="tok-cp">%}</span></code></pre>
+<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{%</span> <span class="tok-k">set</span> <span class="tok-nv">myurl</span><span class="tok-o">=</span><span class="tok-nv">url</span><span class="tok-o">(</span><span class="tok-s2">&quot;ns:name&quot;</span><span class="tok-o">,</span> <span class="tok-nv">pk</span><span class="tok-o">=</span><span class="tok-nv">obj.pk</span><span class="tok-o">)</span> <span class="tok-cp">%}</span></code></pre>
 </div>
 </div>
 </div>
@@ -541,7 +502,7 @@ in jinja context:</p>
 <div class="listingblock">
 <div class="title">Example resolving static files</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span class="tok-cp">{{</span> <span class="tok-nv">static</span><span class="tok-o">(</span><span class="tok-s2">&quot;js/lib/foo.js&quot;</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
+<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{{</span> <span class="tok-nv">static</span><span class="tok-o">(</span><span class="tok-s2">&quot;js/lib/foo.js&quot;</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
 </div>
 </div>
 </div>
@@ -553,7 +514,7 @@ it here: <a href="http://jinja.pocoo.org/docs/dev/templates/#i18n" class="bare">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span class="tok-cp">{{</span> <span class="tok-kp">_</span><span class="tok-o">(</span><span class="tok-s1">&#39;Hello %(name)s&#39;</span><span class="tok-o">,</span> <span class="tok-nv">name</span><span class="tok-o">=</span><span class="tok-nv">user.name</span><span class="tok-o">)</span> <span class="tok-cp">}}</span>
+<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{{</span> <span class="tok-kp">_</span><span class="tok-o">(</span><span class="tok-s1">&#39;Hello %(name)s&#39;</span><span class="tok-o">,</span> <span class="tok-nv">name</span><span class="tok-o">=</span><span class="tok-nv">user.name</span><span class="tok-o">)</span> <span class="tok-cp">}}</span>
 
 <span class="tok-cp">{%</span> <span class="tok-k">trans</span> <span class="tok-nv">name</span><span class="tok-o">=</span><span class="tok-nv">user.name</span> <span class="tok-cp">%}</span>
   Hello <span class="tok-cp">{{</span> <span class="tok-nv">name</span> <span class="tok-cp">}}</span>
@@ -582,7 +543,7 @@ join, length, random, default, filesizeformat, pprint.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_registring_filters_in_a_django_way"><a class="link" href="#_registring_filters_in_a_django_way">Registring filters in a "django" way.</a></h3>
+<h3 id="_registering_filters_in_a_django_way"><a class="link" href="#_registering_filters_in_a_django_way">Registering filters in a "django" way.</a></h3>
 <div class="paragraph">
 <p>django-jinja comes with facilities for loading template filters, globals and tests
 from django applications.</p>
@@ -592,7 +553,7 @@ from django applications.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-c1"># &lt;someapp&gt;/templatetags/&lt;anyfile&gt;.py</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-c1"># &lt;someapp&gt;/templatetags/&lt;anyfile&gt;.py</span>
 <span class="tok-c1"># don&#39;t forget to create __init__.py in templatetags dir</span>
 
 <span class="tok-kn">from</span> <span class="tok-nn">django_jinja</span> <span class="tok-kn">import</span> <span class="tok-n">library</span>
@@ -642,16 +603,19 @@ from django applications.</p>
 <span class="tok-n">library</span><span class="tok-o">.</span><span class="tok-n">extension</span><span class="tok-p">(</span><span class="tok-n">MyExtension</span><span class="tok-p">)</span></code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>This only works within a Django app. If you don&#8217;t have an app for your project, create an app specifically for this purpose and put your templatetags there.</p>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_render_4xx_500_pages_with_jinja"><a class="link" href="#_render_4xx_500_pages_with_jinja">Render 4xx/500 pages with jinja</a></h3>
+<h3 id="_render_4xx500_pages_with_jinja"><a class="link" href="#_render_4xx500_pages_with_jinja">Render 4xx/500 pages with jinja</a></h3>
 <div class="paragraph">
 <p>django-jinja also provides a set of views for easy
 render 4xx/500 pages using jinja engine:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-c1"># yourproject/urls.py</span>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-c1"># yourproject/urls.py</span>
 <span class="tok-kn">from</span> <span class="tok-nn">django_jinja</span> <span class="tok-kn">import</span> <span class="tok-n">views</span>
 
 <span class="tok-n">handler400</span> <span class="tok-o">=</span> <span class="tok-n">views</span><span class="tok-o">.</span><span class="tok-n">BadRequest</span><span class="tok-o">.</span><span class="tok-n">as_view</span><span class="tok-p">()</span>
@@ -731,13 +695,13 @@ should be used.</p>
 <div class="listingblock">
 <div class="title">Activate plugin (settings.py)</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja.contrib._pipeline&#39;</span><span class="tok-p">,)</span></code></pre>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja.contrib._pipeline&#39;</span><span class="tok-p">,)</span></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Usage</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span class="tok-cp">{{</span> <span class="tok-nv">compressed_css</span><span class="tok-o">(</span><span class="tok-s2">&quot;alias&quot;</span><span class="tok-o">)</span> <span class="tok-cp">}}</span>
+<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{{</span> <span class="tok-nv">compressed_css</span><span class="tok-o">(</span><span class="tok-s2">&quot;alias&quot;</span><span class="tok-o">)</span> <span class="tok-cp">}}</span>
 <span class="tok-cp">{{</span> <span class="tok-nv">compressed_js</span><span class="tok-o">(</span><span class="tok-s2">&quot;alias&quot;</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
 </div>
 </div>
@@ -750,13 +714,13 @@ should be used.</p>
 <div class="listingblock">
 <div class="title">Activate plugin (settings.py)</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja.contrib._easy_thumbnails&#39;</span><span class="tok-p">,)</span></code></pre>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja.contrib._easy_thumbnails&#39;</span><span class="tok-p">,)</span></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Usage</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span class="tok-cp">{{</span> <span class="tok-nv">thumbnail</span><span class="tok-o">(</span><span class="tok-nv">file</span><span class="tok-o">,</span> <span class="tok-nv">size</span><span class="tok-o">=(</span><span class="tok-m">400</span><span class="tok-o">,</span> <span class="tok-m">400</span><span class="tok-o">))</span> <span class="tok-cp">}}</span>
+<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{{</span> <span class="tok-nv">thumbnail</span><span class="tok-o">(</span><span class="tok-nv">file</span><span class="tok-o">,</span> <span class="tok-nv">size</span><span class="tok-o">=(</span><span class="tok-m">400</span><span class="tok-o">,</span> <span class="tok-m">400</span><span class="tok-o">))</span> <span class="tok-cp">}}</span>
 <span class="tok-cp">{{</span> <span class="tok-nv">user.avatar</span><span class="tok-o">|</span><span class="tok-nf">thumbnail_url</span><span class="tok-o">(</span><span class="tok-s2">&quot;alias&quot;</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
 </div>
 </div>
@@ -769,13 +733,13 @@ should be used.</p>
 <div class="listingblock">
 <div class="title">Activate plugin (settings.py)</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja.contrib._subdomains&#39;</span><span class="tok-p">,)</span></code></pre>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja.contrib._subdomains&#39;</span><span class="tok-p">,)</span></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Usage</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span class="tok-cp">{{</span> <span class="tok-nv">url</span><span class="tok-o">(</span><span class="tok-s1">&#39;homepage&#39;</span><span class="tok-o">,</span> <span class="tok-nv">subdomain</span><span class="tok-o">=</span><span class="tok-s1">&#39;wildcard&#39;</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
+<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{{</span> <span class="tok-nv">url</span><span class="tok-o">(</span><span class="tok-s1">&#39;homepage&#39;</span><span class="tok-o">,</span> <span class="tok-nv">subdomain</span><span class="tok-o">=</span><span class="tok-s1">&#39;wildcard&#39;</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
 </div>
 </div>
 </div>
@@ -787,7 +751,7 @@ should be used.</p>
 <div class="listingblock">
 <div class="title">Activate plugin (settings.py)</div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja.contrib._humanize&#39;</span><span class="tok-p">,)</span></code></pre>
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja.contrib._humanize&#39;</span><span class="tok-p">,)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -802,7 +766,7 @@ should be used.</p>
 <div class="listingblock">
 <div class="title"><a id="license"></a></div>
 <div class="content">
-<pre class="pygments highlight"><code data-lang="text">Copyright (c) 2011-2017 Andre Antukh &lt;niwi@niwi.be&gt;
+<pre class="pygments highlight"><code data-lang="text"><span></span>Copyright (c) 2011-2017 Andre Antukh &lt;niwi@niwi.be&gt;
 
 All rights reserved.
 
@@ -834,8 +798,79 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-05-28 19:31:51 CEST
+Last updated 2020-02-07 14:32:33 -0800
 </div>
 </div>
+<style>
+pre.pygments .hll { background-color: #ffffcc }
+pre.pygments  { background: #f0f0f0; }
+pre.pygments .tok-c { color: #60a0b0; font-style: italic } /* Comment */
+pre.pygments .tok-err { border: 1px solid #FF0000 } /* Error */
+pre.pygments .tok-k { color: #007020; font-weight: bold } /* Keyword */
+pre.pygments .tok-o { color: #666666 } /* Operator */
+pre.pygments .tok-ch { color: #60a0b0; font-style: italic } /* Comment.Hashbang */
+pre.pygments .tok-cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
+pre.pygments .tok-cp { color: #007020 } /* Comment.Preproc */
+pre.pygments .tok-cpf { color: #60a0b0; font-style: italic } /* Comment.PreprocFile */
+pre.pygments .tok-c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
+pre.pygments .tok-cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
+pre.pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
+pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
+pre.pygments .tok-gr { color: #FF0000 } /* Generic.Error */
+pre.pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
+pre.pygments .tok-gi { color: #00A000 } /* Generic.Inserted */
+pre.pygments .tok-go { color: #888888 } /* Generic.Output */
+pre.pygments .tok-gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
+pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
+pre.pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+pre.pygments .tok-gt { color: #0044DD } /* Generic.Traceback */
+pre.pygments .tok-kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+pre.pygments .tok-kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+pre.pygments .tok-kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+pre.pygments .tok-kp { color: #007020 } /* Keyword.Pseudo */
+pre.pygments .tok-kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+pre.pygments .tok-kt { color: #902000 } /* Keyword.Type */
+pre.pygments .tok-m { color: #40a070 } /* Literal.Number */
+pre.pygments .tok-s { color: #4070a0 } /* Literal.String */
+pre.pygments .tok-na { color: #4070a0 } /* Name.Attribute */
+pre.pygments .tok-nb { color: #007020 } /* Name.Builtin */
+pre.pygments .tok-nc { color: #0e84b5; font-weight: bold } /* Name.Class */
+pre.pygments .tok-no { color: #60add5 } /* Name.Constant */
+pre.pygments .tok-nd { color: #555555; font-weight: bold } /* Name.Decorator */
+pre.pygments .tok-ni { color: #d55537; font-weight: bold } /* Name.Entity */
+pre.pygments .tok-ne { color: #007020 } /* Name.Exception */
+pre.pygments .tok-nf { color: #06287e } /* Name.Function */
+pre.pygments .tok-nl { color: #002070; font-weight: bold } /* Name.Label */
+pre.pygments .tok-nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
+pre.pygments .tok-nt { color: #062873; font-weight: bold } /* Name.Tag */
+pre.pygments .tok-nv { color: #bb60d5 } /* Name.Variable */
+pre.pygments .tok-ow { color: #007020; font-weight: bold } /* Operator.Word */
+pre.pygments .tok-w { color: #bbbbbb } /* Text.Whitespace */
+pre.pygments .tok-mb { color: #40a070 } /* Literal.Number.Bin */
+pre.pygments .tok-mf { color: #40a070 } /* Literal.Number.Float */
+pre.pygments .tok-mh { color: #40a070 } /* Literal.Number.Hex */
+pre.pygments .tok-mi { color: #40a070 } /* Literal.Number.Integer */
+pre.pygments .tok-mo { color: #40a070 } /* Literal.Number.Oct */
+pre.pygments .tok-sa { color: #4070a0 } /* Literal.String.Affix */
+pre.pygments .tok-sb { color: #4070a0 } /* Literal.String.Backtick */
+pre.pygments .tok-sc { color: #4070a0 } /* Literal.String.Char */
+pre.pygments .tok-dl { color: #4070a0 } /* Literal.String.Delimiter */
+pre.pygments .tok-sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
+pre.pygments .tok-s2 { color: #4070a0 } /* Literal.String.Double */
+pre.pygments .tok-se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
+pre.pygments .tok-sh { color: #4070a0 } /* Literal.String.Heredoc */
+pre.pygments .tok-si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
+pre.pygments .tok-sx { color: #c65d09 } /* Literal.String.Other */
+pre.pygments .tok-sr { color: #235388 } /* Literal.String.Regex */
+pre.pygments .tok-s1 { color: #4070a0 } /* Literal.String.Single */
+pre.pygments .tok-ss { color: #517918 } /* Literal.String.Symbol */
+pre.pygments .tok-bp { color: #007020 } /* Name.Builtin.Pseudo */
+pre.pygments .tok-fm { color: #06287e } /* Name.Function.Magic */
+pre.pygments .tok-vc { color: #bb60d5 } /* Name.Variable.Class */
+pre.pygments .tok-vg { color: #bb60d5 } /* Name.Variable.Global */
+pre.pygments .tok-vi { color: #bb60d5 } /* Name.Variable.Instance */
+pre.pygments .tok-vm { color: #bb60d5 } /* Name.Variable.Magic */
+pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
+</style>
 </body>
 </html>
