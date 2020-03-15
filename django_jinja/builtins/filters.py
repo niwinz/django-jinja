@@ -78,3 +78,9 @@ linebreaksbr = partial(linebreaksbr, autoescape=True)
 from django.templatetags.tz import do_timezone as timezone
 from django.templatetags.tz import localtime
 from django.templatetags.tz import utc
+
+try:
+    from django.template.defaultfilters import json_script
+except ImportError:
+    # django version < 2.1
+    pass

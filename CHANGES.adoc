@@ -5,6 +5,7 @@ Unreleased Changes
 ------------------
 
 - Fixed loading template names with backslashes on Windows (#249).
+- Added Django's `json_script` filter for Django 2.1 and higher.
 
 
 Version 2.6.0
