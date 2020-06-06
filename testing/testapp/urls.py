@@ -2,6 +2,7 @@ from django.conf.urls import include, url
 from django_jinja import views
 
 from .views import BasicTestView
+from .views import I18nTestView
 from .views import StreamingTestView
 from .views import PipelineTestView
 from .views import CreateTestView, DeleteTestView, DetailTestView, UpdateTestView
@@ -11,6 +12,7 @@ from .views import ArchiveIndexTestView, YearArchiveTestView, MonthArchiveTestVi
 urlpatterns = [
     url(r"^test1/$", BasicTestView.as_view(), name="test-1"),
     url(r"^test1/(?P<data>\d+)/$", BasicTestView.as_view(), name="test-1"),
+    url(r"^test-i18n/$", I18nTestView.as_view(), name="i18n-test"),
     url(r"^test-pipeline/$", PipelineTestView.as_view(), name="pipeline-test"),
     url(r"^test/404$", views.PageNotFound.as_view(), name="page-404"),
     url(r"^test/403$", views.PermissionDenied.as_view(), name="page-403"),

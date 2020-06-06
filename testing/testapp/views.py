@@ -18,6 +18,21 @@ class BasicTestView(View):
                                 request=request)
         return HttpResponse(data)
 
+class I18nTestView(View):
+    def get(self, request, data=None):
+        class Author:
+            name = "Freddy Fred"
+
+        class Book:
+            title = "Big 'ol Book"
+
+        return render(request, "i18n_test.jinja", {
+            "table_sort": lambda x, y: "{} {}".format(x, y),
+            "invoice_count": 1,
+            "trimmed_invoice_count": 2,
+            "author": Author(),
+            "book": Book(),
+        })
 
 class PipelineTestView(View):
     def get(self, request, data=None):
