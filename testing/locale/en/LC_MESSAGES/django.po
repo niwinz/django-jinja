@@ -1,0 +1,84 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-06 00:06+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: testapp/templates/i18n_test.jinja:1
+#, python-format
+msgid ""
+"\n"
+"Foo %(bar)s\n"
+msgstr ""
+
+#: testapp/templates/i18n_test.jinja:5
+msgid "Index"
+msgstr ""
+
+#: testapp/templates/i18n_test.jinja:6
+msgid "Year"
+msgstr ""
+
+#: testapp/templates/i18n_test.jinja:8
+#, python-format
+msgid "1 Hello %(user)s!"
+msgstr ""
+
+#: testapp/templates/i18n_test.jinja:10
+#, python-format
+msgid "2 Hello %(user)s!"
+msgstr ""
+
+#: testapp/templates/i18n_test.jinja:13
+#, python-format
+msgid ""
+"\n"
+"3 This is %(book_title)s by %(author)s\n"
+msgstr ""
+
+#: testapp/templates/i18n_test.jinja:19
+#, python-format
+msgid ""
+"\n"
+"4 There is %(count)s %(name)s object.\n"
+msgid_plural ""
+"\n"
+"4 There are %(count)s %(name)s objects.\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: testapp/templates/i18n_test.jinja:26
+msgid "5 Hello World!"
+msgstr ""
+
+#: testapp/templates/i18n_test.jinja:32
+#, python-format
+msgid ""
+"\n"
+"  #%(invoice_count)s invoice\n"
+msgid_plural ""
+"\n"
+"  #%(invoice_count)s invoices\n"
+msgstr[0] ""
+msgstr[1] ""
+
+#: testapp/templates/i18n_test.jinja:40
+#, python-format
+msgid "#%(trimmed_invoice_count)s trimmed invoice"
+msgid_plural "#%(trimmed_invoice_count)s trimmed invoices"
+msgstr[0] ""
+msgstr[1] ""
