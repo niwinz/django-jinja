@@ -44,7 +44,7 @@ def patch_django_for_autoescape():
     jinja autoescape implementation.
     """
     from django.utils import safestring
-    from django.forms.forms import BoundField
+    from django.forms.boundfield import BoundField
     from django.forms.utils import ErrorList
     from django.forms.utils import ErrorDict
 
