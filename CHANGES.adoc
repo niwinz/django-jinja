@@ -8,6 +8,7 @@ Unreleased Changes
 - Added Django's `json_script` filter for Django 2.1 and higher.
 - Fixed docs site stylesheet.
 - Added Django 3.1 support.
+- Removed Django 1.11 support.
 - Added Python 3.9 (rc1) to test suite.
 
 

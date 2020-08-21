@@ -5,7 +5,7 @@ from setuptools import setup
 
 INSTALL_REQUIRES = [
     "jinja2 >=2.10",
-    "django >=1.11, <4.0",
+    "django >=2.2",
 ]
 
 setup(
