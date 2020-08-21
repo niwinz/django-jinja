@@ -53,7 +53,7 @@ in the django 1.8 configuration related section.
 === Requirements
 
 - Python >= 3.5
-- Django >= 1.11
+- Django >= 2.2
 - jinja2 >= 2.10
 
 If you are using older versions of Django or Python, you need an older version of django-jinja:
@@ -75,7 +75,7 @@ If you are using older versions of Django or Python, you need an older version o
 
 |Unreleased
 |3.5 (not django 3.x), 3.6, 3.7, 3.8, 3.9
-|1.11, 2.2, 3.0, 3.1
+|2.2, 3.0, 3.1
 |===
 
 
