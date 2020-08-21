@@ -23,7 +23,7 @@ from django.template import TemplateDoesNotExist
 from django.template import TemplateSyntaxError
 from django.template.backends.base import BaseEngine
 from django.template.context import BaseContext
-from django.utils.encoding import smart_text
+from django.utils.encoding import smart_str
 from django.utils.functional import SimpleLazyObject
 from django.utils.functional import cached_property
 from django.utils.module_loading import import_string
@@ -73,7 +73,7 @@ class Template(object):
                 if token is None:
                     return 'NOTPROVIDED'
                 else:
-                    return smart_text(token)
+                    return smart_str(token)
 
             context["request"] = request
             context["csrf_token"] = SimpleLazyObject(_get_val)
