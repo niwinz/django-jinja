@@ -74,7 +74,7 @@ If you are using older versions of Django or Python, you need an older version o
 |1.11, 2.2, 3.0
 
 |Unreleased
-|3.5 (not django 3.x), 3.6, 3.7, 3.8
+|3.5 (not django 3.x), 3.6, 3.7, 3.8, 3.9
 |1.11, 2.2, 3.0, 3.1
 |===
 
