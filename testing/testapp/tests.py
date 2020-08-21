@@ -38,18 +38,16 @@ class RenderTemplatesTests(TestCase):
             ("{{ num|floatformat }}", {'num': 34.23234}, '34.2'),
             ("{{ num|floatformat(3) }}", {'num': 34.23234}, '34.232'),
             ("{{ 'hola'|capfirst }}", {}, "Hola"),
-            # The list of Django 1.11 truncator / Django 2.2 truncator result.
-            ("{{ 'hola mundo'|truncatechars(5) }}", {}, ["ho...", "hola…"]),
-            ("{{ 'hola mundo'|truncatechars_html(5) }}", {}, ["ho...", "hola…"]),
-            ("{{ 'hola mundo'|truncatewords(1) }}", {}, ["hola ...", "hola …"]),
-            ("{{ 'hola mundo'|truncatewords_html(1) }}", {}, ["hola ...", "hola …"]),
+            ("{{ 'hola mundo'|truncatechars(5) }}", {}, "hola…"),
+            ("{{ 'hola mundo'|truncatechars_html(5) }}", {}, "hola…"),
+            ("{{ 'hola mundo'|truncatewords(1) }}", {}, "hola …"),
+            ("{{ 'hola mundo'|truncatewords_html(1) }}", {}, "hola …"),
             ("{{ 'hola mundo'|wordwrap(1) }}", {}, "hola\nmundo"),
             ("{{ 'hola mundo'|title }}", {}, "Hola Mundo"),
             ("{{ 'hola mundo'|slugify }}", {}, "hola-mundo"),
             ("{{ 'hello'|ljust(10) }}", {}, "hello     "),
             ("{{ 'hello'|rjust(10) }}", {}, "     hello"),
-            # Django 2.2 does not close br tag.
-            ("{{ 'hello\nworld'|linebreaksbr }}", {}, ["hello<br />world", "hello<br>world"]),
+            ("{{ 'hello\nworld'|linebreaksbr }}", {}, "hello<br>world"),
             ("{{ '<div>hello</div>'|striptags }}", {}, "hello"),
             ("{{ list|join(',') }}", {'list':['a','b']}, 'a,b'),
             ("{{ 3|add(2) }}", {}, "5"),
@@ -63,10 +61,7 @@ class RenderTemplatesTests(TestCase):
             print("- Testing: ", template_str, "with:", kwargs)
             template = self.env.from_string(template_str)
             _result = template.render(kwargs)
-            if isinstance(result, str):
-                self.assertEqual(_result, result)
-            else:
-                self.assertTrue(_result in result)
+            self.assertEqual(_result, result)
 
     def test_string_interpolation(self):
         template = self.env.from_string("{{ 'Hello %s!' % name }}")
@@ -123,7 +118,6 @@ class RenderTemplatesTests(TestCase):
         result = template.render({"form": form})
 
         self.assertIn('maxlength="2"', result)
-        # Django 2.2 does not use "/>" for input html.
         self.assertIn("<input ", result)
 
     def test_autoscape_with_form_field(self):
@@ -132,7 +126,6 @@ class RenderTemplatesTests(TestCase):
         result = template.render({"form": form})
 
         self.assertIn('maxlength="2"', result)
-        # Django 2.2 does not use "/>" for input html.
         self.assertIn("<input ", result)
 
     def test_autoscape_with_form_errors(self):
@@ -167,10 +160,7 @@ class RenderTemplatesTests(TestCase):
     def test_autoescape_03(self):
         template = self.env.from_string("{{ foo|linebreaksbr }}")
         result = template.render({"foo": "<script>alert(1)</script>\nfoo"})
-        self.assertTrue(result in [
-            "&lt;script&gt;alert(1)&lt;/script&gt;<br />foo",  # Django 1.11
-            "&lt;script&gt;alert(1)&lt;/script&gt;<br>foo",    # Django 2.2
-        ])
+        self.assertEqual(result, "&lt;script&gt;alert(1)&lt;/script&gt;<br>foo")
 
     def test_debug_var_when_render_shortcut_is_used(self):
         prev_debug_value = settings.DEBUG
