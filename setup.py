@@ -10,7 +10,7 @@ INSTALL_REQUIRES = [
 
 setup(
     name = "django-jinja",
-    version = "2.6.0",
+    version = "2.7.0",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     keywords = "django, jinja2",
