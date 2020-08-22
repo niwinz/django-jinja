@@ -15,7 +15,7 @@
 <h1>django-jinja - jinja2 backend for Django</h1>
 <div class="details">
 <span id="author" class="author">Andrey Antukh, &lt;niwi@niwi.be&gt;</span><br>
-<span id="revdate">2.6.0</span>
+<span id="revdate">2.7.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -126,9 +126,10 @@ Jinja templates)</p>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>The usage of context processors is not the recommended way anymore, and with
-<strong>django-jinja</strong> you can done it setting global data or global constants. See below,
-in the django 1.8 configuration related section.</p>
+<p>The usage of context processors is available for compatibility and migrations,
+but creating new context processors is not the recommended way to set global context.
+With <strong>django-jinja</strong>, you can do this by setting global data or global constants. See below,
+in the "Custom filters, globals, constants and tests" section.</p>
 </div>
 </td>
 </tr>
@@ -143,7 +144,7 @@ in the django 1.8 configuration related section.</p>
 <p>Python &gt;= 3.5</p>
 </li>
 <li>
-<p>Django &gt;= 1.11</p>
+<p>Django &gt;= 2.2</p>
 </li>
 <li>
 <p>jinja2 &gt;= 2.10</p>
@@ -178,9 +179,14 @@ in the django 1.8 configuration related section.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1.8, 1.11</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">&gt;=2.5.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">==2.6.0</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3.5 (not django 3.0), 3.6, 3.7, 3.8</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">1.11, 2.2, 3.0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&gt;=2.7.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3.5 (django 2.2 only), 3.6, 3.7, 3.8, 3.9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.2, 3.0, 3.1</p></td>
 </tr>
 </tbody>
 </table>
@@ -301,10 +307,11 @@ for django 1.8.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>As usual, this is a default list of context processors and you can skip
-setting them if you do not have your own. Furthermore, it is now not the recommended way
-to setup variables in the context and the purpose of its existence is a help
-for migrations.</p>
+<p>As with the django template engine, this is a default list of context processors, and you can skip
+setting them if you do not have your own.
+Furthermore, the purpose of django-jinja&#8217;s context manager support is to help with migrations,
+but context managers are no longer the recommended way to set global variables and functions.
+For the recommended way, see the next section.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -327,7 +334,7 @@ request parameter in order to make context processors work.</p>
 <div class="sect2">
 <h3 id="_custom_filters_globals_constants_and_tests"><a class="link" href="#_custom_filters_globals_constants_and_tests">Custom filters, globals, constants and tests</a></h3>
 <div class="paragraph">
-<p>This is a way to setup statically (in your settings) additional stuff for jinja:</p>
+<p>This is the recommended way to set up additional jinja variables, tests, and filters, in your settings.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -795,7 +802,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-06-10 14:59:26 -0700
+Last updated 2020-08-21 20:33:02 -0700
 </div>
 </div>
 <style>
