@@ -44,9 +44,10 @@ list of differences with django's built-in backend:
 
 [NOTE]
 ====
-The usage of context processors is not the recommended way anymore, and with
-*django-jinja* you can done it setting global data or global constants. See below,
-in the django 1.8 configuration related section.
+The usage of context processors is available for compatibility and migrations,
+but creating new context processors is not the recommended way to set global context.
+With *django-jinja*, you can do this by setting global data or global constants. See below,
+in the "Custom filters, globals, constants and tests" section.
 ====
 
 
@@ -175,10 +176,11 @@ for django 1.8.
 }
 ----
 
-As usual, this is a default list of context processors and you can skip
-setting them if you do not have your own. Furthermore, it is now not the recommended way
-to setup variables in the context and the purpose of its existence is a help
-for migrations.
+As with the django template engine, this is a default list of context processors, and you can skip
+setting them if you do not have your own.
+Furthermore, the purpose of django-jinja's context manager support is to help with migrations,
+but context managers are no longer the recommended way to set global variables and functions.
+For the recommended way, see the next section.
 
 [NOTE]
 ====
@@ -191,7 +193,7 @@ request parameter in order to make context processors work.
 
 === Custom filters, globals, constants and tests
 
-This is a way to setup statically (in your settings) additional stuff for jinja:
+This is the recommended way to set up additional jinja variables, tests, and filters, in your settings.
 
 [source, python]
 ----

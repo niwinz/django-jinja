@@ -10,6 +10,7 @@ Unreleased Changes
 - Added Django 3.1 support.
 - Removed Django 1.11 support.
 - Added Python 3.9 (rc1) to test suite.
+- Clarified "not recommended" usage of context processors with django-jinja in the docs.
 
 
 Version 2.6.0
