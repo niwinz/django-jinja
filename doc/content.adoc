@@ -178,8 +178,8 @@ for django 1.8.
 
 As with the django template engine, this is a default list of context processors, and you can skip
 setting them if you do not have your own.
-Furthermore, the purpose of django-jinja's context manager support is to help with migrations,
-but context managers are no longer the recommended way to set global variables and functions.
+Furthermore, the purpose of django-jinja's context processor support is to help with migrations,
+but context processors are no longer the recommended way to set global variables and functions.
 For the recommended way, see the next section.
 
 [NOTE]
