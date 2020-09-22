@@ -2,20 +2,16 @@
 
 from setuptools import setup
 
-
-INSTALL_REQUIRES = [
-    "jinja2 >=2.10",
-    "django >=2.2",
-]
-
 setup(
     name = "django-jinja",
     version = "2.7.0",
     description = "Jinja2 templating language integrated in Django.",
-    long_description = "",
+    long_description = open("README.rst").read(),
     keywords = "django, jinja2",
     author = "Andrey Antukh",
-    author_email = "auvipy@gmail.com",
+    author_email = "niwi@niwi.be",
+    maintainer = "Asif Saif Uddin",
+    maintainer_email = "auvipy@gmail.com",
     url = "https://github.com/niwinz/django-jinja",
     license = "BSD",
     packages = [
@@ -35,15 +31,20 @@ setup(
         "django_jinja.views",
         "django_jinja.views.generic",
     ],
-
-    install_requires = INSTALL_REQUIRES,
+    python_requires = ">=3.5",
+    install_requires = [
+        "jinja2>=2.10",
+        "django>=2.2",
+    ],
     tests_require = [
         "pytz",
     ],
-
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Framework :: Django",
+        "Framework :: Django :: 2.2",
+        "Framework :: Django :: 3.0",
+        "Framework :: Django :: 3.1",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
