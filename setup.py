@@ -5,12 +5,12 @@ from setuptools import setup
 
 INSTALL_REQUIRES = [
     "jinja2 >=2.10",
-    "django >=1.11, <3.1",
+    "django >=2.2",
 ]
 
 setup(
     name = "django-jinja",
-    version = "2.6.0",
+    version = "2.7.0",
     description = "Jinja2 templating language integrated in Django.",
     long_description = "",
     long_description_content_type='text/markdown',
@@ -50,10 +50,12 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
         "Topic :: Internet :: WWW/HTTP",
     ]
 )

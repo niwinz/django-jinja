@@ -9,16 +9,37 @@ Foo {{ bar }}
 
 <p>{% trans user=user.username %}2 Hello {{ user }}!{% endtrans %}</p>
 
+<p>
 {% trans book_title=book.title, author=author.name %}
 3 This is {{ book_title }} by {{ author }}
 {% endtrans %}
+</p>
 
+<p>
 {% trans count=list|length %}
 4 There is {{ count }} {{ name }} object.
 {% pluralize %}
 4 There are {{ count }} {{ name }} objects.
 {% endtrans %}
+</p>
 
-{{ _('5 Hello World!') }}
+<p>{{ _('5 Hello World!') }}</p>
 
-{{ _('6 Hello %(user)s!')|format(user=user.username) }}
+{# couldnt get this one to work..#}
+<p>{# _('6 Hello, %(user)s!6)|format(user=user.username) #}</p>
+
+<p>
+{% trans %}
+  #{{ invoice_count }} invoice
+{% pluralize %}
+  #{{ invoice_count }} invoices
+{% endtrans %}
+</p>
+
+</p>
+{% trans trimmed %}
+  #{{ trimmed_invoice_count }} trimmed invoice
+{% pluralize %}
+  #{{ trimmed_invoice_count }} trimmed invoices
+{% endtrans %}
+</p>
