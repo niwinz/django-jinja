@@ -7,6 +7,7 @@ setup(
     version = "2.7.0",
     description = "Jinja2 templating language integrated in Django.",
     long_description = open("README.rst").read(),
+    long_description_content_type='text/markdown',
     keywords = "django, jinja2",
     author = "Andrey Antukh",
     author_email = "niwi@niwi.be",
