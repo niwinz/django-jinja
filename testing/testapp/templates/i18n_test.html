@@ -1,0 +1,46 @@
+{% blocktranslate with bar=foo %}
+Foo {{ bar }}
+{% endblocktranslate %}
+
+{% translate v_index %}
+{% translate 'Year' as t_year %}
+<th>{{ table_sort('date_start', t_year) }}</th>
+
+<p>{% blocktranslate %}1 Hello {{ user }}!{% endblocktranslate %}</p>
+
+<p>{% blocktranslate user=user.username %}2 Hello {{ user }}!{% endblocktranslate %}</p>
+
+<p>
+{% blocktranslate book_title=book.title, author=author.name %}
+3 This is {{ book_title }} by {{ author }}
+{% endblocktranslate %}
+</p>
+
+<p>
+{% blocktranslate count=list|length %}
+4 There is {{ count }} {{ name }} object.
+{% plural %}
+4 There are {{ count }} {{ name }} objects.
+{% endblocktranslate %}
+</p>
+
+<p>{% translate '5 Hello World!' %}</p>
+
+{# couldnt get this one to work..#}
+<p>{# _('6 Hello, %(user)s!6)|format(user=user.username) #}</p>
+
+<p>
+{% blocktranslate %}
+  #{{ invoice_count }} invoice
+{% plural %}
+  #{{ invoice_count }} invoices
+{% endblocktranslate %}
+</p>
+
+</p>
+{% blocktranslate trimmed %}
+  #{{ trimmed_invoice_count }} trimmed invoice
+{% plural %}
+  #{{ trimmed_invoice_count }} trimmed invoices
+{% endblocktranslate %}
+</p>
