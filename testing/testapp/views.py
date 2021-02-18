@@ -19,6 +19,8 @@ class BasicTestView(View):
         return HttpResponse(data)
 
 class I18nTestView(View):
+    template_name = "i18n_test.jinja"
+
     def get(self, request, data=None):
         class Author:
             name = "Freddy Fred"
@@ -26,13 +28,17 @@ class I18nTestView(View):
         class Book:
             title = "Big 'ol Book"
 
-        return render(request, "i18n_test.jinja", {
+        return render(request, self.template_name, {
+            "v_index": "Index",
             "table_sort": lambda x, y: "{} {}".format(x, y),
             "invoice_count": 1,
             "trimmed_invoice_count": 2,
             "author": Author(),
             "book": Book(),
         })
+
+class I18nTestViewDTL(I18nTestView):
+    template_name = "i18n_test.html"
 
 class PipelineTestView(View):
     def get(self, request, data=None):
