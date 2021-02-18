@@ -1,46 +1,46 @@
-{% blocktranslate with bar=foo %}
+{% blocktrans with bar=foo %}
 Foo {{ bar }}
-{% endblocktranslate %}
+{% endblocktrans %}
 
-{% translate v_index %}
-{% translate 'Year' as t_year %}
+{% trans v_index %}
+{% trans 'Year' as t_year %}
 <th>{{ table_sort('date_start', t_year) }}</th>
 
-<p>{% blocktranslate %}1 Hello {{ user }}!{% endblocktranslate %}</p>
+<p>{% blocktrans %}1 Hello {{ user }}!{% endblocktrans %}</p>
 
-<p>{% blocktranslate user=user.username %}2 Hello {{ user }}!{% endblocktranslate %}</p>
+<p>{% blocktrans user=user.username %}2 Hello {{ user }}!{% endblocktrans %}</p>
 
 <p>
-{% blocktranslate book_title=book.title, author=author.name %}
+{% blocktrans book_title=book.title, author=author.name %}
 3 This is {{ book_title }} by {{ author }}
-{% endblocktranslate %}
+{% endblocktrans %}
 </p>
 
 <p>
-{% blocktranslate count=list|length %}
+{% blocktrans count=list|length %}
 4 There is {{ count }} {{ name }} object.
 {% plural %}
 4 There are {{ count }} {{ name }} objects.
-{% endblocktranslate %}
+{% endblocktrans %}
 </p>
 
-<p>{% translate '5 Hello World!' %}</p>
+<p>{% trans '5 Hello World!' %}</p>
 
 {# couldnt get this one to work..#}
 <p>{# _('6 Hello, %(user)s!6)|format(user=user.username) #}</p>
 
 <p>
-{% blocktranslate %}
+{% blocktrans %}
   #{{ invoice_count }} invoice
 {% plural %}
   #{{ invoice_count }} invoices
-{% endblocktranslate %}
+{% endblocktrans %}
 </p>
 
 </p>
-{% blocktranslate trimmed %}
+{% blocktrans trimmed %}
   #{{ trimmed_invoice_count }} trimmed invoice
 {% plural %}
   #{{ trimmed_invoice_count }} trimmed invoices
-{% endblocktranslate %}
+{% endblocktrans %}
 </p>

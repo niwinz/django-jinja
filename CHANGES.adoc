@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Fixed makemessages command not reading Django template `{% trans %}` tags correctly (#272).
+
+
 Version 2.7.0
 -------------
 
