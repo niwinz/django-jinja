@@ -5,6 +5,7 @@ Unreleased
 ----------
 
 - Fixed makemessages command not reading Django template `{% trans %}` tags correctly (#272).
+- Added testing against Django 3.2b1.
 
 
 Version 2.7.0
