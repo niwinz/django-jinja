@@ -94,10 +94,11 @@ class CacheExtension(Extension):
 
     def _cache_support(self, expire_time, fragm_name, vary_on, lineno, caller):
         try:
-            expire_time = int(expire_time)
+            if expire_time is not None:
+                expire_time = int(expire_time)
         except (ValueError, TypeError):
             raise TemplateSyntaxError('"%s" tag got a non-integer timeout '
-                'value: %r' % (list(self.tags)[0], expire_time), lineno)
+                                      'value: %r' % (list(self.tags)[0], expire_time), lineno)
 
         cache_key = make_template_fragment_key(fragm_name, vary_on)
 
