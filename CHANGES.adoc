@@ -5,6 +5,7 @@ Unreleased
 ----------
 
 - Fixed makemessages command not reading Django template `{% trans %}` tags correctly (#272).
+- Fixed `{% cache %}` tag to allow None timeout to cache forever, which Django allowed since in 2.0.
 - Added testing against Django 3.2b1.
 
 
