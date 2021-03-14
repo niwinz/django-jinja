@@ -216,6 +216,21 @@ class RenderTemplatesTests(TestCase):
 
         self.assertEqual(result, "fóäo bar")
 
+    def test_cache_none(self):
+        template_content1 = "{% cache none 'barr' %}foo foo berry{% endcache %}"
+        template_content2 = "{% cache none 'barr' %}not rendered{% endcache %}"
+
+        request = self.factory.get('/forgotten/flavor')
+        context = RequestContext(request)
+
+        template1 = self.env.from_string(template_content1)
+        result1 = template1.render(context)
+        template2 = self.env.from_string(template_content2)
+        result2 = template2.render(context)
+
+        self.assertEqual(result1, "foo foo berry")
+        self.assertEqual(result2, "foo foo berry")
+
     def test_404_page(self):
         response = self.client.get(reverse("page-404"))
         self.assertEqual(response.status_code, 404)
