@@ -4,7 +4,7 @@ from setuptools import setup
 
 setup(
     name = "django-jinja",
-    version = "2.7.0",
+    version = "2.7.1",
     description = "Jinja2 templating language integrated in Django.",
     long_description = open("README.rst").read(),
     long_description_content_type='text/x-rst',
