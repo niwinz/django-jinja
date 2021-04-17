@@ -4,9 +4,85 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.10">
+<meta name="generator" content="Asciidoctor 2.0.12">
 <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
 <title>django-jinja - jinja2 backend for Django</title>
+<style>
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+pre.pygments .hll { background-color: #ffffcc }
+pre.pygments { background: #f0f0f0; }
+pre.pygments .tok-c { color: #60a0b0; font-style: italic } /* Comment */
+pre.pygments .tok-err { border: 1px solid #FF0000 } /* Error */
+pre.pygments .tok-k { color: #007020; font-weight: bold } /* Keyword */
+pre.pygments .tok-o { color: #666666 } /* Operator */
+pre.pygments .tok-ch { color: #60a0b0; font-style: italic } /* Comment.Hashbang */
+pre.pygments .tok-cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
+pre.pygments .tok-cp { color: #007020 } /* Comment.Preproc */
+pre.pygments .tok-cpf { color: #60a0b0; font-style: italic } /* Comment.PreprocFile */
+pre.pygments .tok-c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
+pre.pygments .tok-cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
+pre.pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
+pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
+pre.pygments .tok-gr { color: #FF0000 } /* Generic.Error */
+pre.pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
+pre.pygments .tok-gi { color: #00A000 } /* Generic.Inserted */
+pre.pygments .tok-go { color: #888888 } /* Generic.Output */
+pre.pygments .tok-gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
+pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
+pre.pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+pre.pygments .tok-gt { color: #0044DD } /* Generic.Traceback */
+pre.pygments .tok-kc { color: #007020; font-weight: bold } /* Keyword.Constant */
+pre.pygments .tok-kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
+pre.pygments .tok-kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
+pre.pygments .tok-kp { color: #007020 } /* Keyword.Pseudo */
+pre.pygments .tok-kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
+pre.pygments .tok-kt { color: #902000 } /* Keyword.Type */
+pre.pygments .tok-m { color: #40a070 } /* Literal.Number */
+pre.pygments .tok-s { color: #4070a0 } /* Literal.String */
+pre.pygments .tok-na { color: #4070a0 } /* Name.Attribute */
+pre.pygments .tok-nb { color: #007020 } /* Name.Builtin */
+pre.pygments .tok-nc { color: #0e84b5; font-weight: bold } /* Name.Class */
+pre.pygments .tok-no { color: #60add5 } /* Name.Constant */
+pre.pygments .tok-nd { color: #555555; font-weight: bold } /* Name.Decorator */
+pre.pygments .tok-ni { color: #d55537; font-weight: bold } /* Name.Entity */
+pre.pygments .tok-ne { color: #007020 } /* Name.Exception */
+pre.pygments .tok-nf { color: #06287e } /* Name.Function */
+pre.pygments .tok-nl { color: #002070; font-weight: bold } /* Name.Label */
+pre.pygments .tok-nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
+pre.pygments .tok-nt { color: #062873; font-weight: bold } /* Name.Tag */
+pre.pygments .tok-nv { color: #bb60d5 } /* Name.Variable */
+pre.pygments .tok-ow { color: #007020; font-weight: bold } /* Operator.Word */
+pre.pygments .tok-w { color: #bbbbbb } /* Text.Whitespace */
+pre.pygments .tok-mb { color: #40a070 } /* Literal.Number.Bin */
+pre.pygments .tok-mf { color: #40a070 } /* Literal.Number.Float */
+pre.pygments .tok-mh { color: #40a070 } /* Literal.Number.Hex */
+pre.pygments .tok-mi { color: #40a070 } /* Literal.Number.Integer */
+pre.pygments .tok-mo { color: #40a070 } /* Literal.Number.Oct */
+pre.pygments .tok-sa { color: #4070a0 } /* Literal.String.Affix */
+pre.pygments .tok-sb { color: #4070a0 } /* Literal.String.Backtick */
+pre.pygments .tok-sc { color: #4070a0 } /* Literal.String.Char */
+pre.pygments .tok-dl { color: #4070a0 } /* Literal.String.Delimiter */
+pre.pygments .tok-sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
+pre.pygments .tok-s2 { color: #4070a0 } /* Literal.String.Double */
+pre.pygments .tok-se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
+pre.pygments .tok-sh { color: #4070a0 } /* Literal.String.Heredoc */
+pre.pygments .tok-si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
+pre.pygments .tok-sx { color: #c65d09 } /* Literal.String.Other */
+pre.pygments .tok-sr { color: #235388 } /* Literal.String.Regex */
+pre.pygments .tok-s1 { color: #4070a0 } /* Literal.String.Single */
+pre.pygments .tok-ss { color: #517918 } /* Literal.String.Symbol */
+pre.pygments .tok-bp { color: #007020 } /* Name.Builtin.Pseudo */
+pre.pygments .tok-fm { color: #06287e } /* Name.Function.Magic */
+pre.pygments .tok-vc { color: #bb60d5 } /* Name.Variable.Class */
+pre.pygments .tok-vg { color: #bb60d5 } /* Name.Variable.Global */
+pre.pygments .tok-vi { color: #bb60d5 } /* Name.Variable.Instance */
+pre.pygments .tok-vm { color: #bb60d5 } /* Name.Variable.Magic */
+pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
+</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Liberation+Mono:400|Roboto+Slab:400,700"/>
 <link rel="stylesheet" href="assets/simple-red-titles/stylesheet.css"/>
 </head>
@@ -15,7 +91,7 @@
 <h1>django-jinja - jinja2 backend for Django</h1>
 <div class="details">
 <span id="author" class="author">Andrey Antukh, &lt;niwi@niwi.be&gt;</span><br>
-<span id="revdate">2.7.0</span>
+<span id="revdate">2.7.1</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -186,7 +262,7 @@ in the "Custom filters, globals, constants and tests" section.</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">&gt;=2.7.0</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3.5 (django 2.2 only), 3.6, 3.7, 3.8, 3.9</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2.2, 3.0, 3.1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2.2, 3.0, 3.1, 3.2</p></td>
 </tr>
 </tbody>
 </table>
@@ -223,7 +299,7 @@ in the "Custom filters, globals, constants and tests" section.</p>
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">TEMPLATES</span> <span class="tok-o">=</span> <span class="tok-p">[</span>
     <span class="tok-p">{</span>
         <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.backend.Jinja2&quot;</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-bp">True</span><span class="tok-p">,</span>
+        <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
             <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.jinja&quot;</span><span class="tok-p">,</span>
         <span class="tok-p">}</span>
@@ -231,7 +307,7 @@ in the "Custom filters, globals, constants and tests" section.</p>
     <span class="tok-p">{</span>
         <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django.template.backends.django.DjangoTemplates&quot;</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-p">[],</span>
-        <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-bp">True</span>
+        <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span>
     <span class="tok-p">},</span>
 <span class="tok-p">]</span></code></pre>
 </div>
@@ -278,7 +354,7 @@ templates, but if it is not enough, you can extend it using regular expressions:
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-bp">None</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-kc">None</span><span class="tok-p">,</span>
     <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-sa">r</span><span class="tok-s2">&quot;^(?!admin/).*&quot;</span><span class="tok-p">,</span>
 <span class="tok-p">}</span></code></pre>
 </div>
@@ -388,7 +464,7 @@ backend options:</p>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-s2">&quot;newstyle_gettext&quot;</span><span class="tok-p">:</span> <span class="tok-bp">True</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;newstyle_gettext&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
@@ -419,7 +495,7 @@ value with the <code>app_dirname</code> option:</p>
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">TEMPLATES</span> <span class="tok-o">=</span> <span class="tok-p">[</span>
     <span class="tok-p">{</span>
         <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.backend.Jinja2&quot;</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-bp">True</span><span class="tok-p">,</span>
+        <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
             <span class="tok-c1"># Match the template names ending in .html but not the ones in the admin folder.</span>
             <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.html&quot;</span><span class="tok-p">,</span>
@@ -427,9 +503,9 @@ value with the <code>app_dirname</code> option:</p>
             <span class="tok-s2">&quot;app_dirname&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;templates&quot;</span><span class="tok-p">,</span>
 
             <span class="tok-c1"># Can be set to &quot;jinja2.Undefined&quot; or any other subclass.</span>
-            <span class="tok-s2">&quot;undefined&quot;</span><span class="tok-p">:</span> <span class="tok-bp">None</span><span class="tok-p">,</span>
+            <span class="tok-s2">&quot;undefined&quot;</span><span class="tok-p">:</span> <span class="tok-kc">None</span><span class="tok-p">,</span>
 
-            <span class="tok-s2">&quot;newstyle_gettext&quot;</span><span class="tok-p">:</span> <span class="tok-bp">True</span><span class="tok-p">,</span>
+            <span class="tok-s2">&quot;newstyle_gettext&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
             <span class="tok-s2">&quot;tests&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
                 <span class="tok-s2">&quot;mytest&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;path.to.my.test&quot;</span><span class="tok-p">,</span>
             <span class="tok-p">},</span>
@@ -459,9 +535,9 @@ value with the <code>app_dirname</code> option:</p>
             <span class="tok-s2">&quot;bytecode_cache&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
                 <span class="tok-s2">&quot;name&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;default&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;backend&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.cache.BytecodeCache&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;enabled&quot;</span><span class="tok-p">:</span> <span class="tok-bp">False</span><span class="tok-p">,</span>
+                <span class="tok-s2">&quot;enabled&quot;</span><span class="tok-p">:</span> <span class="tok-kc">False</span><span class="tok-p">,</span>
             <span class="tok-p">},</span>
-            <span class="tok-s2">&quot;autoescape&quot;</span><span class="tok-p">:</span> <span class="tok-bp">True</span><span class="tok-p">,</span>
+            <span class="tok-s2">&quot;autoescape&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
             <span class="tok-s2">&quot;auto_reload&quot;</span><span class="tok-p">:</span> <span class="tok-n">settings</span><span class="tok-o">.</span><span class="tok-n">DEBUG</span><span class="tok-p">,</span>
             <span class="tok-s2">&quot;translation_engine&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django.utils.translation&quot;</span><span class="tok-p">,</span>
         <span class="tok-p">}</span>
@@ -563,22 +639,22 @@ from django applications.</p>
 <span class="tok-kn">from</span> <span class="tok-nn">django_jinja</span> <span class="tok-kn">import</span> <span class="tok-n">library</span>
 <span class="tok-kn">import</span> <span class="tok-nn">jinja2</span>
 
-<span class="tok-nd">@library.test</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-o">=</span><span class="tok-s2">&quot;one&quot;</span><span class="tok-p">)</span>
+<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">test</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-o">=</span><span class="tok-s2">&quot;one&quot;</span><span class="tok-p">)</span>
 <span class="tok-k">def</span> <span class="tok-nf">is_one</span><span class="tok-p">(</span><span class="tok-n">n</span><span class="tok-p">):</span>
     <span class="tok-sd">&quot;&quot;&quot;</span>
 <span class="tok-sd">    Usage: {% if m is one %}Foo{% endif %}</span>
 <span class="tok-sd">    &quot;&quot;&quot;</span>
     <span class="tok-k">return</span> <span class="tok-n">n</span> <span class="tok-o">==</span> <span class="tok-mi">1</span>
 
-<span class="tok-nd">@library.filter</span>
+<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">filter</span>
 <span class="tok-k">def</span> <span class="tok-nf">mylower</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-p">):</span>
     <span class="tok-sd">&quot;&quot;&quot;</span>
 <span class="tok-sd">    Usage: {{ &#39;Hello&#39;|mylower() }}</span>
 <span class="tok-sd">    &quot;&quot;&quot;</span>
     <span class="tok-k">return</span> <span class="tok-n">name</span><span class="tok-o">.</span><span class="tok-n">lower</span><span class="tok-p">()</span>
 
-<span class="tok-nd">@library.filter</span>
-<span class="tok-nd">@jinja2.contextfilter</span>
+<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">filter</span>
+<span class="tok-nd">@jinja2</span><span class="tok-o">.</span><span class="tok-n">contextfilter</span>
 <span class="tok-k">def</span> <span class="tok-nf">replace</span><span class="tok-p">(</span><span class="tok-n">context</span><span class="tok-p">,</span> <span class="tok-n">value</span><span class="tok-p">,</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">y</span><span class="tok-p">):</span>
     <span class="tok-sd">&quot;&quot;&quot;</span>
 <span class="tok-sd">    Filter with template context. Usage: {{ &#39;Hello&#39;|replace(&#39;H&#39;,&#39;M&#39;) }}</span>
@@ -586,7 +662,7 @@ from django applications.</p>
     <span class="tok-k">return</span> <span class="tok-n">value</span><span class="tok-o">.</span><span class="tok-n">replace</span><span class="tok-p">(</span><span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">y</span><span class="tok-p">)</span>
 
 
-<span class="tok-nd">@library.global_function</span>
+<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">global_function</span>
 <span class="tok-k">def</span> <span class="tok-nf">myecho</span><span class="tok-p">(</span><span class="tok-n">data</span><span class="tok-p">):</span>
     <span class="tok-sd">&quot;&quot;&quot;</span>
 <span class="tok-sd">    Usage: {{ myecho(&#39;foo&#39;) }}</span>
@@ -594,8 +670,8 @@ from django applications.</p>
     <span class="tok-k">return</span> <span class="tok-n">data</span>
 
 
-<span class="tok-nd">@library.global_function</span>
-<span class="tok-nd">@library.render_with</span><span class="tok-p">(</span><span class="tok-s2">&quot;test-render-with.jinja&quot;</span><span class="tok-p">)</span>
+<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">global_function</span>
+<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">render_with</span><span class="tok-p">(</span><span class="tok-s2">&quot;test-render-with.jinja&quot;</span><span class="tok-p">)</span>
 <span class="tok-k">def</span> <span class="tok-nf">myrenderwith</span><span class="tok-p">(</span><span class="tok-o">*</span><span class="tok-n">args</span><span class="tok-p">,</span> <span class="tok-o">**</span><span class="tok-n">kwargs</span><span class="tok-p">):</span>
     <span class="tok-sd">&quot;&quot;&quot;</span>
 <span class="tok-sd">    Render result with jinja template. Usage: {{ myrenderwith() }}</span>
@@ -802,79 +878,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-08-25 13:19:47 -0700
+Last updated 2021-04-16 17:44:07 -0700
 </div>
 </div>
-<style>
-pre.pygments .hll { background-color: #ffffcc }
-pre.pygments  { background: #f0f0f0; }
-pre.pygments .tok-c { color: #60a0b0; font-style: italic } /* Comment */
-pre.pygments .tok-err { border: 1px solid #FF0000 } /* Error */
-pre.pygments .tok-k { color: #007020; font-weight: bold } /* Keyword */
-pre.pygments .tok-o { color: #666666 } /* Operator */
-pre.pygments .tok-ch { color: #60a0b0; font-style: italic } /* Comment.Hashbang */
-pre.pygments .tok-cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
-pre.pygments .tok-cp { color: #007020 } /* Comment.Preproc */
-pre.pygments .tok-cpf { color: #60a0b0; font-style: italic } /* Comment.PreprocFile */
-pre.pygments .tok-c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
-pre.pygments .tok-cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
-pre.pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
-pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
-pre.pygments .tok-gr { color: #FF0000 } /* Generic.Error */
-pre.pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
-pre.pygments .tok-gi { color: #00A000 } /* Generic.Inserted */
-pre.pygments .tok-go { color: #888888 } /* Generic.Output */
-pre.pygments .tok-gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
-pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
-pre.pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
-pre.pygments .tok-gt { color: #0044DD } /* Generic.Traceback */
-pre.pygments .tok-kc { color: #007020; font-weight: bold } /* Keyword.Constant */
-pre.pygments .tok-kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
-pre.pygments .tok-kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
-pre.pygments .tok-kp { color: #007020 } /* Keyword.Pseudo */
-pre.pygments .tok-kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
-pre.pygments .tok-kt { color: #902000 } /* Keyword.Type */
-pre.pygments .tok-m { color: #40a070 } /* Literal.Number */
-pre.pygments .tok-s { color: #4070a0 } /* Literal.String */
-pre.pygments .tok-na { color: #4070a0 } /* Name.Attribute */
-pre.pygments .tok-nb { color: #007020 } /* Name.Builtin */
-pre.pygments .tok-nc { color: #0e84b5; font-weight: bold } /* Name.Class */
-pre.pygments .tok-no { color: #60add5 } /* Name.Constant */
-pre.pygments .tok-nd { color: #555555; font-weight: bold } /* Name.Decorator */
-pre.pygments .tok-ni { color: #d55537; font-weight: bold } /* Name.Entity */
-pre.pygments .tok-ne { color: #007020 } /* Name.Exception */
-pre.pygments .tok-nf { color: #06287e } /* Name.Function */
-pre.pygments .tok-nl { color: #002070; font-weight: bold } /* Name.Label */
-pre.pygments .tok-nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
-pre.pygments .tok-nt { color: #062873; font-weight: bold } /* Name.Tag */
-pre.pygments .tok-nv { color: #bb60d5 } /* Name.Variable */
-pre.pygments .tok-ow { color: #007020; font-weight: bold } /* Operator.Word */
-pre.pygments .tok-w { color: #bbbbbb } /* Text.Whitespace */
-pre.pygments .tok-mb { color: #40a070 } /* Literal.Number.Bin */
-pre.pygments .tok-mf { color: #40a070 } /* Literal.Number.Float */
-pre.pygments .tok-mh { color: #40a070 } /* Literal.Number.Hex */
-pre.pygments .tok-mi { color: #40a070 } /* Literal.Number.Integer */
-pre.pygments .tok-mo { color: #40a070 } /* Literal.Number.Oct */
-pre.pygments .tok-sa { color: #4070a0 } /* Literal.String.Affix */
-pre.pygments .tok-sb { color: #4070a0 } /* Literal.String.Backtick */
-pre.pygments .tok-sc { color: #4070a0 } /* Literal.String.Char */
-pre.pygments .tok-dl { color: #4070a0 } /* Literal.String.Delimiter */
-pre.pygments .tok-sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
-pre.pygments .tok-s2 { color: #4070a0 } /* Literal.String.Double */
-pre.pygments .tok-se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
-pre.pygments .tok-sh { color: #4070a0 } /* Literal.String.Heredoc */
-pre.pygments .tok-si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
-pre.pygments .tok-sx { color: #c65d09 } /* Literal.String.Other */
-pre.pygments .tok-sr { color: #235388 } /* Literal.String.Regex */
-pre.pygments .tok-s1 { color: #4070a0 } /* Literal.String.Single */
-pre.pygments .tok-ss { color: #517918 } /* Literal.String.Symbol */
-pre.pygments .tok-bp { color: #007020 } /* Name.Builtin.Pseudo */
-pre.pygments .tok-fm { color: #06287e } /* Name.Function.Magic */
-pre.pygments .tok-vc { color: #bb60d5 } /* Name.Variable.Class */
-pre.pygments .tok-vg { color: #bb60d5 } /* Name.Variable.Global */
-pre.pygments .tok-vi { color: #bb60d5 } /* Name.Variable.Instance */
-pre.pygments .tok-vm { color: #bb60d5 } /* Name.Variable.Magic */
-pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
-</style>
 </body>
 </html>
