@@ -34,7 +34,7 @@ setup(
     ],
     python_requires = ">=3.5",
     install_requires = [
-        "jinja2>=2.10",
+        "jinja2>=3",
         "django>=2.2",
     ],
     tests_require = [

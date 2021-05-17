@@ -1,6 +1,5 @@
 import logging
 import pprint
-import sys
 
 from django.conf import settings
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -10,11 +9,11 @@ from django.urls import NoReverseMatch
 from django.urls import reverse
 from django.utils.encoding import force_str
 from jinja2.nodes import ContextReference
-from jinja2 import Markup
 from jinja2 import TemplateSyntaxError
-from jinja2 import contextfunction
+from jinja2 import pass_context
 from jinja2 import nodes
 from jinja2.ext import Extension
+from markupsafe import Markup
 
 
 JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = getattr(settings, "JINJA2_MUTE_URLRESOLVE_EXCEPTIONS", False)
@@ -175,7 +174,7 @@ class UrlsExtension(Extension):
         super(UrlsExtension, self).__init__(environment)
         environment.globals["url"] = self._url_reverse
 
-    @contextfunction
+    @pass_context
     def _url_reverse(self, context, name, *args, **kwargs):
         try:
             current_app = context["request"].current_app

@@ -13,3 +13,4 @@ versiontools-*.egg
 /testing/venv
 doc/index.html
 .tox
+env/
