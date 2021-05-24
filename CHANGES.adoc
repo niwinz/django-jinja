@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Dropped Python 3.5 support.
+
+
 Version 2.7.1
 -------------
 
