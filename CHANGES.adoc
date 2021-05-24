@@ -1,9 +1,10 @@
 Changelog
 =========
 
-Unreleased
-----------
+Version 2.8.0
+-------------
 
+- Upgrade to jinja2 3.0, dropping support for 2.11 and below (#279).
 - Dropped Python 3.5 support.
 
 
