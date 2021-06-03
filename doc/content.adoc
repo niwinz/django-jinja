@@ -53,7 +53,7 @@ in the "Custom filters, globals, constants and tests" section.
 
 === Requirements
 
-- Python >= 3.5
+- Python >= 3.6
 - Django >= 2.2
 - jinja2 >= 2.10
 
