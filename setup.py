@@ -32,6 +32,10 @@ setup(
         "django_jinja.views",
         "django_jinja.views.generic",
     ],
+    include_package_data = True,
+    package_data = {
+        "django_jinja": ["contrib/_pipeline/templates/pipeline/*.jinja"],
+    },
     python_requires = ">=3.6",
     install_requires = [
         "jinja2>=3",

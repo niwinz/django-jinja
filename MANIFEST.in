@@ -1,2 +1,0 @@
-include LICENSE README.rst
-include django_jinja/contrib/_pipeline/templates/pipeline/*.jinja
