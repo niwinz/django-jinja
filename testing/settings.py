@@ -86,6 +86,9 @@ TEMPLATES = [
             "constants": {
                 "foo": "bar",
             },
+            "policies": {
+                "ext.i18n.trimmed": True,
+            },
             "extensions": DEFAULT_EXTENSIONS + [
                 "django_jinja.builtins.extensions.DjangoExtraFiltersExtension",
             ]
