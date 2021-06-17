@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Jinja2 policies now settable via TEMPLATES[n]['OPTIONS']['policies'] (#285).
+
+
 Version 2.8.0
 -------------
 
