@@ -37,7 +37,7 @@ list of differences with django's built-in backend:
   It works as middleware, intercepts Jinja templates by file path pattern.
 - Django template filters and tags can mostly be used in Jinja2 templates.
 - I18n subsystem adapted for Jinja2 (makemessages now collects messages from
-  Jinja templates)
+  Jinja templates, respects the `ext.i18n.trimmed` policy)
 - jinja2 bytecode cache adapted for using django's cache subsystem.
 - Support for django context processors.
 
