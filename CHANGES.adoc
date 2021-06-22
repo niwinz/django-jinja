@@ -5,6 +5,8 @@ Unreleased
 ----------
 
 - Jinja2 policies now settable via TEMPLATES[n]['OPTIONS']['policies'] (#285).
+- `makemessages` now respects the `ext.i18n.trimmed` policy,
+   will automatically trim jinja `{% trans %}` blocks when generating `.po` files.
 
 
 Version 2.8.0
