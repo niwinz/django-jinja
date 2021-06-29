@@ -10,7 +10,7 @@ Foo {{ bar }}
 <p>{% trans user=user.username %}2 Hello {{ user }}!{% endtrans %}</p>
 
 <p>
-{% trans book_title=book.title, author=author.name %}
+{% trans notrimmed book_title=book.title, author=author.name %}
 3 This is {{ book_title }} by {{ author }}
 {% endtrans %}
 </p>

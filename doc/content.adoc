@@ -37,7 +37,7 @@ list of differences with django's built-in backend:
   It works as middleware, intercepts Jinja templates by file path pattern.
 - Django template filters and tags can mostly be used in Jinja2 templates.
 - I18n subsystem adapted for Jinja2 (makemessages now collects messages from
-  Jinja templates)
+  Jinja templates, respects the `ext.i18n.trimmed` policy)
 - jinja2 bytecode cache adapted for using django's cache subsystem.
 - Support for django context processors.
 
@@ -218,6 +218,20 @@ This is the recommended way to set up additional jinja variables, tests, and fil
 ----
 
 
+=== Set policies
+
+To set link:https://jinja.palletsprojects.com/en/3.0.x/api/#policies[environment policies] introduced in Jinja2 2.9:
+
+[source, python]
+----
+"OPTIONS": {
+    "policies": {
+        "ext.i18n.trimmed": True,
+    },
+}
+----
+
+
 === Add additional extensions
 
 django-jinja, by default sets up a great amount of extensions to make your experience
@@ -301,6 +315,7 @@ TEMPLATES = [
             "constants": {
                 "foo": "bar",
             },
+            "policies": {},
             "extensions": [
                 "jinja2.ext.do",
                 "jinja2.ext.loopcontrols",

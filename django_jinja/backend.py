@@ -151,6 +151,7 @@ class Jinja2(BaseEngine):
         extra_globals = options.pop("globals", {})
         extra_constants = options.pop("constants", {})
         translation_engine = options.pop("translation_engine", "django.utils.translation")
+        policies = options.pop("policies", {})
 
         tmpl_debug = options.pop("debug", settings.DEBUG)
         bytecode_cache = options.pop("bytecode_cache", {})
@@ -203,6 +204,7 @@ class Jinja2(BaseEngine):
                                   tests=extra_tests,
                                   globals=extra_globals,
                                   constants=extra_constants)
+        self._initialize_policies(policies)
 
         self._initialize_thirdparty()
         self._initialize_bytecode_cache()
@@ -256,6 +258,11 @@ class Jinja2(BaseEngine):
         if constants:
             for name, value in constants.items():
                 self.env.globals[name] = value
+
+    def _initialize_policies(self, policies):
+        # Set policies like those in jinja2.defaults.DEFAULT_POLICIES
+        for name, value in policies.items():
+            self.env.policies[name] = value
 
     @cached_property
     def context_processors(self):
