@@ -1,10 +1,12 @@
 Changelog
 =========
 
-Unreleased
-----------
+Version 2.9.0
+-------------
 
-- Jinja2 policies now settable via TEMPLATES[n]['OPTIONS']['policies'] (#285).
+_Released July 2nd, 2021_
+
+- Jinja2 policies now settable via `TEMPLATES[n]['OPTIONS']['policies']` (#285).
 - `makemessages` now respects the `ext.i18n.trimmed` policy,
    will automatically trim jinja `{% trans %}` blocks when generating `.po` files.
 
