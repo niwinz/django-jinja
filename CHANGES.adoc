@@ -12,12 +12,16 @@ Unreleased
 Version 2.8.0
 -------------
 
+_Released May 24th, 2021_
+
 - Upgrade to jinja2 3.0, dropping support for 2.11 and below (#279).
 - Dropped Python 3.5 support.
 
 
 Version 2.7.1
 -------------
+
+_Released April 16th, 2021_
 
 - Fixed `makemessages` command, which in 2.7.0 could not detect `{% trans %}` tags in Django templates (#272).
 - Fixed `{% cache %}` tag to allow a timeout of `None` (to cache forever), which Django's tag added in 2.0 (#274).
@@ -27,6 +31,8 @@ Version 2.7.1
 
 Version 2.7.0
 -------------
+
+_Released August 20th, 2020_
 
 - Fixed loading template names with backslashes on Windows (#249).
 - Added Django's `json_script` filter for Django 2.1 and higher.
@@ -39,6 +45,8 @@ Version 2.7.0
 
 Version 2.6.0
 -------------
+
+_Released February 1st, 2020_
 
 - Documented compatibility changes made in version 2.5.0.
 - Cut new release to reflect this in package metadata.
