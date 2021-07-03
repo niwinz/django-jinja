@@ -91,7 +91,7 @@ pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
 <h1>django-jinja - jinja2 backend for Django</h1>
 <div class="details">
 <span id="author" class="author">Andrey Antukh, &lt;niwi@niwi.be&gt;</span><br>
-<span id="revdate">2.8.0</span>
+<span id="revdate">2.9.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -109,6 +109,7 @@ pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
 <li><a href="#_regex_based_template_matching">Regex based template matching</a></li>
 <li><a href="#_context_processors_support">Context processors support</a></li>
 <li><a href="#_custom_filters_globals_constants_and_tests">Custom filters, globals, constants and tests</a></li>
+<li><a href="#_set_policies">Set policies</a></li>
 <li><a href="#_add_additional_extensions">Add additional extensions</a></li>
 <li><a href="#_gettext_style">Gettext Style</a></li>
 <li><a href="#_overwrite_the_default_app_templates_directory">Overwrite the default app templates directory</a></li>
@@ -184,7 +185,7 @@ It works as middleware, intercepts Jinja templates by file path pattern.</p>
 </li>
 <li>
 <p>I18n subsystem adapted for Jinja2 (makemessages now collects messages from
-Jinja templates)</p>
+Jinja templates, respects the <code>ext.i18n.trimmed</code> policy)</p>
 </li>
 <li>
 <p>jinja2 bytecode cache adapted for using django&#8217;s cache subsystem.</p>
@@ -437,6 +438,21 @@ request parameter in order to make context processors work.</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_set_policies"><a class="link" href="#_set_policies">Set policies</a></h3>
+<div class="paragraph">
+<p>To set <a href="https://jinja.palletsprojects.com/en/3.0.x/api/#policies">environment policies</a> introduced in Jinja2 2.9:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+    <span class="tok-s2">&quot;policies&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+        <span class="tok-s2">&quot;ext.i18n.trimmed&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
+    <span class="tok-p">},</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_add_additional_extensions"><a class="link" href="#_add_additional_extensions">Add additional extensions</a></h3>
 <div class="paragraph">
 <p>django-jinja, by default sets up a great amount of extensions to make your experience
@@ -523,6 +539,7 @@ value with the <code>app_dirname</code> option:</p>
             <span class="tok-s2">&quot;constants&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
                 <span class="tok-s2">&quot;foo&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;bar&quot;</span><span class="tok-p">,</span>
             <span class="tok-p">},</span>
+            <span class="tok-s2">&quot;policies&quot;</span><span class="tok-p">:</span> <span class="tok-p">{},</span>
             <span class="tok-s2">&quot;extensions&quot;</span><span class="tok-p">:</span> <span class="tok-p">[</span>
                 <span class="tok-s2">&quot;jinja2.ext.do&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;jinja2.ext.loopcontrols&quot;</span><span class="tok-p">,</span>
@@ -883,7 +900,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-06-16 14:58:47 -0700
+Last updated 2021-07-02 12:15:38 -0700
 </div>
 </div>
 </body>
