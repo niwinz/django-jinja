@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Complete config example in the docs now reflects actual project defaults (#286).
+
+
 Version 2.9.0
 -------------
 
