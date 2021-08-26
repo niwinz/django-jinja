@@ -102,7 +102,7 @@ def match_template(template_name, extension, regex):
         if regex:
             return matches_extension and re.match(regex, template_name)
         else:
-            return template_name.endswith(extension)
+            return matches_extension
     elif regex:
         return re.match(regex, template_name)
     else:
