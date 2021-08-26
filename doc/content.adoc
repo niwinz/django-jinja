@@ -294,34 +294,31 @@ TEMPLATES = [
         "BACKEND": "django_jinja.backend.Jinja2",
         "APP_DIRS": True,
         "OPTIONS": {
-            # Match the template names ending in .html but not the ones in the admin folder.
-            "match_extension": ".html",
-            "match_regex": r"^(?!admin/).*",
+            "match_extension": ".jinja",
+            "match_regex": None,
             "app_dirname": "templates",
-
             # Can be set to "jinja2.Undefined" or any other subclass.
             "undefined": None,
-
             "newstyle_gettext": True,
             "tests": {
-                "mytest": "path.to.my.test",
+                # "mytest": "path.to.my.test",
             },
             "filters": {
-                "myfilter": "path.to.my.filter",
+                # "myfilter": "path.to.my.filter",
             },
             "globals": {
-                "myglobal": "path.to.my.globalfunc",
+                # "myglobal": "path.to.my.globalfunc",
             },
             "constants": {
-                "foo": "bar",
+                # "foo": "bar",
             },
-            "policies": {},
+            "policies": {
+                # "ext.i18n.trimmed": True,
+            },
             "extensions": [
                 "jinja2.ext.do",
                 "jinja2.ext.loopcontrols",
-                "jinja2.ext.with_",
                 "jinja2.ext.i18n",
-                "jinja2.ext.autoescape",
                 "django_jinja.builtins.extensions.CsrfExtension",
                 "django_jinja.builtins.extensions.CacheExtension",
                 "django_jinja.builtins.extensions.DebugExtension",
