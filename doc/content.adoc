@@ -110,15 +110,15 @@ Followed by the basic template engine configuration:
 TEMPLATES = [
     {
         "BACKEND": "django_jinja.backend.Jinja2",
+        "DIRS": [],
         "APP_DIRS": True,
-        "OPTIONS": {
-            "match_extension": ".jinja",
-        }
+        "OPTIONS": {}
     },
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         "DIRS": [],
-        "APP_DIRS": True
+        "APP_DIRS": True,
+        "OPTIONS": {}
     },
 ]
 ----
@@ -132,29 +132,101 @@ the django template engine. If you put the django engine first every jinja
 template will be found by the django engine.
 ====
 
+To read more on the logic of the `DIRS` and `APP_DIRS` settings,
+and how the engines resolve template paths, check out
+link:https://docs.djangoproject.com/en/dev/topics/templates/#support-for-template-engines[Django's section on setting up template engines].
+
 
 == User Guide
 
+=== Using Jinja2 templates in your views
 
-=== Regex based template matching
+By default, *django-jinja*'s template backend matches files with the extension `.jinja`,
+and (if using the `APP_DIRS` template loader) it crawls the same `templates` folders
+within your apps as the Django Template Language (DTL) engine does.
 
-By default, *django-jinja* uses the file extension as the method to match
-templates, but if it is not enough, you can extend it using regular expressions:
+So, all you have to do to switch your template renderer is to change the file extension of the template.
+Make sure your templates use the right engine's syntax corresponding to their file extensions!
+
+As an example, these class-based views work for both Jinja2 and DTL in a project set up like in xref:_quick_start[Quick Start]:
+
+[source, python]
+----
+"""
+app layout:
+    myapp/
+    ├── __init__.py
+    ├── apps.py
+    ├── templates
+    │   ├── bar.html
+    │   └── foo.jinja
+    └── views.py       <--(you are here)
+"""
+from django.views.generic import TemplateView
+
+class FooView(TemplateView):
+    template_name = 'foo.jinja'  # renders with Jinja2
+
+class BarView(TemplateView):
+    template_name = 'bar.html'  # renders with DTL
+----
+
+[NOTE]
+====
+Jinja2 and DTL templates can't call each other with `{% extends %}` or `{% include %}`.
+If you mix them up, django will raise `django.template.TemplateDoesNotExist` or `TemplateSyntaxError`.
+
+If you use template inheritance in your project to keep every page looking the same,
+you may end up needing to maintain two versions of your commonly used templates, like
+`base.jinja` and `base.html`, that render the same, each using their own template language.
+====
+
+For advice on converting from a DTL to a Jinja2 template,
+see xref:_differences_with_django_template_engine[Differences with Django Template Engine].
+
+
+=== Advanced template pattern matching
+
+If the above default behavior is not to your liking, you can tune it using these `OPTIONS`:
 
 [source, python]
 ----
 "OPTIONS": {
-    "match_regex": r"^(?!admin/).*", # this is additive to match_extension
+    # django-jinja defaults
+    "match_extension": ".jinja",
+    "match_regex": None,
+    "app_dirname": "templates",
 }
 ----
 
-To disable the extension matching, just set `"match_extension"` to `None`:
+- To match only file paths that end with a certain string, use `match_extension`.
+- To use regular expressions to match or exclude certain paths, use `match_regex`.
+- If both are set, both tests must pass for the backend to try and render the file.
+- If both are disabled with `None`, the backend will try and render *any* file it finds
+  (and preclude any subsequent engines in `TEMPLATES`).
+
+This example matches `.html` files instead of `.jinja` across the entire project,
+but uses a regular expression to exclude matching DTL templates used by the admin interface.
 
 [source, python]
 ----
 "OPTIONS": {
-    "match_extension": None,
+    # Match the template names ending in .html but not the ones in the admin folder.
+    "match_extension": ".html",
     "match_regex": r"^(?!admin/).*",
+}
+----
+
+As said previously, when using `APP_DIRS`, django-jinja's backend uses the same
+`templates` directory as the django template engine. To change it to use another
+directory in your apps, you can use the `app_dirname` option:
+
+[source, python]
+----
+"OPTIONS": {
+    # Match the templates at <app>/jinja2/*.html`, leaving <app>/templates/ for DTL.
+    "match_extension": ".html",
+    "app_dirname": "jinja2",
 }
 ----
 
@@ -264,21 +336,6 @@ backend options:
 ----
 "OPTIONS": {
     "newstyle_gettext": True,
-}
-----
-
-
-=== Overwrite the default app templates directory
-
-As we said previously, django-jinja backend for django 1.8, uses the same
-directory for templates as the django template engine. But in some circumstances
-you may want to change it to use another directory. You can overwrite the default
-value with the `app_dirname` option:
-
-[source, python]
-----
-"OPTIONS": {
-    "app_dirname": "jinja2",
 }
 ----
 

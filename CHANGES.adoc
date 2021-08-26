@@ -6,6 +6,7 @@ Unreleased
 
 - Complete config example in the docs now reflects actual project defaults (#286).
 - `get_template` no longer calls `template_name.endswith` twice under the default setup.
+- Rewrite usage and template matching config sections in the docs, to fully explain behavior.
 
 
 Version 2.9.0
