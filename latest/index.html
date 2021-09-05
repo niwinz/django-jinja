@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.15">
+<meta name="generator" content="Asciidoctor 2.0.16">
 <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
 <title>django-jinja - jinja2 backend for Django</title>
 <style>
@@ -91,7 +91,7 @@ pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
 <h1>django-jinja - jinja2 backend for Django</h1>
 <div class="details">
 <span id="author" class="author">Andrey Antukh, &lt;niwi@niwi.be&gt;</span><br>
-<span id="revdate">2.9.0</span>
+<span id="revdate">2.9.1</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -106,13 +106,13 @@ pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
 <li><a href="#_quick_start">Quick Start</a></li>
 <li><a href="#_user_guide">User Guide</a>
 <ul class="sectlevel2">
-<li><a href="#_regex_based_template_matching">Regex based template matching</a></li>
+<li><a href="#_using_jinja2_templates_in_your_views">Using Jinja2 templates in your views</a></li>
+<li><a href="#_advanced_template_pattern_matching">Advanced template pattern matching</a></li>
 <li><a href="#_context_processors_support">Context processors support</a></li>
 <li><a href="#_custom_filters_globals_constants_and_tests">Custom filters, globals, constants and tests</a></li>
 <li><a href="#_set_policies">Set policies</a></li>
 <li><a href="#_add_additional_extensions">Add additional extensions</a></li>
 <li><a href="#_gettext_style">Gettext Style</a></li>
-<li><a href="#_overwrite_the_default_app_templates_directory">Overwrite the default app templates directory</a></li>
 <li><a href="#_complete_example">Complete example</a></li>
 </ul>
 </li>
@@ -305,15 +305,15 @@ in the "Custom filters, globals, constants and tests" section.</p>
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">TEMPLATES</span> <span class="tok-o">=</span> <span class="tok-p">[</span>
     <span class="tok-p">{</span>
         <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.backend.Jinja2&quot;</span><span class="tok-p">,</span>
+        <span class="tok-s2">&quot;DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-p">[],</span>
         <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-            <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.jinja&quot;</span><span class="tok-p">,</span>
-        <span class="tok-p">}</span>
+        <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{}</span>
     <span class="tok-p">},</span>
     <span class="tok-p">{</span>
         <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django.template.backends.django.DjangoTemplates&quot;</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-p">[],</span>
-        <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span>
+        <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
+        <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{}</span>
     <span class="tok-p">},</span>
 <span class="tok-p">]</span></code></pre>
 </div>
@@ -336,32 +336,132 @@ template will be found by the django engine.</p>
 </tr>
 </table>
 </div>
+<div class="paragraph">
+<p>To read more on the logic of the <code>DIRS</code> and <code>APP_DIRS</code> settings,
+and how the engines resolve template paths, check out
+<a href="https://docs.djangoproject.com/en/dev/topics/templates/#support-for-template-engines">Django&#8217;s section on setting up template engines</a>.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_user_guide"><a class="link" href="#_user_guide">User Guide</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_regex_based_template_matching"><a class="link" href="#_regex_based_template_matching">Regex based template matching</a></h3>
+<h3 id="_using_jinja2_templates_in_your_views"><a class="link" href="#_using_jinja2_templates_in_your_views">Using Jinja2 templates in your views</a></h3>
 <div class="paragraph">
-<p>By default, <strong>django-jinja</strong> uses the file extension as the method to match
-templates, but if it is not enough, you can extend it using regular expressions:</p>
+<p>By default, <strong>django-jinja</strong>'s template backend matches files with the extension <code>.jinja</code>,
+and (if using the <code>APP_DIRS</code> template loader) it crawls the same <code>templates</code> folders
+within your apps as the Django Template Language (DTL) engine does.</p>
+</div>
+<div class="paragraph">
+<p>So, all you have to do to switch your template renderer is to change the file extension of the template.
+Make sure your templates use the right engine&#8217;s syntax corresponding to their file extensions!</p>
+</div>
+<div class="paragraph">
+<p>As an example, these class-based views work for both Jinja2 and DTL in a project set up like in <a href="#_quick_start">Quick Start</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-sd">&quot;&quot;&quot;</span>
+<span class="tok-sd">app layout:</span>
+<span class="tok-sd">    myapp/</span>
+<span class="tok-sd">    ├── __init__.py</span>
+<span class="tok-sd">    ├── apps.py</span>
+<span class="tok-sd">    ├── templates</span>
+<span class="tok-sd">    │   ├── bar.html</span>
+<span class="tok-sd">    │   └── foo.jinja</span>
+<span class="tok-sd">    └── views.py       &lt;--(you are here)</span>
+<span class="tok-sd">&quot;&quot;&quot;</span>
+<span class="tok-kn">from</span> <span class="tok-nn">django.views.generic</span> <span class="tok-kn">import</span> <span class="tok-n">TemplateView</span>
+
+<span class="tok-k">class</span> <span class="tok-nc">FooView</span><span class="tok-p">(</span><span class="tok-n">TemplateView</span><span class="tok-p">):</span>
+    <span class="tok-n">template_name</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;foo.jinja&#39;</span>  <span class="tok-c1"># renders with Jinja2</span>
+
+<span class="tok-k">class</span> <span class="tok-nc">BarView</span><span class="tok-p">(</span><span class="tok-n">TemplateView</span><span class="tok-p">):</span>
+    <span class="tok-n">template_name</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;bar.html&#39;</span>  <span class="tok-c1"># renders with DTL</span></code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Jinja2 and DTL templates can&#8217;t call each other with <code>{% extends %}</code> or <code>{% include %}</code>.
+If you mix them up, django will raise <code>django.template.TemplateDoesNotExist</code> or <code>TemplateSyntaxError</code>.</p>
+</div>
+<div class="paragraph">
+<p>If you use template inheritance in your project to keep every page looking the same,
+you may end up needing to maintain two versions of your commonly used templates, like
+<code>base.jinja</code> and <code>base.html</code>, that render the same, each using their own template language.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For advice on converting from a DTL to a Jinja2 template,
+see <a href="#_differences_with_django_template_engine">Differences with Django Template Engine</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_advanced_template_pattern_matching"><a class="link" href="#_advanced_template_pattern_matching">Advanced template pattern matching</a></h3>
+<div class="paragraph">
+<p>If the above default behavior is not to your liking, you can tune it using these <code>OPTIONS</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-sa">r</span><span class="tok-s2">&quot;^(?!admin/).*&quot;</span><span class="tok-p">,</span> <span class="tok-c1"># this is additive to match_extension</span>
+    <span class="tok-c1"># django-jinja defaults</span>
+    <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.jinja&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-kc">None</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;app_dirname&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;templates&quot;</span><span class="tok-p">,</span>
+<span class="tok-p">}</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>To match only file paths that end with a certain string, use <code>match_extension</code>.</p>
+</li>
+<li>
+<p>To use regular expressions to match or exclude certain paths, use <code>match_regex</code>.</p>
+</li>
+<li>
+<p>If both are set, both tests must pass for the backend to try and render the file.</p>
+</li>
+<li>
+<p>If both are disabled with <code>None</code>, the backend will try and render <strong>any</strong> file it finds
+(and preclude any subsequent engines in <code>TEMPLATES</code>).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This example matches <code>.html</code> files instead of <code>.jinja</code> across the entire project,
+but uses a regular expression to exclude matching DTL templates used by the admin interface.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+    <span class="tok-c1"># Match the template names ending in .html but not the ones in the admin folder.</span>
+    <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.html&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-sa">r</span><span class="tok-s2">&quot;^(?!admin/).*&quot;</span><span class="tok-p">,</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>To disable the extension matching, just set <code>"match_extension"</code> to <code>None</code>:</p>
+<p>As said previously, when using <code>APP_DIRS</code>, django-jinja&#8217;s backend uses the same
+<code>templates</code> directory as the django template engine. To change it to use another
+directory in your apps, you can use the <code>app_dirname</code> option:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-kc">None</span><span class="tok-p">,</span>
-    <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-sa">r</span><span class="tok-s2">&quot;^(?!admin/).*&quot;</span><span class="tok-p">,</span>
+    <span class="tok-c1"># Match the templates at &lt;app&gt;/jinja2/*.html`, leaving &lt;app&gt;/templates/ for DTL.</span>
+    <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.html&quot;</span><span class="tok-p">,</span>
+    <span class="tok-s2">&quot;app_dirname&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;jinja2&quot;</span><span class="tok-p">,</span>
 <span class="tok-p">}</span></code></pre>
 </div>
 </div>
@@ -491,22 +591,6 @@ backend options:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_overwrite_the_default_app_templates_directory"><a class="link" href="#_overwrite_the_default_app_templates_directory">Overwrite the default app templates directory</a></h3>
-<div class="paragraph">
-<p>As we said previously, django-jinja backend for django 1.8, uses the same
-directory for templates as the django template engine. But in some circumstances
-you may want to change it to use another directory. You can overwrite the default
-value with the <code>app_dirname</code> option:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-s2">&quot;app_dirname&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;jinja2&quot;</span><span class="tok-p">,</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
 <h3 id="_complete_example"><a class="link" href="#_complete_example">Complete example</a></h3>
 <div class="paragraph">
 <p>This is a complete configuration example with django-jinja&#8217;s defaults:</p>
@@ -518,34 +602,31 @@ value with the <code>app_dirname</code> option:</p>
         <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.backend.Jinja2&quot;</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-            <span class="tok-c1"># Match the template names ending in .html but not the ones in the admin folder.</span>
-            <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.html&quot;</span><span class="tok-p">,</span>
-            <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-sa">r</span><span class="tok-s2">&quot;^(?!admin/).*&quot;</span><span class="tok-p">,</span>
+            <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.jinja&quot;</span><span class="tok-p">,</span>
+            <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-kc">None</span><span class="tok-p">,</span>
             <span class="tok-s2">&quot;app_dirname&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;templates&quot;</span><span class="tok-p">,</span>
-
             <span class="tok-c1"># Can be set to &quot;jinja2.Undefined&quot; or any other subclass.</span>
             <span class="tok-s2">&quot;undefined&quot;</span><span class="tok-p">:</span> <span class="tok-kc">None</span><span class="tok-p">,</span>
-
             <span class="tok-s2">&quot;newstyle_gettext&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
             <span class="tok-s2">&quot;tests&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-                <span class="tok-s2">&quot;mytest&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;path.to.my.test&quot;</span><span class="tok-p">,</span>
+                <span class="tok-c1"># &quot;mytest&quot;: &quot;path.to.my.test&quot;,</span>
             <span class="tok-p">},</span>
             <span class="tok-s2">&quot;filters&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-                <span class="tok-s2">&quot;myfilter&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;path.to.my.filter&quot;</span><span class="tok-p">,</span>
+                <span class="tok-c1"># &quot;myfilter&quot;: &quot;path.to.my.filter&quot;,</span>
             <span class="tok-p">},</span>
             <span class="tok-s2">&quot;globals&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-                <span class="tok-s2">&quot;myglobal&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;path.to.my.globalfunc&quot;</span><span class="tok-p">,</span>
+                <span class="tok-c1"># &quot;myglobal&quot;: &quot;path.to.my.globalfunc&quot;,</span>
             <span class="tok-p">},</span>
             <span class="tok-s2">&quot;constants&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-                <span class="tok-s2">&quot;foo&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;bar&quot;</span><span class="tok-p">,</span>
+                <span class="tok-c1"># &quot;foo&quot;: &quot;bar&quot;,</span>
             <span class="tok-p">},</span>
-            <span class="tok-s2">&quot;policies&quot;</span><span class="tok-p">:</span> <span class="tok-p">{},</span>
+            <span class="tok-s2">&quot;policies&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
+                <span class="tok-c1"># &quot;ext.i18n.trimmed&quot;: True,</span>
+            <span class="tok-p">},</span>
             <span class="tok-s2">&quot;extensions&quot;</span><span class="tok-p">:</span> <span class="tok-p">[</span>
                 <span class="tok-s2">&quot;jinja2.ext.do&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;jinja2.ext.loopcontrols&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;jinja2.ext.with_&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;jinja2.ext.i18n&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;jinja2.ext.autoescape&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;django_jinja.builtins.extensions.CsrfExtension&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;django_jinja.builtins.extensions.CacheExtension&quot;</span><span class="tok-p">,</span>
                 <span class="tok-s2">&quot;django_jinja.builtins.extensions.DebugExtension&quot;</span><span class="tok-p">,</span>
@@ -900,7 +981,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-07-02 12:15:38 -0700
+Last updated 2021-09-04 18:52:33 -0700
 </div>
 </div>
 </body>
