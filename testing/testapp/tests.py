@@ -274,12 +274,12 @@ class RenderTemplatesTests(TestCase):
         }
 
         with self.modify_settings(TEMPLATES=setting):
-            with self.assertRaisesRegexp(ImproperlyConfigured, r'Several Jinja2 backends'):
+            with self.assertRaisesRegex(ImproperlyConfigured, r'Several Jinja2 backends'):
                 Jinja2.get_default()
 
     def test_get_default_none(self):
         with self.settings(TEMPLATES=global_settings.TEMPLATES):
-            with self.assertRaisesRegexp(ImproperlyConfigured, r'No Jinja2 backend is configured'):
+            with self.assertRaisesRegex(ImproperlyConfigured, r'No Jinja2 backend is configured'):
                 Jinja2.get_default()
 
 
@@ -367,7 +367,7 @@ class BaseTests(TestCase):
             match_template('admin/foo.html', regex=r"^(?!admin/.*)", extension=None))
 
     def test_get_match_extension(self):
-        self.assertEquals(Jinja2.get_default().match_extension, get_match_extension())
+        self.assertEqual(Jinja2.get_default().match_extension, get_match_extension())
 
     def test_get_match_extension_using(self):
         setting = {
@@ -384,8 +384,8 @@ class BaseTests(TestCase):
         }
 
         with self.modify_settings(TEMPLATES=setting):
-            self.assertEquals(".jinja", get_match_extension(using='jinja2'))
-            self.assertEquals(".jinjadup", get_match_extension(using="jinja2dup"))
+            self.assertEqual(".jinja", get_match_extension(using='jinja2'))
+            self.assertEqual(".jinjadup", get_match_extension(using="jinja2dup"))
 
 
 class TemplateResponseTests(TestCase):
@@ -405,7 +405,7 @@ class TemplateResponseTests(TestCase):
             pass
 
         view = _View()
-        self.assertEquals(
+        self.assertEqual(
             ['name1.html.jinja', 'name2.html.jinja', 'name3.html.jinja'],
             view.get_template_names()
         )
@@ -415,7 +415,7 @@ class TemplateResponseTests(TestCase):
             jinja2_template_extension = '.foo'
 
         view = _View()
-        self.assertEquals(
+        self.assertEqual(
             ['name1.html.foo', 'name2.html.foo', 'name3.html.jinja.foo'],
             view.get_template_names()
         )
@@ -439,7 +439,7 @@ class TemplateResponseTests(TestCase):
 
         with self.modify_settings(TEMPLATES=setting):
             view = _View()
-            self.assertEquals(
+            self.assertEqual(
                 ['name1.html.jinjadup', 'name2.html.jinjadup', 'name3.html.jinja.jinjadup'],
                 view.get_template_names()
             )
