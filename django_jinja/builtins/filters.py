@@ -64,6 +64,7 @@ from django.template.defaultfilters import yesno
 from django.template.defaultfilters import filesizeformat
 from django.template.defaultfilters import pprint
 from django.template.defaultfilters import pluralize
+from django.template.defaultfilters import json_script
 
 from django.utils.text import slugify as djslugify
 
@@ -78,9 +79,3 @@ linebreaksbr = partial(linebreaksbr, autoescape=True)
 from django.templatetags.tz import do_timezone as timezone
 from django.templatetags.tz import localtime
 from django.templatetags.tz import utc
-
-try:
-    from django.template.defaultfilters import json_script
-except ImportError:
-    # django version < 2.1
-    pass
