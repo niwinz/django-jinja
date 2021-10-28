@@ -243,11 +243,7 @@ class DjangoFiltersExtension(Extension):
         environment.filters["localtime"] = filters.localtime
         environment.filters["utc"] = filters.utc
         environment.filters["timezone"] = filters.timezone
-        try:
-            environment.filters["json_script"] = filters.json_script
-        except AttributeError:
-            # django version < 2.1
-            pass
+        environment.filters["json_script"] = filters.json_script
 
 
 class DjangoExtraFiltersExtension(Extension):
