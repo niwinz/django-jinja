@@ -15,12 +15,12 @@ def load_class(path):
         mod_name, klass_name = path.rsplit('.', 1)
         mod = import_module(mod_name)
     except AttributeError as e:
-        raise ImproperlyConfigured('Error importing {0}: "{1}"'.format(mod_name, e))
+        raise ImproperlyConfigured(f'Error importing {mod_name}: "{e}"')
 
     try:
         klass = getattr(mod, klass_name)
     except AttributeError:
-        raise ImproperlyConfigured('Module "{0}" does not define a "{1}" class'.format(mod_name, klass_name))
+        raise ImproperlyConfigured(f'Module "{mod_name}" does not define a "{klass_name}" class')
 
     return klass
 

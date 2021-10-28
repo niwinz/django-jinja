@@ -30,7 +30,7 @@ class I18nTestView(View):
 
         return render(request, self.template_name, {
             "v_index": "Index",
-            "table_sort": lambda x, y: "{} {}".format(x, y),
+            "table_sort": lambda x, y: f"{x} {y}",
             "invoice_count": 1,
             "trimmed_invoice_count": 2,
             "author": Author(),
