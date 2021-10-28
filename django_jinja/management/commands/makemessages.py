@@ -32,8 +32,8 @@ from django.template.base import BLOCK_TAG_START, BLOCK_TAG_END
 from django.utils.translation import template as trans_real
 
 
-strip_whitespace_right = re.compile(r"(%s-?\s*(trans|pluralize).*?-%s)\s+" % (BLOCK_TAG_START, BLOCK_TAG_END), re.U)
-strip_whitespace_left = re.compile(r"\s+(%s-\s*(endtrans|pluralize).*?-?%s)" % (BLOCK_TAG_START, BLOCK_TAG_END), re.U)
+strip_whitespace_right = re.compile(fr"({BLOCK_TAG_START}-?\s*(trans|pluralize).*?-{BLOCK_TAG_END})\s+", re.U)
+strip_whitespace_left = re.compile(fr"\s+({BLOCK_TAG_START}-\s*(endtrans|pluralize).*?-?{BLOCK_TAG_END})", re.U)
 
 
 def strip_whitespaces(src):
@@ -45,8 +45,8 @@ def strip_whitespaces(src):
 # this regex looks for {% trans %} blocks that don't have 'trimmed' or 'notrimmed' set.
 # capturing {% endtrans %} ensures this doesn't affect DTL {% trans %} tags.
 trans_block_re = re.compile(
-    r"(%s-?\s*trans)(?!\s+(?:no)?trimmed)(.*?%s.*?%s-?\s*?endtrans\s*?-?%s)"
-    % (BLOCK_TAG_START, BLOCK_TAG_END, BLOCK_TAG_START, BLOCK_TAG_END),
+    fr"({BLOCK_TAG_START}-?\s*trans)(?!\s+(?:no)?trimmed)"
+    fr"(.*?{BLOCK_TAG_END}.*?{BLOCK_TAG_START}-?\s*?endtrans\s*?-?{BLOCK_TAG_END})",
     re.U | re.DOTALL
 )
 
@@ -62,7 +62,7 @@ def apply_i18n_trimmed_policy(src, engine):
 class Command(makemessages.Command):
 
     def add_arguments(self, parser):
-        super(Command, self).add_arguments(parser)
+        super().add_arguments(parser)
         parser.add_argument('--jinja2-engine-name', default=None, dest='jinja_engine')
 
     def _get_default_jinja_template_engine(self):
@@ -101,7 +101,7 @@ class Command(makemessages.Command):
         trans_real.templatize = my_templatize
 
         try:
-            super(Command, self).handle(*args, **options)
+            super().handle(*args, **options)
         finally:
             trans_real.endblock_re = old_endblock_re
             trans_real.block_re = old_block_re

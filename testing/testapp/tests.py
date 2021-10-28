@@ -199,8 +199,7 @@ class RenderTemplatesTests(TestCase):
             template = self.env.from_string(template_content)
             result = template.render({}, request)
 
-            expected = ("<input type='hidden' name='csrfmiddlewaretoken'"
-                        " value='{}' />").format(token)
+            expected = f"<input type='hidden' name='csrfmiddlewaretoken' value='{token}' />"
 
         self.assertEqual(token, "123123")
         self.assertEqual(result, expected)
@@ -389,7 +388,7 @@ class BaseTests(TestCase):
 
 
 class TemplateResponseTests(TestCase):
-    class _BaseView(object):
+    class _BaseView:
         def get_template_names(self):
             return [
                 'name1.html',
@@ -451,7 +450,7 @@ class GenericViewTests(TestCase):
 
     def test_detailview(self):
         self.assertContains(
-            self.client.get('/testmodel/{0}/detail'.format(self.obj1.pk)),
+            self.client.get(f'/testmodel/{self.obj1.pk}/detail'),
             'DetailView Test Template',
             status_code=200
         )
@@ -465,14 +464,14 @@ class GenericViewTests(TestCase):
 
     def test_deleteview(self):
         self.assertContains(
-            self.client.get('/testmodel/{0}/delete'.format(self.obj1.pk)),
+            self.client.get(f'/testmodel/{self.obj1.pk}/delete'),
             'DeleteView Test Template',
             status_code=200
         )
 
     def test_updateview(self):
         self.assertContains(
-            self.client.get('/testmodel/{0}/update'.format(self.obj1.pk)),
+            self.client.get(f'/testmodel/{self.obj1.pk}/update'),
             'UpdateView Test Template',
             status_code=200
         )
@@ -493,28 +492,28 @@ class GenericViewTests(TestCase):
 
     def test_yeararchiveview(self):
         self.assertContains(
-            self.client.get('/testmodel/archive/{0:%Y}/'.format(self.obj1.date)),
+            self.client.get(f'/testmodel/archive/{self.obj1.date:%Y}/'),
             'YearArchiveView Test Template',
             status_code=200
         )
 
     def test_montharchiveview(self):
         self.assertContains(
-            self.client.get('/testmodel/archive/{0:%Y/%b}/'.format(self.obj1.date)),
+            self.client.get(f'/testmodel/archive/{self.obj1.date:%Y/%b}/'),
             'MonthArchiveView Test Template',
             status_code=200
         )
 
     def test_weekarchiveview(self):
         self.assertContains(
-            self.client.get('/testmodel/archive/{0:%Y/week/%U}/'.format(self.obj1.date)),
+            self.client.get(f'/testmodel/archive/{self.obj1.date:%Y/week/%U}/'),
             'WeekArchiveView Test Template',
             status_code=200
         )
 
     def test_dayarchiveview(self):
         self.assertContains(
-            self.client.get('/testmodel/archive/{0:%Y/%b/%d}/'.format(self.obj1.date)),
+            self.client.get(f'/testmodel/archive/{self.obj1.date:%Y/%b/%d}/'),
             'DayArchiveView Test Template',
             status_code=200
         )
@@ -528,7 +527,7 @@ class GenericViewTests(TestCase):
 
     def test_datedetailview(self):
         self.assertContains(
-            self.client.get('/testmodel/archive/{0:%Y/%b/%d}/{1}'.format(self.obj1.date, self.obj1.pk)),
+            self.client.get(f'/testmodel/archive/{self.obj1.date:%Y/%b/%d}/{self.obj1.pk}'),
             'DateDetailView Test Template',
             status_code=200
         )

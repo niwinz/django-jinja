@@ -10,7 +10,7 @@ _local_env = {
     "globals": {},
     "tests": {},
     "filters": {},
-    "extensions": set([]),
+    "extensions": set(),
 }
 
 

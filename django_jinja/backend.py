@@ -35,7 +35,7 @@ from . import library
 from . import utils
 
 
-class Origin(object):
+class Origin:
     """
     A container to hold debug information as described in the template API
     documentation.
@@ -45,7 +45,7 @@ class Origin(object):
         self.template_name = template_name
 
 
-class Template(object):
+class Template:
     def __init__(self, template, backend):
         self.template = template
         self.backend = backend
@@ -139,7 +139,7 @@ class Jinja2(BaseEngine):
         options = params.pop("OPTIONS", {}).copy()
 
         self.app_dirname = options.pop("app_dirname", "templates")
-        super(Jinja2, self).__init__(params)
+        super().__init__(params)
 
         newstyle_gettext = options.pop("newstyle_gettext", True)
         context_processors = options.pop("context_processors", [])
@@ -228,7 +228,7 @@ class Jinja2(BaseEngine):
                 if filename == "__init__.py" or filename == "__init__.pyc":
                     continue
 
-                file_mod_path = "%s.templatetags.%s" % (app_path, filename.rsplit(".", 1)[0])
+                file_mod_path = f"{app_path}.templatetags.{filename.rsplit('.', 1)[0]}"
                 try:
                     import_module(file_mod_path)
                 except ImportError:
@@ -282,7 +282,7 @@ class Jinja2(BaseEngine):
 
     def get_template(self, template_name):
         if not self.match_template(template_name):
-            message = "Template {} does not exists".format(template_name)
+            message = f"Template {template_name} does not exists"
             raise TemplateDoesNotExist(message)
 
         try:
@@ -327,7 +327,7 @@ def get_exception_info(exception):
     lineno = exception.lineno
     if exception.source is None:
         if os.path.exists(exception.filename):
-            with open(exception.filename, "r") as f:
+            with open(exception.filename) as f:
                 source = f.read()
     else:
         source = exception.source

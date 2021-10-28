@@ -16,11 +16,11 @@ class BytecodeCache(_BytecodeCache):
         return caches[self._cache_name]
 
     def load_bytecode(self, bucket):
-        key = 'jinja2_%s' % str(bucket.key)
+        key = f'jinja2_{str(bucket.key)}'
         bytecode = self.backend.get(key)
         if bytecode:
             bucket.bytecode_from_string(bytecode)
 
     def dump_bytecode(self, bucket):
-        key = 'jinja2_%s' % str(bucket.key)
+        key = f'jinja2_{str(bucket.key)}'
         self.backend.set(key, bucket.bytecode_to_string())

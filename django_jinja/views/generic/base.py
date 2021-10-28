@@ -1,7 +1,7 @@
 from ...base import get_match_extension
 
 
-class Jinja2TemplateResponseMixin(object):
+class Jinja2TemplateResponseMixin:
     jinja2_template_extension = None
 
     def get_template_names(self):
@@ -17,7 +17,7 @@ class Jinja2TemplateResponseMixin(object):
         If you would like to not have it append an extension, set
         jinja2_template_extension to '' (empty string).
         """
-        vals = super(Jinja2TemplateResponseMixin, self).get_template_names()
+        vals = super().get_template_names()
 
         ext = self.jinja2_template_extension
         if ext is None:

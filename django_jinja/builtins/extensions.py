@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 
 class CsrfExtension(Extension):
-    tags = set(['csrf_token'])
+    tags = {'csrf_token'}
 
     def __init__(self, environment):
         self.environment = environment
@@ -40,8 +40,7 @@ class CsrfExtension(Extension):
             if csrf_token == 'NOTPROVIDED':
                 return Markup("")
 
-            return Markup("<input type='hidden'"
-                          " name='csrfmiddlewaretoken' value='%s' />" % (csrf_token))
+            return Markup(f"<input type='hidden' name='csrfmiddlewaretoken' value='{csrf_token}' />")
 
         if settings.DEBUG:
             import warnings
@@ -71,7 +70,7 @@ class CacheExtension(Extension):
     Partly based on the ``FragmentCacheExtension`` from the Jinja2 docs.
     """
 
-    tags = set(['cache'])
+    tags = {'cache'}
 
     def parse(self, parser):
         lineno = next(parser.stream).lineno
@@ -96,8 +95,10 @@ class CacheExtension(Extension):
             if expire_time is not None:
                 expire_time = int(expire_time)
         except (ValueError, TypeError):
-            raise TemplateSyntaxError('"%s" tag got a non-integer timeout '
-                                      'value: %r' % (list(self.tags)[0], expire_time), lineno)
+            raise TemplateSyntaxError(
+                f'"{list(self.tags)[0]}" tag got a non-integer timeout value: {expire_time!r}',
+                lineno,
+            )
 
         cache_key = make_template_fragment_key(fragm_name, vary_on)
 
@@ -135,10 +136,10 @@ class DebugExtension(Extension):
                'multiple_checkbox_field', ... 'string', 'undefined', 'upper']}
 
     """
-    tags = set(['debug'])
+    tags = {'debug'}
 
     def __init__(self, environment):
-        super(DebugExtension, self).__init__(environment)
+        super().__init__(environment)
 
     def parse(self, parser):
         lineno = parser.stream.expect('name:debug').lineno
@@ -162,7 +163,7 @@ class DebugExtension(Extension):
 
 class StaticFilesExtension(Extension):
     def __init__(self, environment):
-        super(StaticFilesExtension, self).__init__(environment)
+        super().__init__(environment)
         environment.globals["static"] = self._static
 
     def _static(self, path):
@@ -171,7 +172,7 @@ class StaticFilesExtension(Extension):
 
 class UrlsExtension(Extension):
     def __init__(self, environment):
-        super(UrlsExtension, self).__init__(environment)
+        super().__init__(environment)
         environment.globals["url"] = self._url_reverse
 
     @pass_context
@@ -199,7 +200,7 @@ from . import filters
 
 class TimezoneExtension(Extension):
     def __init__(self, environment):
-        super(TimezoneExtension, self).__init__(environment)
+        super().__init__(environment)
         environment.globals["utc"] = filters.utc
         environment.globals["timezone"] = filters.timezone
         environment.globals["localtime"] = filters.localtime
@@ -207,7 +208,7 @@ class TimezoneExtension(Extension):
 
 class DjangoFiltersExtension(Extension):
     def __init__(self, environment):
-        super(DjangoFiltersExtension, self).__init__(environment)
+        super().__init__(environment)
         environment.filters["static"] = filters.static
         environment.filters["reverseurl"] = filters.reverse
         environment.filters["addslashes"] = filters.addslashes
@@ -251,7 +252,7 @@ class DjangoFiltersExtension(Extension):
 
 class DjangoExtraFiltersExtension(Extension):
     def __init__(self, environment):
-        super(DjangoExtraFiltersExtension, self).__init__(environment)
+        super().__init__(environment)
         environment.filters["title"] = filters.title
         environment.filters["upper"] = filters.upper
         environment.filters["lower"] = filters.lower
