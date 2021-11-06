@@ -13,6 +13,7 @@ DATABASES = {
         "NAME": "foobar.db"
     }
 }
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 MIDDLEWARE_CLASSES = [
     # "django.middleware.csrf.CsrfViewMiddleware",
