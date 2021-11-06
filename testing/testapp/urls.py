@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.urls import re_path as url
 from django_jinja import views
 
 from .views import BasicTestView
