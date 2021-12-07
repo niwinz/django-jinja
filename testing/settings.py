@@ -32,13 +32,8 @@ LANGUAGE_CODE = "en"
 ADMIN_MEDIA_PREFIX = "/static/admin/"
 INTERNAL_IPS = ("127.0.0.1",)
 
-#STATICFILES_STORAGE = "pipeline.storage.PipelineStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
-
-PIPELINE_CSS_COMPRESSOR = None
-PIPELINE_JS_COMPRESSOR = None
-PIPELINE_ENABLE = False
 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -46,8 +41,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
-    "pipeline.finders.PipelineFinder",
-    "pipeline.finders.CachedFileFinder",
 )
 
 # TEMPLATE_DIRS = ()
@@ -59,9 +52,7 @@ INSTALLED_APPS = (
     "django.contrib.sessions",
     "django.contrib.staticfiles",
     "django.contrib.messages",
-    "pipeline",
     "django_jinja",
-    "django_jinja.contrib._pipeline",
     "testapp",
 )
 
@@ -101,26 +92,6 @@ TEMPLATES = [
         "APP_DIRS": True
     }
 ]
-
-PIPELINE_CSS = {
-   "test": {
-       "source_filenames": ["style.css"],
-       "output_filename": "style.2.css",
-       "extra_context": {"media": "all"},
-   },
-   "test2": {
-       "source_filenames": ["style.css"],
-       "output_filename": "style.2.css",
-   }
-}
-
-
-PIPELINE_JS = {
-   "test": {
-       "source_filenames": ["script.js"],
-       "output_filename": "script.2.js",
-   }
-}
 
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 

@@ -21,8 +21,6 @@ setup(
         "django_jinja.management",
         "django_jinja.management.commands",
         "django_jinja.contrib",
-        "django_jinja.contrib._pipeline",
-        "django_jinja.contrib._pipeline.templatetags",
         "django_jinja.contrib._easy_thumbnails",
         "django_jinja.contrib._easy_thumbnails.templatetags",
         "django_jinja.contrib._humanize",
@@ -33,9 +31,6 @@ setup(
         "django_jinja.views.generic",
     ],
     include_package_data = True,
-    package_data = {
-        "django_jinja": ["contrib/_pipeline/templates/pipeline/*.jinja"],
-    },
     python_requires = ">=3.6",
     install_requires = [
         "jinja2>=3",
