@@ -40,10 +40,6 @@ class I18nTestView(View):
 class I18nTestViewDTL(I18nTestView):
     template_name = "i18n_test.html"
 
-class PipelineTestView(View):
-    def get(self, request, data=None):
-        return render(request, "pipeline_test.jinja")
-
 class ContextManipulationTestView(View):
     def get(self, request):
         return render(request, "hello_world.jinja", {"name": "Jinja2"})

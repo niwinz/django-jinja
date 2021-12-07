@@ -320,35 +320,6 @@ class RenderTemplatesTests(TestCase):
         )
 
 
-class DjangoPipelineTestTest(TestCase):
-    def setUp(self):
-        self.env = engines["jinja2"]
-
-    def test_pipeline_js_safe(self):
-        template = self.env.from_string("{{ compressed_js('test') }}")
-        result = template.render({})
-
-        self.assertTrue(result.startswith("<script"))
-        self.assertIn("text/javascript", result)
-        self.assertIn("/static/script.2.js", result)
-
-    def test_pipeline_css_safe_01(self):
-        template = self.env.from_string("{{ compressed_css('test') }}")
-        result = template.render({})
-        self.assertIn("media=\"all\"", result)
-        self.assertIn("stylesheet", result)
-        self.assertIn("<link", result)
-        self.assertIn("/static/style.2.css", result)
-
-    def test_pipeline_css_safe_02(self):
-        template = self.env.from_string("{{ compressed_css('test2') }}")
-        result = template.render({})
-        self.assertNotIn("media", result)
-        self.assertIn("stylesheet", result)
-        self.assertIn("<link", result)
-        self.assertIn("/static/style.2.css", result)
-
-
 class BaseTests(TestCase):
     def setUp(self):
         self.env = engines["jinja2"]

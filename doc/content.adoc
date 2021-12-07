@@ -568,35 +568,6 @@ functions with the same functionality.
 ====
 
 
-django-pipeline
-~~~~~~~~~~~~~~~
-
-link:https://github.com/cyberdelia/django-pipeline[Pipeline] is an asset packaging
-library for Django (official description).
-
-[WARNING]
-====
-This plugin is deprecated, *django-pipeline* comes with good jinja support and it
-should be used.
-
-You can use the native *django-pipeline* suport for jinja using the
-"pipeline.jinja2.ext.PipelineExtension" extension.
-====
-
-.Activate plugin (settings.py)
-[source, python]
-----
-INSTALLED_APPS += ('django_jinja.contrib._pipeline',)
-----
-
-.Usage
-[source, html+jinja]
-----
-{{ compressed_css("alias") }}
-{{ compressed_js("alias") }}
-----
-
-
 easy-thumbnails
 ~~~~~~~~~~~~~~~
 
