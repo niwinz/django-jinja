@@ -1,6 +1,25 @@
 Changelog
 =========
 
+Version 2.10.0
+--------------
+
+_Released December 10th, 2021_
+
+- Fix usage of `unittest` to be ready for Python 3.11 (#288).
+- Fix `default_app_config` deprecation warning for Django 3.2 (#289).
+- Replace Travis with GitHub Actions, dropping `ppc64le` arch tests (#290).
+  * Added Python 3.10 to tests (Django supports it if >=3.2.9).
+- Run pyupgrade, remove compatibility code (#291).
+- Add support for Django 4.0, with more old-code cleanup (#292).
+  * Remove use of `django.conf.urls.url` in test app (gone in Django 4.0).
+  * Set `DEFAULT_AUTO_FIELD` to avoid warnings in test app.
+  * Remove `django_jinja.contrib._pipeline` package, which was deprecated in 2015.
+  * Drop formal Django 3.0 and 3.1 support.
+    ** Projects using these versions should still function until support for 2.2 is dropped.
+- Django 2.2 and Python 3.6 will likely be dropped in the next non-patch release.
+
+
 Version 2.9.1
 -------------
 
