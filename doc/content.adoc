@@ -546,8 +546,7 @@ handler500 = views.ServerError.as_view()
 
 == Known Issues
 
-- Previously to django 1.8, some way of using i18n related functions are not properly
-  parsed with makemessages.
+- The above handler500 is broken as of django 2.2. see: https:github.com/niwinz/django-jinja/issues/234
 
 
 
