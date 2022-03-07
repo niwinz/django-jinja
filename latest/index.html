@@ -4,15 +4,10 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.16">
+<meta name="generator" content="Asciidoctor 2.0.17">
 <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
 <title>django-jinja - jinja2 backend for Django</title>
 <style>
-pre { line-height: 125%; }
-td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
-span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
-td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
-span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
 pre.pygments .hll { background-color: #ffffcc }
 pre.pygments { background: #f0f0f0; }
 pre.pygments .tok-c { color: #60a0b0; font-style: italic } /* Comment */
@@ -820,8 +815,7 @@ render 4xx/500 pages using jinja engine:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Previously to django 1.8, some way of using i18n related functions are not properly
-parsed with makemessages.</p>
+<p>The above handler500 is broken as of django 2.2. see: https:github.com/niwinz/django-jinja/issues/234</p>
 </li>
 </ul>
 </div>
@@ -946,7 +940,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-12-10 14:14:23 -0800
+Last updated 2022-03-06 18:09:55 -0800
 </div>
 </div>
 </body>
