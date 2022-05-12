@@ -296,7 +296,7 @@ This is the recommended way to set up additional jinja variables, tests, and fil
 
 === Set policies
 
-To set link:https://jinja.palletsprojects.com/en/3.0.x/api/#policies[environment policies] introduced in Jinja2 2.9:
+To set link:https://jinja.palletsprojects.com/en/latest/api/#policies[environment policies] introduced in Jinja2 2.9:
 
 [source, python]
 ----
