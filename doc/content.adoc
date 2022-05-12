@@ -331,7 +331,7 @@ from django_jinja.builtins import DEFAULT_EXTENSIONS
 === Gettext Style
 
 Jinja2 implements two styles of gettext. You can read about it here:
-http://jinja.pocoo.org/docs/dev/extensions/#newstyle-gettext.
+https://jinja.palletsprojects.com/en/latest/extensions/#new-style-gettext
 
 You can switch to concrete style using the `newstyle_gettext` entry on
 backend options:
@@ -438,7 +438,7 @@ in jinja context:
 === i18n support
 
 django-jinja inherits the jinja2 approach for handling translation strings. You can read more about
-it here: http://jinja.pocoo.org/docs/dev/templates/#i18n
+it here: https://jinja.palletsprojects.com/en/latest/templates/#i18n
 
 [source, html+jinja]
 ----
