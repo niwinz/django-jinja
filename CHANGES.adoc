@@ -1,6 +1,14 @@
 Changelog
 =========
 
+Version 2.10.1
+--------------
+
+_Released May 12th, 2022_
+
+- Update links in documentation to point to new home of Jinja2 docs (#295).
+
+
 Version 2.10.0
 --------------
 
