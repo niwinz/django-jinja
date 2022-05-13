@@ -496,7 +496,7 @@ def mylower(name):
     return name.lower()
 
 @library.filter
-@jinja2.contextfilter
+@jinja2.pass_context
 def replace(context, value, x, y):
     """
     Filter with template context. Usage: {{ 'Hello'|replace('H','M') }}

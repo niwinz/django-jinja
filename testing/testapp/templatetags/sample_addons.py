@@ -8,7 +8,7 @@ def is_one(n):
 
 
 @library.filter
-@jinja2.contextfilter
+@jinja2.pass_context
 def replace(context, value, x, y):
     return value.replace(x, y)
 
