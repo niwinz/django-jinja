@@ -7,77 +7,6 @@
 <meta name="generator" content="Asciidoctor 2.0.17">
 <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
 <title>django-jinja - jinja2 backend for Django</title>
-<style>
-pre.pygments .hll { background-color: #ffffcc }
-pre.pygments { background: #f0f0f0; }
-pre.pygments .tok-c { color: #60a0b0; font-style: italic } /* Comment */
-pre.pygments .tok-err { border: 1px solid #FF0000 } /* Error */
-pre.pygments .tok-k { color: #007020; font-weight: bold } /* Keyword */
-pre.pygments .tok-o { color: #666666 } /* Operator */
-pre.pygments .tok-ch { color: #60a0b0; font-style: italic } /* Comment.Hashbang */
-pre.pygments .tok-cm { color: #60a0b0; font-style: italic } /* Comment.Multiline */
-pre.pygments .tok-cp { color: #007020 } /* Comment.Preproc */
-pre.pygments .tok-cpf { color: #60a0b0; font-style: italic } /* Comment.PreprocFile */
-pre.pygments .tok-c1 { color: #60a0b0; font-style: italic } /* Comment.Single */
-pre.pygments .tok-cs { color: #60a0b0; background-color: #fff0f0 } /* Comment.Special */
-pre.pygments .tok-gd { color: #A00000 } /* Generic.Deleted */
-pre.pygments .tok-ge { font-style: italic } /* Generic.Emph */
-pre.pygments .tok-gr { color: #FF0000 } /* Generic.Error */
-pre.pygments .tok-gh { color: #000080; font-weight: bold } /* Generic.Heading */
-pre.pygments .tok-gi { color: #00A000 } /* Generic.Inserted */
-pre.pygments .tok-go { color: #888888 } /* Generic.Output */
-pre.pygments .tok-gp { color: #c65d09; font-weight: bold } /* Generic.Prompt */
-pre.pygments .tok-gs { font-weight: bold } /* Generic.Strong */
-pre.pygments .tok-gu { color: #800080; font-weight: bold } /* Generic.Subheading */
-pre.pygments .tok-gt { color: #0044DD } /* Generic.Traceback */
-pre.pygments .tok-kc { color: #007020; font-weight: bold } /* Keyword.Constant */
-pre.pygments .tok-kd { color: #007020; font-weight: bold } /* Keyword.Declaration */
-pre.pygments .tok-kn { color: #007020; font-weight: bold } /* Keyword.Namespace */
-pre.pygments .tok-kp { color: #007020 } /* Keyword.Pseudo */
-pre.pygments .tok-kr { color: #007020; font-weight: bold } /* Keyword.Reserved */
-pre.pygments .tok-kt { color: #902000 } /* Keyword.Type */
-pre.pygments .tok-m { color: #40a070 } /* Literal.Number */
-pre.pygments .tok-s { color: #4070a0 } /* Literal.String */
-pre.pygments .tok-na { color: #4070a0 } /* Name.Attribute */
-pre.pygments .tok-nb { color: #007020 } /* Name.Builtin */
-pre.pygments .tok-nc { color: #0e84b5; font-weight: bold } /* Name.Class */
-pre.pygments .tok-no { color: #60add5 } /* Name.Constant */
-pre.pygments .tok-nd { color: #555555; font-weight: bold } /* Name.Decorator */
-pre.pygments .tok-ni { color: #d55537; font-weight: bold } /* Name.Entity */
-pre.pygments .tok-ne { color: #007020 } /* Name.Exception */
-pre.pygments .tok-nf { color: #06287e } /* Name.Function */
-pre.pygments .tok-nl { color: #002070; font-weight: bold } /* Name.Label */
-pre.pygments .tok-nn { color: #0e84b5; font-weight: bold } /* Name.Namespace */
-pre.pygments .tok-nt { color: #062873; font-weight: bold } /* Name.Tag */
-pre.pygments .tok-nv { color: #bb60d5 } /* Name.Variable */
-pre.pygments .tok-ow { color: #007020; font-weight: bold } /* Operator.Word */
-pre.pygments .tok-w { color: #bbbbbb } /* Text.Whitespace */
-pre.pygments .tok-mb { color: #40a070 } /* Literal.Number.Bin */
-pre.pygments .tok-mf { color: #40a070 } /* Literal.Number.Float */
-pre.pygments .tok-mh { color: #40a070 } /* Literal.Number.Hex */
-pre.pygments .tok-mi { color: #40a070 } /* Literal.Number.Integer */
-pre.pygments .tok-mo { color: #40a070 } /* Literal.Number.Oct */
-pre.pygments .tok-sa { color: #4070a0 } /* Literal.String.Affix */
-pre.pygments .tok-sb { color: #4070a0 } /* Literal.String.Backtick */
-pre.pygments .tok-sc { color: #4070a0 } /* Literal.String.Char */
-pre.pygments .tok-dl { color: #4070a0 } /* Literal.String.Delimiter */
-pre.pygments .tok-sd { color: #4070a0; font-style: italic } /* Literal.String.Doc */
-pre.pygments .tok-s2 { color: #4070a0 } /* Literal.String.Double */
-pre.pygments .tok-se { color: #4070a0; font-weight: bold } /* Literal.String.Escape */
-pre.pygments .tok-sh { color: #4070a0 } /* Literal.String.Heredoc */
-pre.pygments .tok-si { color: #70a0d0; font-style: italic } /* Literal.String.Interpol */
-pre.pygments .tok-sx { color: #c65d09 } /* Literal.String.Other */
-pre.pygments .tok-sr { color: #235388 } /* Literal.String.Regex */
-pre.pygments .tok-s1 { color: #4070a0 } /* Literal.String.Single */
-pre.pygments .tok-ss { color: #517918 } /* Literal.String.Symbol */
-pre.pygments .tok-bp { color: #007020 } /* Name.Builtin.Pseudo */
-pre.pygments .tok-fm { color: #06287e } /* Name.Function.Magic */
-pre.pygments .tok-vc { color: #bb60d5 } /* Name.Variable.Class */
-pre.pygments .tok-vg { color: #bb60d5 } /* Name.Variable.Global */
-pre.pygments .tok-vi { color: #bb60d5 } /* Name.Variable.Instance */
-pre.pygments .tok-vm { color: #bb60d5 } /* Name.Variable.Magic */
-pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
-</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Liberation+Mono:400|Roboto+Slab:400,700"/>
 <link rel="stylesheet" href="assets/simple-red-titles/stylesheet.css"/>
 </head>
@@ -86,7 +15,7 @@ pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
 <h1>django-jinja - jinja2 backend for Django</h1>
 <div class="details">
 <span id="author" class="author">Andrey Antukh, &lt;niwi@niwi.be&gt;</span><br>
-<span id="revdate">2.10.1</span>
+<span id="revdate">2.10.2</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -95,41 +24,8 @@ pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
 <ul class="sectlevel2">
 <li><a href="#_rationale">Rationale</a></li>
 <li><a href="#_requirements">Requirements</a></li>
-<li><a href="#_installation">Installation</a></li>
 </ul>
 </li>
-<li><a href="#_quick_start">Quick Start</a></li>
-<li><a href="#_user_guide">User Guide</a>
-<ul class="sectlevel2">
-<li><a href="#_using_jinja2_templates_in_your_views">Using Jinja2 templates in your views</a></li>
-<li><a href="#_advanced_template_pattern_matching">Advanced template pattern matching</a></li>
-<li><a href="#_context_processors_support">Context processors support</a></li>
-<li><a href="#_custom_filters_globals_constants_and_tests">Custom filters, globals, constants and tests</a></li>
-<li><a href="#_set_policies">Set policies</a></li>
-<li><a href="#_add_additional_extensions">Add additional extensions</a></li>
-<li><a href="#_gettext_style">Gettext Style</a></li>
-<li><a href="#_complete_example">Complete example</a></li>
-</ul>
-</li>
-<li><a href="#_differences_with_django_template_engine">Differences with Django Template Engine</a>
-<ul class="sectlevel2">
-<li><a href="#_url_reversing">Url reversing</a></li>
-<li><a href="#_static_files">Static files</a></li>
-<li><a href="#_i18n_support">i18n support</a></li>
-<li><a href="#_replace_jinja_filters_with_django_versions">Replace jinja filters with django versions</a></li>
-<li><a href="#_registering_filters_in_a_django_way">Registering filters in a "django" way.</a></li>
-<li><a href="#_render_4xx500_pages_with_jinja">Render 4xx/500 pages with jinja</a></li>
-</ul>
-</li>
-<li><a href="#_known_issues">Known Issues</a></li>
-<li><a href="#_builtin_contrib_modules">Builtin contrib modules</a>
-<ul class="sectlevel2">
-<li><a href="#_easy_thumbnails">easy-thumbnails</a></li>
-<li><a href="#_django_subdomains">django-subdomains</a></li>
-<li><a href="#_humanize">humanize</a></li>
-</ul>
-</li>
-<li><a href="#_license">License</a></li>
 </ul>
 </div>
 </div>
@@ -212,13 +108,13 @@ in the "Custom filters, globals, constants and tests" section.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Python &gt;= 3.6</p>
+<p>Python &gt;= 3.7</p>
 </li>
 <li>
-<p>Django &gt;= 2.2</p>
+<p>Django &gt;= 3.2</p>
 </li>
 <li>
-<p>jinja2 &gt;= 3.0</p>
+<p>jinja2 &gt;= 3.1</p>
 </li>
 </ul>
 </div>
@@ -271,648 +167,433 @@ in the "Custom filters, globals, constants and tests" section.</p>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect2">
-<h3 id="_installation"><a class="link" href="#_installation">Installation</a></h3>
 <div class="paragraph">
-<p>The simplest way to install <strong>django-jinja</strong> is using <strong>pip</strong>:</p>
+<p>|&gt;=2.11.0
+|3.6, 3.7, 3.8, 3.9, 3.10
+|3.2, 4.0</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="bash"><span></span>pip install django-jinja</code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_quick_start"><a class="link" href="#_quick_start">Quick Start</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Add it to Django&#8217;s installed apps list:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja&#39;</span><span class="tok-p">,)</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Followed by the basic template engine configuration:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">TEMPLATES</span> <span class="tok-o">=</span> <span class="tok-p">[</span>
-    <span class="tok-p">{</span>
-        <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.backend.Jinja2&quot;</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-p">[],</span>
-        <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{}</span>
-    <span class="tok-p">},</span>
-    <span class="tok-p">{</span>
-        <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django.template.backends.django.DjangoTemplates&quot;</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-p">[],</span>
-        <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{}</span>
-    <span class="tok-p">},</span>
-<span class="tok-p">]</span></code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<tbody>
 <tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>If you are using the default value for the app templates directory of the
+<td class="tableblock halign-left valign-top"><p class="tableblock">=== Installation</p>
+<p class="tableblock">The simplest way to install <strong>django-jinja</strong> is using <strong>pip</strong>:</p>
+<p class="tableblock">[source, bash]
+----
+pip install django-jinja
+----</p>
+<p class="tableblock">== Quick Start</p>
+<p class="tableblock">Add it to Django&#8217;s installed apps list:</p>
+<p class="tableblock">[source, python]
+----
+INSTALLED_APPS += ('django_jinja',)
+----</p>
+<p class="tableblock">Followed by the basic template engine configuration:</p>
+<p class="tableblock">[source, python]
+----
+TEMPLATES = [
+    {
+        "BACKEND": "django_jinja.backend.Jinja2",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {}
+    },
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {}
+    },
+]
+----</p>
+<p class="tableblock">[NOTE]
+====
+If you are using the default value for the app templates directory of the
 django-jinja backend, take care of the template engines order, because the
 django-jinja backend by default uses the same directory for the templates as
 the django template engine. If you put the django engine first every jinja
-template will be found by the django engine.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>To read more on the logic of the <code>DIRS</code> and <code>APP_DIRS</code> settings,
+template will be found by the django engine.
+====</p>
+<p class="tableblock">To read more on the logic of the <code>DIRS</code> and <code>APP_DIRS</code> settings,
 and how the engines resolve template paths, check out
 <a href="https://docs.djangoproject.com/en/dev/topics/templates/#support-for-template-engines">Django&#8217;s section on setting up template engines</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_user_guide"><a class="link" href="#_user_guide">User Guide</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_using_jinja2_templates_in_your_views"><a class="link" href="#_using_jinja2_templates_in_your_views">Using Jinja2 templates in your views</a></h3>
-<div class="paragraph">
-<p>By default, <strong>django-jinja</strong>'s template backend matches files with the extension <code>.jinja</code>,
+<p class="tableblock">== User Guide</p>
+<p class="tableblock">=== Using Jinja2 templates in your views</p>
+<p class="tableblock">By default, <strong>django-jinja</strong>'s template backend matches files with the extension <code>.jinja</code>,
 and (if using the <code>APP_DIRS</code> template loader) it crawls the same <code>templates</code> folders
 within your apps as the Django Template Language (DTL) engine does.</p>
-</div>
-<div class="paragraph">
-<p>So, all you have to do to switch your template renderer is to change the file extension of the template.
+<p class="tableblock">So, all you have to do to switch your template renderer is to change the file extension of the template.
 Make sure your templates use the right engine&#8217;s syntax corresponding to their file extensions!</p>
-</div>
-<div class="paragraph">
-<p>As an example, these class-based views work for both Jinja2 and DTL in a project set up like in <a href="#_quick_start">Quick Start</a>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-sd">&quot;&quot;&quot;</span>
-<span class="tok-sd">app layout:</span>
-<span class="tok-sd">    myapp/</span>
-<span class="tok-sd">    ├── __init__.py</span>
-<span class="tok-sd">    ├── apps.py</span>
-<span class="tok-sd">    ├── templates</span>
-<span class="tok-sd">    │   ├── bar.html</span>
-<span class="tok-sd">    │   └── foo.jinja</span>
-<span class="tok-sd">    └── views.py       &lt;--(you are here)</span>
-<span class="tok-sd">&quot;&quot;&quot;</span>
-<span class="tok-kn">from</span> <span class="tok-nn">django.views.generic</span> <span class="tok-kn">import</span> <span class="tok-n">TemplateView</span>
-
-<span class="tok-k">class</span> <span class="tok-nc">FooView</span><span class="tok-p">(</span><span class="tok-n">TemplateView</span><span class="tok-p">):</span>
-    <span class="tok-n">template_name</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;foo.jinja&#39;</span>  <span class="tok-c1"># renders with Jinja2</span>
-
-<span class="tok-k">class</span> <span class="tok-nc">BarView</span><span class="tok-p">(</span><span class="tok-n">TemplateView</span><span class="tok-p">):</span>
-    <span class="tok-n">template_name</span> <span class="tok-o">=</span> <span class="tok-s1">&#39;bar.html&#39;</span>  <span class="tok-c1"># renders with DTL</span></code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Jinja2 and DTL templates can&#8217;t call each other with <code>{% extends %}</code> or <code>{% include %}</code>.
+<p class="tableblock">As an example, these class-based views work for both Jinja2 and DTL in a project set up like in <a href="#_quick_start">Quick Start</a>:</p>
+<p class="tableblock">[source, python]
+----
+"""
+app layout:
+    myapp/
+    ├── <em>init</em>.py
+    ├── apps.py
+    ├── templates
+    │   ├── bar.html
+    │   └── foo.jinja
+    └── views.py       &#8592;-(you are here)
+"""
+from django.views.generic import TemplateView</p>
+<p class="tableblock">class FooView(TemplateView):
+    template_name = 'foo.jinja'  # renders with Jinja2</p>
+<p class="tableblock">class BarView(TemplateView):
+    template_name = 'bar.html'  # renders with DTL
+----</p>
+<p class="tableblock">[NOTE]
+====
+Jinja2 and DTL templates can&#8217;t call each other with <code>{% extends %}</code> or <code>{% include %}</code>.
 If you mix them up, django will raise <code>django.template.TemplateDoesNotExist</code> or <code>TemplateSyntaxError</code>.</p>
-</div>
-<div class="paragraph">
-<p>If you use template inheritance in your project to keep every page looking the same,
+<p class="tableblock">If you use template inheritance in your project to keep every page looking the same,
 you may end up needing to maintain two versions of your commonly used templates, like
-<code>base.jinja</code> and <code>base.html</code>, that render the same, each using their own template language.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>For advice on converting from a DTL to a Jinja2 template,
+<code>base.jinja</code> and <code>base.html</code>, that render the same, each using their own template language.
+====</p>
+<p class="tableblock">For advice on converting from a DTL to a Jinja2 template,
 see <a href="#_differences_with_django_template_engine">Differences with Django Template Engine</a>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_advanced_template_pattern_matching"><a class="link" href="#_advanced_template_pattern_matching">Advanced template pattern matching</a></h3>
-<div class="paragraph">
-<p>If the above default behavior is not to your liking, you can tune it using these <code>OPTIONS</code>:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-c1"># django-jinja defaults</span>
-    <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.jinja&quot;</span><span class="tok-p">,</span>
-    <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-kc">None</span><span class="tok-p">,</span>
-    <span class="tok-s2">&quot;app_dirname&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;templates&quot;</span><span class="tok-p">,</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>To match only file paths that end with a certain string, use <code>match_extension</code>.</p>
-</li>
-<li>
-<p>To use regular expressions to match or exclude certain paths, use <code>match_regex</code>.</p>
-</li>
-<li>
-<p>If both are set, both tests must pass for the backend to try and render the file.</p>
-</li>
-<li>
-<p>If both are disabled with <code>None</code>, the backend will try and render <strong>any</strong> file it finds
-(and preclude any subsequent engines in <code>TEMPLATES</code>).</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>This example matches <code>.html</code> files instead of <code>.jinja</code> across the entire project,
+<p class="tableblock">=== Advanced template pattern matching</p>
+<p class="tableblock">If the above default behavior is not to your liking, you can tune it using these <code>OPTIONS</code>:</p>
+<p class="tableblock">[source, python]
+----
+"OPTIONS": {
+    # django-jinja defaults
+    "match_extension": ".jinja",
+    "match_regex": None,
+    "app_dirname": "templates",
+}
+----</p>
+<p class="tableblock">- To match only file paths that end with a certain string, use <code>match_extension</code>.
+- To use regular expressions to match or exclude certain paths, use <code>match_regex</code>.
+- If both are set, both tests must pass for the backend to try and render the file.
+- If both are disabled with <code>None</code>, the backend will try and render <strong>any</strong> file it finds
+  (and preclude any subsequent engines in <code>TEMPLATES</code>).</p>
+<p class="tableblock">This example matches <code>.html</code> files instead of <code>.jinja</code> across the entire project,
 but uses a regular expression to exclude matching DTL templates used by the admin interface.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-c1"># Match the template names ending in .html but not the ones in the admin folder.</span>
-    <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.html&quot;</span><span class="tok-p">,</span>
-    <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-sa">r</span><span class="tok-s2">&quot;^(?!admin/).*&quot;</span><span class="tok-p">,</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>As said previously, when using <code>APP_DIRS</code>, django-jinja&#8217;s backend uses the same
+<p class="tableblock">[source, python]
+----
+"OPTIONS": {
+    # Match the template names ending in .html but not the ones in the admin folder.
+    "match_extension": ".html",
+    "match_regex": r"^(?!admin/).<strong>",
+}
+----</p>
+<p class="tableblock">As said previously, when using <code>APP_DIRS</code>, django-jinja&#8217;s backend uses the same
 <code>templates</code> directory as the django template engine. To change it to use another
 directory in your apps, you can use the <code>app_dirname</code> option:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-c1"># Match the templates at &lt;app&gt;/jinja2/*.html`, leaving &lt;app&gt;/templates/ for DTL.</span>
-    <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.html&quot;</span><span class="tok-p">,</span>
-    <span class="tok-s2">&quot;app_dirname&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;jinja2&quot;</span><span class="tok-p">,</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_context_processors_support"><a class="link" href="#_context_processors_support">Context processors support</a></h3>
-<div class="paragraph">
-<p>It is a helper to use django&#8217;s context processors with jinja2 backend
+<p class="tableblock">[source, python]
+----
+"OPTIONS": {
+    # Match the templates at &lt;app&gt;/jinja2/</strong>.html`, leaving &lt;app&gt;/templates/ for DTL.
+    "match_extension": ".html",
+    "app_dirname": "jinja2",
+}
+----</p>
+<p class="tableblock">=== Context processors support</p>
+<p class="tableblock">It is a helper to use django&#8217;s context processors with jinja2 backend
 for django 1.8.</p>
-</div>
-<div class="listingblock">
-<div class="title">Example: set up a bunch of context processors:</div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-s2">&quot;context_processors&quot;</span><span class="tok-p">:</span> <span class="tok-p">[</span>
-        <span class="tok-s2">&quot;django.contrib.auth.context_processors.auth&quot;</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;django.template.context_processors.debug&quot;</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;django.template.context_processors.i18n&quot;</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;django.template.context_processors.media&quot;</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;django.template.context_processors.static&quot;</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;django.template.context_processors.tz&quot;</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;django.contrib.messages.context_processors.messages&quot;</span><span class="tok-p">,</span>
-    <span class="tok-p">],</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>As with the django template engine, this is a default list of context processors, and you can skip
+<p class="tableblock">.Example: set up a bunch of context processors:
+[source, python]
+----
+"OPTIONS": {
+    "context_processors": [
+        "django.contrib.auth.context_processors.auth",
+        "django.template.context_processors.debug",
+        "django.template.context_processors.i18n",
+        "django.template.context_processors.media",
+        "django.template.context_processors.static",
+        "django.template.context_processors.tz",
+        "django.contrib.messages.context_processors.messages",
+    ],
+}
+----</p>
+<p class="tableblock">As with the django template engine, this is a default list of context processors, and you can skip
 setting them if you do not have your own.
 Furthermore, the purpose of django-jinja&#8217;s context processor support is to help with migrations,
 but context processors are no longer the recommended way to set global variables and functions.
 For the recommended way, see the next section.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Remember that django (1.8.x and 1.9.x) is backward compatible with
+<p class="tableblock">[NOTE]
+====
+Remember that django (1.8.x and 1.9.x) is backward compatible with
 the old template api and this has its own trade-offs. If you find yourself using functions
 like <code>render_to_string</code> or <code>render_to_response</code> from django, do not forget to pass the
-request parameter in order to make context processors work.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_custom_filters_globals_constants_and_tests"><a class="link" href="#_custom_filters_globals_constants_and_tests">Custom filters, globals, constants and tests</a></h3>
-<div class="paragraph">
-<p>This is the recommended way to set up additional jinja variables, tests, and filters, in your settings.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-s2">&quot;tests&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-        <span class="tok-s2">&quot;mytest&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;path.to.tests.mytestfn&quot;</span><span class="tok-p">,</span>
-    <span class="tok-p">},</span>
-    <span class="tok-s2">&quot;filters&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-        <span class="tok-s2">&quot;myfilter&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;path.to.filters.myfilterfn&quot;</span><span class="tok-p">,</span>
-    <span class="tok-p">},</span>
-    <span class="tok-s2">&quot;constants&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-        <span class="tok-s2">&quot;hello&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;hello world&quot;</span><span class="tok-p">,</span>
-    <span class="tok-p">},</span>
-    <span class="tok-s2">&quot;globals&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-        <span class="tok-s2">&quot;somefn&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;path.to.functions.somefn&quot;</span><span class="tok-p">,</span>
-    <span class="tok-p">}</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_set_policies"><a class="link" href="#_set_policies">Set policies</a></h3>
-<div class="paragraph">
-<p>To set <a href="https://jinja.palletsprojects.com/en/latest/api/#policies">environment policies</a> introduced in Jinja2 2.9:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-s2">&quot;policies&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-        <span class="tok-s2">&quot;ext.i18n.trimmed&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
-    <span class="tok-p">},</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_add_additional_extensions"><a class="link" href="#_add_additional_extensions">Add additional extensions</a></h3>
-<div class="paragraph">
-<p>django-jinja, by default sets up a great amount of extensions to make your experience
+request parameter in order to make context processors work.
+====</p>
+<p class="tableblock">=== Custom filters, globals, constants and tests</p>
+<p class="tableblock">This is the recommended way to set up additional jinja variables, tests, and filters, in your settings.</p>
+<p class="tableblock">[source, python]
+----
+"OPTIONS": {
+    "tests": {
+        "mytest": "path.to.tests.mytestfn",
+    },
+    "filters": {
+        "myfilter": "path.to.filters.myfilterfn",
+    },
+    "constants": {
+        "hello": "hello world",
+    },
+    "globals": {
+        "somefn": "path.to.functions.somefn",
+    }
+}
+----</p>
+<p class="tableblock">=== Set policies</p>
+<p class="tableblock">To set <a href="https://jinja.palletsprojects.com/en/latest/api/#policies">environment policies</a> introduced in Jinja2 2.9:</p>
+<p class="tableblock">[source, python]
+----
+"OPTIONS": {
+    "policies": {
+        "ext.i18n.trimmed": True,
+    },
+}
+----</p>
+<p class="tableblock">=== Add additional extensions</p>
+<p class="tableblock">django-jinja, by default sets up a great amount of extensions to make your experience
 using jinja in django painless. But if you want to add more extensions, you can do it
 using the <code>extensions</code> entry of the backend options:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-kn">from</span> <span class="tok-nn">django_jinja.builtins</span> <span class="tok-kn">import</span> <span class="tok-n">DEFAULT_EXTENSIONS</span>
-
-<span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-s2">&quot;extensions&quot;</span><span class="tok-p">:</span> <span class="tok-n">DEFAULT_EXTENSIONS</span> <span class="tok-o">+</span> <span class="tok-p">[</span>
-        <span class="tok-c1"># Your extensions here...</span>
-        <span class="tok-s2">&quot;path.to.your.Extension&quot;</span>
-    <span class="tok-p">]</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_gettext_style"><a class="link" href="#_gettext_style">Gettext Style</a></h3>
-<div class="paragraph">
-<p>Jinja2 implements two styles of gettext. You can read about it here:
+<p class="tableblock">[source, python]
+----
+from django_jinja.builtins import DEFAULT_EXTENSIONS</p>
+<p class="tableblock">"OPTIONS": {
+    "extensions": DEFAULT_EXTENSIONS + [
+        # Your extensions here&#8230;&#8203;
+        "path.to.your.Extension"
+    ]
+}</p>
+<p class="tableblock">----</p>
+<p class="tableblock">=== Gettext Style</p>
+<p class="tableblock">Jinja2 implements two styles of gettext. You can read about it here:
 <a href="https://jinja.palletsprojects.com/en/latest/extensions/#new-style-gettext" class="bare">https://jinja.palletsprojects.com/en/latest/extensions/#new-style-gettext</a></p>
-</div>
-<div class="paragraph">
-<p>You can switch to concrete style using the <code>newstyle_gettext</code> entry on
+<p class="tableblock">You can switch to concrete style using the <code>newstyle_gettext</code> entry on
 backend options:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-    <span class="tok-s2">&quot;newstyle_gettext&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
-<span class="tok-p">}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_complete_example"><a class="link" href="#_complete_example">Complete example</a></h3>
-<div class="paragraph">
-<p>This is a complete configuration example with django-jinja&#8217;s defaults:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">TEMPLATES</span> <span class="tok-o">=</span> <span class="tok-p">[</span>
-    <span class="tok-p">{</span>
-        <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.backend.Jinja2&quot;</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
-        <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-            <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.jinja&quot;</span><span class="tok-p">,</span>
-            <span class="tok-s2">&quot;match_regex&quot;</span><span class="tok-p">:</span> <span class="tok-kc">None</span><span class="tok-p">,</span>
-            <span class="tok-s2">&quot;app_dirname&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;templates&quot;</span><span class="tok-p">,</span>
-            <span class="tok-c1"># Can be set to &quot;jinja2.Undefined&quot; or any other subclass.</span>
-            <span class="tok-s2">&quot;undefined&quot;</span><span class="tok-p">:</span> <span class="tok-kc">None</span><span class="tok-p">,</span>
-            <span class="tok-s2">&quot;newstyle_gettext&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
-            <span class="tok-s2">&quot;tests&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-                <span class="tok-c1"># &quot;mytest&quot;: &quot;path.to.my.test&quot;,</span>
-            <span class="tok-p">},</span>
-            <span class="tok-s2">&quot;filters&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-                <span class="tok-c1"># &quot;myfilter&quot;: &quot;path.to.my.filter&quot;,</span>
-            <span class="tok-p">},</span>
-            <span class="tok-s2">&quot;globals&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-                <span class="tok-c1"># &quot;myglobal&quot;: &quot;path.to.my.globalfunc&quot;,</span>
-            <span class="tok-p">},</span>
-            <span class="tok-s2">&quot;constants&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-                <span class="tok-c1"># &quot;foo&quot;: &quot;bar&quot;,</span>
-            <span class="tok-p">},</span>
-            <span class="tok-s2">&quot;policies&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-                <span class="tok-c1"># &quot;ext.i18n.trimmed&quot;: True,</span>
-            <span class="tok-p">},</span>
-            <span class="tok-s2">&quot;extensions&quot;</span><span class="tok-p">:</span> <span class="tok-p">[</span>
-                <span class="tok-s2">&quot;jinja2.ext.do&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;jinja2.ext.loopcontrols&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;jinja2.ext.i18n&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;django_jinja.builtins.extensions.CsrfExtension&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;django_jinja.builtins.extensions.CacheExtension&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;django_jinja.builtins.extensions.DebugExtension&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;django_jinja.builtins.extensions.TimezoneExtension&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;django_jinja.builtins.extensions.UrlsExtension&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;django_jinja.builtins.extensions.StaticFilesExtension&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;django_jinja.builtins.extensions.DjangoFiltersExtension&quot;</span><span class="tok-p">,</span>
-            <span class="tok-p">],</span>
-            <span class="tok-s2">&quot;bytecode_cache&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
-                <span class="tok-s2">&quot;name&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;default&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;backend&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.cache.BytecodeCache&quot;</span><span class="tok-p">,</span>
-                <span class="tok-s2">&quot;enabled&quot;</span><span class="tok-p">:</span> <span class="tok-kc">False</span><span class="tok-p">,</span>
-            <span class="tok-p">},</span>
-            <span class="tok-s2">&quot;autoescape&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
-            <span class="tok-s2">&quot;auto_reload&quot;</span><span class="tok-p">:</span> <span class="tok-n">settings</span><span class="tok-o">.</span><span class="tok-n">DEBUG</span><span class="tok-p">,</span>
-            <span class="tok-s2">&quot;translation_engine&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django.utils.translation&quot;</span><span class="tok-p">,</span>
-        <span class="tok-p">}</span>
-    <span class="tok-p">},</span>
-<span class="tok-p">]</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_differences_with_django_template_engine"><a class="link" href="#_differences_with_django_template_engine">Differences with Django Template Engine</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_url_reversing"><a class="link" href="#_url_reversing">Url reversing</a></h3>
-<div class="paragraph">
-<p>django-jinja comes with helpers for reverse urls. Instead of using django&#8217;s approach, it uses
+<p class="tableblock">[source, python]
+----
+"OPTIONS": {
+    "newstyle_gettext": True,
+}
+----</p>
+<p class="tableblock">=== Complete example</p>
+<p class="tableblock">This is a complete configuration example with django-jinja&#8217;s defaults:</p>
+<p class="tableblock">[source, python]
+----
+TEMPLATES = [
+    {
+        "BACKEND": "django_jinja.backend.Jinja2",
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "match_extension": ".jinja",
+            "match_regex": None,
+            "app_dirname": "templates",
+            # Can be set to "jinja2.Undefined" or any other subclass.
+            "undefined": None,
+            "newstyle_gettext": True,
+            "tests": {
+                # "mytest": "path.to.my.test",
+            },
+            "filters": {
+                # "myfilter": "path.to.my.filter",
+            },
+            "globals": {
+                # "myglobal": "path.to.my.globalfunc",
+            },
+            "constants": {
+                # "foo": "bar",
+            },
+            "policies": {
+                # "ext.i18n.trimmed": True,
+            },
+            "extensions": [
+                "jinja2.ext.do",
+                "jinja2.ext.loopcontrols",
+                "jinja2.ext.i18n",
+                "django_jinja.builtins.extensions.CsrfExtension",
+                "django_jinja.builtins.extensions.CacheExtension",
+                "django_jinja.builtins.extensions.DebugExtension",
+                "django_jinja.builtins.extensions.TimezoneExtension",
+                "django_jinja.builtins.extensions.UrlsExtension",
+                "django_jinja.builtins.extensions.StaticFilesExtension",
+                "django_jinja.builtins.extensions.DjangoFiltersExtension",
+            ],
+            "bytecode_cache": {
+                "name": "default",
+                "backend": "django_jinja.cache.BytecodeCache",
+                "enabled": False,
+            },
+            "autoescape": True,
+            "auto_reload": settings.DEBUG,
+            "translation_engine": "django.utils.translation",
+        }
+    },
+]
+----</p>
+<p class="tableblock">== Differences with Django Template Engine</p>
+<p class="tableblock">=== Url reversing</p>
+<p class="tableblock">django-jinja comes with helpers for reverse urls. Instead of using django&#8217;s approach, it uses
 a simple function called <code>url</code>.</p>
-</div>
-<div class="listingblock">
-<div class="title">Reverse urls in templates</div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{{</span> <span class="tok-nv">url</span><span class="tok-o">(</span><span class="tok-s1">&#39;ns:name&#39;</span><span class="tok-o">,</span> <span class="tok-nv">pk</span><span class="tok-o">=</span><span class="tok-nv">obj.pk</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This approach is very flexible, because we do not need additional options to set a result
+<p class="tableblock">.Reverse urls in templates
+[source, html+jinja]
+----
+{{ url('ns:name', pk=obj.pk) }}
+----</p>
+<p class="tableblock">This approach is very flexible, because we do not need additional options to set a result
 if executing url in one variable. With jinja2 you can use the set template tag for it:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{%</span> <span class="tok-k">set</span> <span class="tok-nv">myurl</span><span class="tok-o">=</span><span class="tok-nv">url</span><span class="tok-o">(</span><span class="tok-s2">&quot;ns:name&quot;</span><span class="tok-o">,</span> <span class="tok-nv">pk</span><span class="tok-o">=</span><span class="tok-nv">obj.pk</span><span class="tok-o">)</span> <span class="tok-cp">%}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_static_files"><a class="link" href="#_static_files">Static files</a></h3>
-<div class="paragraph">
-<p>Like urls, static files can be resolved with the simple <code>static</code> function available globally
+<p class="tableblock">[source, html+jinja]
+----
+{% set myurl=url("ns:name", pk=obj.pk) %}
+----</p>
+<p class="tableblock">=== Static files</p>
+<p class="tableblock">Like urls, static files can be resolved with the simple <code>static</code> function available globally
 in jinja context:</p>
-</div>
-<div class="listingblock">
-<div class="title">Example resolving static files</div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{{</span> <span class="tok-nv">static</span><span class="tok-o">(</span><span class="tok-s2">&quot;js/lib/foo.js&quot;</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_i18n_support"><a class="link" href="#_i18n_support">i18n support</a></h3>
-<div class="paragraph">
-<p>django-jinja inherits the jinja2 approach for handling translation strings. You can read more about
+<p class="tableblock">.Example resolving static files
+[source, html+jinja]
+----
+{{ static("js/lib/foo.js") }}
+----</p>
+<p class="tableblock">=== i18n support</p>
+<p class="tableblock">django-jinja inherits the jinja2 approach for handling translation strings. You can read more about
 it here: <a href="https://jinja.palletsprojects.com/en/latest/templates/#i18n" class="bare">https://jinja.palletsprojects.com/en/latest/templates/#i18n</a></p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{{</span> <span class="tok-kp">_</span><span class="tok-o">(</span><span class="tok-s1">&#39;Hello %(name)s&#39;</span><span class="tok-o">,</span> <span class="tok-nv">name</span><span class="tok-o">=</span><span class="tok-nv">user.name</span><span class="tok-o">)</span> <span class="tok-cp">}}</span>
-
-<span class="tok-cp">{%</span> <span class="tok-k">trans</span> <span class="tok-nv">name</span><span class="tok-o">=</span><span class="tok-nv">user.name</span> <span class="tok-cp">%}</span>
-  Hello <span class="tok-cp">{{</span> <span class="tok-nv">name</span> <span class="tok-cp">}}</span>
-<span class="tok-cp">{%</span> <span class="tok-k">endtrans</span> <span class="tok-cp">%}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Additionally, django-jinja extends django&#8217;s <code>makemessages</code> command to make it work
+<p class="tableblock">[source, html+jinja]
+----
+{{ _('Hello %(name)s', name=user.name) }}</p>
+<p class="tableblock">{% trans name=user.name %}
+  Hello {{ name }}
+{% endtrans %}
+----</p>
+<p class="tableblock">Additionally, django-jinja extends django&#8217;s <code>makemessages</code> command to make it work
 with jinja2 i18n tags.</p>
-</div>
-<div class="paragraph">
-<p>If you want more django-like i18n-related tags, you can use extensions from
+<p class="tableblock">If you want more django-like i18n-related tags, you can use extensions from
 <a href="https://github.com/MoritzS/jinja2-django-tags" class="bare">https://github.com/MoritzS/jinja2-django-tags</a>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_replace_jinja_filters_with_django_versions"><a class="link" href="#_replace_jinja_filters_with_django_versions">Replace jinja filters with django versions</a></h3>
-<div class="paragraph">
-<p>Django and Jinja overlap in a little subset of template filters. To properly handle this, django-jinja
+<p class="tableblock">=== Replace jinja filters with django versions</p>
+<p class="tableblock">Django and Jinja overlap in a little subset of template filters. To properly handle this, django-jinja
 uses the jinja versions by default. But if you want a django version of them, you should use
 the "django_jinja.builtins.extensions.DjangoExtraFiltersExtension" extension.</p>
-</div>
-<div class="paragraph">
-<p>The affected filters are: title, upper, lower, urlencode, urlize, wordcount, wordwrap, center
+<p class="tableblock">The affected filters are: title, upper, lower, urlencode, urlize, wordcount, wordwrap, center
 join, length, random, default, filesizeformat, pprint.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_registering_filters_in_a_django_way"><a class="link" href="#_registering_filters_in_a_django_way">Registering filters in a "django" way.</a></h3>
-<div class="paragraph">
-<p>django-jinja comes with facilities for loading template filters, globals and tests
+<p class="tableblock">=== Registering filters in a "django" way.</p>
+<p class="tableblock">django-jinja comes with facilities for loading template filters, globals and tests
 from django applications.</p>
-</div>
-<div class="paragraph">
-<p>Here an example:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-c1"># &lt;someapp&gt;/templatetags/&lt;anyfile&gt;.py</span>
-<span class="tok-c1"># don&#39;t forget to create __init__.py in templatetags dir</span>
-
-<span class="tok-kn">from</span> <span class="tok-nn">django_jinja</span> <span class="tok-kn">import</span> <span class="tok-n">library</span>
-<span class="tok-kn">import</span> <span class="tok-nn">jinja2</span>
-
-<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">test</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-o">=</span><span class="tok-s2">&quot;one&quot;</span><span class="tok-p">)</span>
-<span class="tok-k">def</span> <span class="tok-nf">is_one</span><span class="tok-p">(</span><span class="tok-n">n</span><span class="tok-p">):</span>
-    <span class="tok-sd">&quot;&quot;&quot;</span>
-<span class="tok-sd">    Usage: {% if m is one %}Foo{% endif %}</span>
-<span class="tok-sd">    &quot;&quot;&quot;</span>
-    <span class="tok-k">return</span> <span class="tok-n">n</span> <span class="tok-o">==</span> <span class="tok-mi">1</span>
-
-<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">filter</span>
-<span class="tok-k">def</span> <span class="tok-nf">mylower</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-p">):</span>
-    <span class="tok-sd">&quot;&quot;&quot;</span>
-<span class="tok-sd">    Usage: {{ &#39;Hello&#39;|mylower() }}</span>
-<span class="tok-sd">    &quot;&quot;&quot;</span>
-    <span class="tok-k">return</span> <span class="tok-n">name</span><span class="tok-o">.</span><span class="tok-n">lower</span><span class="tok-p">()</span>
-
-<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">filter</span>
-<span class="tok-nd">@jinja2</span><span class="tok-o">.</span><span class="tok-n">contextfilter</span>
-<span class="tok-k">def</span> <span class="tok-nf">replace</span><span class="tok-p">(</span><span class="tok-n">context</span><span class="tok-p">,</span> <span class="tok-n">value</span><span class="tok-p">,</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">y</span><span class="tok-p">):</span>
-    <span class="tok-sd">&quot;&quot;&quot;</span>
-<span class="tok-sd">    Filter with template context. Usage: {{ &#39;Hello&#39;|replace(&#39;H&#39;,&#39;M&#39;) }}</span>
-<span class="tok-sd">    &quot;&quot;&quot;</span>
-    <span class="tok-k">return</span> <span class="tok-n">value</span><span class="tok-o">.</span><span class="tok-n">replace</span><span class="tok-p">(</span><span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">y</span><span class="tok-p">)</span>
-
-
-<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">global_function</span>
-<span class="tok-k">def</span> <span class="tok-nf">myecho</span><span class="tok-p">(</span><span class="tok-n">data</span><span class="tok-p">):</span>
-    <span class="tok-sd">&quot;&quot;&quot;</span>
-<span class="tok-sd">    Usage: {{ myecho(&#39;foo&#39;) }}</span>
-<span class="tok-sd">    &quot;&quot;&quot;</span>
-    <span class="tok-k">return</span> <span class="tok-n">data</span>
-
-
-<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">global_function</span>
-<span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">render_with</span><span class="tok-p">(</span><span class="tok-s2">&quot;test-render-with.jinja&quot;</span><span class="tok-p">)</span>
-<span class="tok-k">def</span> <span class="tok-nf">myrenderwith</span><span class="tok-p">(</span><span class="tok-o">*</span><span class="tok-n">args</span><span class="tok-p">,</span> <span class="tok-o">**</span><span class="tok-n">kwargs</span><span class="tok-p">):</span>
-    <span class="tok-sd">&quot;&quot;&quot;</span>
-<span class="tok-sd">    Render result with jinja template. Usage: {{ myrenderwith() }}</span>
-<span class="tok-sd">    &quot;&quot;&quot;</span>
-    <span class="tok-k">return</span> <span class="tok-p">{</span><span class="tok-s2">&quot;name&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Foo&quot;</span><span class="tok-p">}</span>
-
-
-<span class="tok-kn">from</span> <span class="tok-nn">.myextensions</span>  <span class="tok-kn">import</span> <span class="tok-n">MyExtension</span>
-<span class="tok-n">library</span><span class="tok-o">.</span><span class="tok-n">extension</span><span class="tok-p">(</span><span class="tok-n">MyExtension</span><span class="tok-p">)</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>This only works within a Django app. If you don&#8217;t have an app for your project, create an app specifically for this purpose and put your templatetags there.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_render_4xx500_pages_with_jinja"><a class="link" href="#_render_4xx500_pages_with_jinja">Render 4xx/500 pages with jinja</a></h3>
-<div class="paragraph">
-<p>django-jinja also provides a set of views for easy
+<p class="tableblock">Here an example:</p>
+<p class="tableblock">[source, python]
+----
+# &lt;someapp&gt;/templatetags/&lt;anyfile&gt;.py
+# don&#8217;t forget to create <em>init</em>.py in templatetags dir</p>
+<p class="tableblock">from django_jinja import library
+import jinja2</p>
+<p class="tableblock">@library.test(name="one")
+def is_one(n):
+    """
+    Usage: {% if m is one %}Foo{% endif %}
+    """
+    return n == 1</p>
+<p class="tableblock">@library.filter
+def mylower(name):
+    """
+    Usage: {{ 'Hello'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">mylower() }}
+    """
+    return name.lower()</p>
+<p class="tableblock">@library.filter
+@jinja2.pass_context
+def replace(context, value, x, y):
+    """
+    Filter with template context. Usage: {{ 'Hello'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">replace('H','M') }}
+    """
+    return value.replace(x, y)</p>
+<p class="tableblock">@library.global_function
+def myecho(data):
+    """
+    Usage: {{ myecho('foo') }}
+    """
+    return data</p>
+<p class="tableblock">@library.global_function
+@library.render_with("test-render-with.jinja")
+def myrenderwith(<strong>args, **kwargs):
+    """
+    Render result with jinja template. Usage: {{ myrenderwith() }}
+    """
+    return {"name": "Foo"}</p>
+<p class="tableblock">from .myextensions  import MyExtension
+library.extension(MyExtension)
+----</p>
+<p class="tableblock">This only works within a Django app. If you don&#8217;t have an app for your project, create an app specifically for this purpose and put your templatetags there.</p>
+<p class="tableblock">=== Render 4xx/500 pages with jinja</p>
+<p class="tableblock">django-jinja also provides a set of views for easy
 render 4xx/500 pages using jinja engine:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-c1"># yourproject/urls.py</span>
-<span class="tok-kn">from</span> <span class="tok-nn">django_jinja</span> <span class="tok-kn">import</span> <span class="tok-n">views</span>
-
-<span class="tok-n">handler400</span> <span class="tok-o">=</span> <span class="tok-n">views</span><span class="tok-o">.</span><span class="tok-n">BadRequest</span><span class="tok-o">.</span><span class="tok-n">as_view</span><span class="tok-p">()</span>
-<span class="tok-n">handler403</span> <span class="tok-o">=</span> <span class="tok-n">views</span><span class="tok-o">.</span><span class="tok-n">PermissionDenied</span><span class="tok-o">.</span><span class="tok-n">as_view</span><span class="tok-p">()</span>
-<span class="tok-n">handler404</span> <span class="tok-o">=</span> <span class="tok-n">views</span><span class="tok-o">.</span><span class="tok-n">PageNotFound</span><span class="tok-o">.</span><span class="tok-n">as_view</span><span class="tok-p">()</span>
-<span class="tok-n">handler500</span> <span class="tok-o">=</span> <span class="tok-n">views</span><span class="tok-o">.</span><span class="tok-n">ServerError</span><span class="tok-o">.</span><span class="tok-n">as_view</span><span class="tok-p">()</span></code></pre>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_known_issues"><a class="link" href="#_known_issues">Known Issues</a></h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p>The above handler500 is broken as of django 2.2. see: https:github.com/niwinz/django-jinja/issues/234</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_builtin_contrib_modules"><a class="link" href="#_builtin_contrib_modules">Builtin contrib modules</a></h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p><strong>django-jinja</strong> comes with some additional contrib modules that adapt a limited set of external
+<p class="tableblock">[source, python]
+----
+# yourproject/urls.py
+from django_jinja import views</p>
+<p class="tableblock">handler400 = views.BadRequest.as_view()
+handler403 = views.PermissionDenied.as_view()
+handler404 = views.PageNotFound.as_view()
+handler500 = views.ServerError.as_view()
+----</p>
+<p class="tableblock">== Known Issues</p>
+<p class="tableblock">- The above handler500 is broken as of django 2.2. see: https:github.com/niwinz/django-jinja/issues/234</p>
+<p class="tableblock">== Builtin contrib modules</p>
+<p class="tableblock">*django-jinja</strong> comes with some additional contrib modules that adapt a limited set of external
 django apps for easy use from jinja templates. Please note that in order to use any of these
 contrib modules, you&#8217;ll need to install the relevant dependent packages yourself first.</p>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>In django, creating new tags is simpler than in Jinja2. You should remember that
+<p class="tableblock">[NOTE]
+====
+In django, creating new tags is simpler than in Jinja2. You should remember that
 in jinja tags are really extensions and have a different purpose than the django template tags.</p>
-</div>
-<div class="paragraph">
-<p>Thus for many things that the django template system uses tags, django-jinja will provide
-functions with the same functionality.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_easy_thumbnails"><a class="link" href="#_easy_thumbnails">easy-thumbnails</a></h3>
-<div class="paragraph">
-<p>Easy Thumbnails is a thumbnail generation library for Django.</p>
-</div>
-<div class="listingblock">
-<div class="title">Activate plugin (settings.py)</div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja.contrib._easy_thumbnails&#39;</span><span class="tok-p">,)</span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Usage</div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{{</span> <span class="tok-nv">thumbnail</span><span class="tok-o">(</span><span class="tok-nv">file</span><span class="tok-o">,</span> <span class="tok-nv">size</span><span class="tok-o">=(</span><span class="tok-m">400</span><span class="tok-o">,</span> <span class="tok-m">400</span><span class="tok-o">))</span> <span class="tok-cp">}}</span>
-<span class="tok-cp">{{</span> <span class="tok-nv">user.avatar</span><span class="tok-o">|</span><span class="tok-nf">thumbnail_url</span><span class="tok-o">(</span><span class="tok-s2">&quot;alias&quot;</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_django_subdomains"><a class="link" href="#_django_subdomains">django-subdomains</a></h3>
-<div class="paragraph">
-<p>Subdomain helpers for the Django framework, including subdomain-based URL routing.</p>
-</div>
-<div class="listingblock">
-<div class="title">Activate plugin (settings.py)</div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja.contrib._subdomains&#39;</span><span class="tok-p">,)</span></code></pre>
-</div>
-</div>
-<div class="listingblock">
-<div class="title">Usage</div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="html+jinja"><span></span><span class="tok-cp">{{</span> <span class="tok-nv">url</span><span class="tok-o">(</span><span class="tok-s1">&#39;homepage&#39;</span><span class="tok-o">,</span> <span class="tok-nv">subdomain</span><span class="tok-o">=</span><span class="tok-s1">&#39;wildcard&#39;</span><span class="tok-o">)</span> <span class="tok-cp">}}</span></code></pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_humanize"><a class="link" href="#_humanize">humanize</a></h3>
-<div class="paragraph">
-<p>Django comes with the humanize library that exposes some useful template filters.</p>
-</div>
-<div class="listingblock">
-<div class="title">Activate plugin (settings.py)</div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">INSTALLED_APPS</span> <span class="tok-o">+=</span> <span class="tok-p">(</span><span class="tok-s1">&#39;django_jinja.contrib._humanize&#39;</span><span class="tok-p">,)</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p><a href="https://docs.djangoproject.com/en/dev/ref/contrib/humanize/">Complete list of available filters</a></p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_license"><a class="link" href="#_license">License</a></h2>
-<div class="sectionbody">
-<div class="listingblock">
-<div class="title"><a id="license"></a></div>
-<div class="content">
-<pre class="pygments highlight"><code data-lang="text"><span></span>Copyright (c) 2011-2017 Andre Antukh &lt;niwi@niwi.be&gt;
-
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
+<p class="tableblock">Thus for many things that the django template system uses tags, django-jinja will provide
+functions with the same functionality.
+====</p>
+<p class="tableblock">easy-thumbnails
+<sub>~</sub><sub>~</sub><sub>~</sub><sub>~</sub><sub>~</sub></p>
+<p class="tableblock">Easy Thumbnails is a thumbnail generation library for Django.</p>
+<p class="tableblock">.Activate plugin (settings.py)
+[source, python]
+----
+INSTALLED_APPS += ('django_jinja.contrib._easy_thumbnails',)
+----</p>
+<p class="tableblock">.Usage
+[source, html+jinja]
+----
+{{ thumbnail(file, size=(400, 400)) }}
+{{ user.avatar</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">thumbnail_url("alias") }}
+----</p>
+<p class="tableblock">django-subdomains
+<sub>~</sub><sub>~</sub><sub>~</sub><sub>~</sub><sub>~</sub>~~</p>
+<p class="tableblock">Subdomain helpers for the Django framework, including subdomain-based URL routing.</p>
+<p class="tableblock">.Activate plugin (settings.py)
+[source, python]
+----
+INSTALLED_APPS += ('django_jinja.contrib._subdomains',)
+----</p>
+<p class="tableblock">.Usage
+[source, html+jinja]
+----
+{{ url('homepage', subdomain='wildcard') }}
+----</p>
+<p class="tableblock">humanize
+<sub>~</sub><sub>~</sub>~~</p>
+<p class="tableblock">Django comes with the humanize library that exposes some useful template filters.</p>
+<p class="tableblock">.Activate plugin (settings.py)
+[source, python]
+----
+INSTALLED_APPS += ('django_jinja.contrib._humanize',)
+----</p>
+<p class="tableblock"><a href="https://docs.djangoproject.com/en/dev/ref/contrib/humanize/">Complete list of available filters</a></p>
+<p class="tableblock">.<a id="license"></a>
+License
+-------</p>
+<p class="tableblock">[source,text]
+----
+Copyright (c) 2011-2017 Andre Antukh &lt;<a href="mailto:niwi@niwi.be">niwi@niwi.be</a>&gt;</p>
+<p class="tableblock">All rights reserved.</p>
+<p class="tableblock">Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
 are met:
 1. Redistributions of source code must retain the above copyright
@@ -921,9 +602,8 @@ are met:
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
 3. The name of the author may not be used to endorse or promote products
-   derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS&#39;&#39; AND ANY EXPRESS OR
+   derived from this software without specific prior written permission.</p>
+<p class="tableblock">THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
 IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
 OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
 IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -932,15 +612,18 @@ NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
 DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
-THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
-</div>
+THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+----</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-05-12 15:52:03 -0700
+Last updated 2022-05-12 17:07:07 -0700
 </div>
 </div>
 </body>
