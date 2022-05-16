@@ -53,8 +53,8 @@ in the "Custom filters, globals, constants and tests" section.
 
 === Requirements
 
-- Python >= 3.6
-- Django >= 2.2
+- Python >= 3.7
+- Django >= 3.2
 - jinja2 >= 3.0
 
 If you are using older versions of Django or Python, you need an older version of django-jinja:
@@ -85,6 +85,10 @@ If you are using older versions of Django or Python, you need an older version o
 |>=2.10.0
 |3.6, 3.7, 3.8, 3.9, 3.10
 |2.2, 3.2, 4.0
+
+|>=2.next
+|3.7, 3.8, 3.9, 3.10
+|3.2, 4.0
 |===
 
 

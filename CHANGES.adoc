@@ -1,6 +1,12 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Drop Django 2.2 support, now require >=3.2.
+- Drop Python 3.6 support, now require >=3.7.
+
 
 Version 2.10.2
 --------------

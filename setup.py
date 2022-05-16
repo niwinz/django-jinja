@@ -31,10 +31,10 @@ setup(
         "django_jinja.views.generic",
     ],
     include_package_data = True,
-    python_requires = ">=3.6",
+    python_requires = ">=3.7",
     install_requires = [
         "jinja2>=3",
-        "django>=2.2",
+        "django>=3.2",
     ],
     tests_require = [
         "pytz",
@@ -42,7 +42,6 @@ setup(
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Framework :: Django",
-        "Framework :: Django :: 2.2",
         "Framework :: Django :: 3.2",
         "Framework :: Django :: 4.0",
         "Intended Audience :: Developers",
@@ -51,7 +50,6 @@ setup(
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
