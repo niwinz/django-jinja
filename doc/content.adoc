@@ -87,8 +87,8 @@ If you are using older versions of Django or Python, you need an older version o
 |2.2, 3.2, 4.0
 
 |>=2.next
-|3.7, 3.8, 3.9, 3.10
-|3.2, 4.0
+|3.7, 3.8, 3.9, 3.10, 3.11
+|3.2, 4.0, 4.1
 |===
 
 
