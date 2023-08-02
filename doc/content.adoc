@@ -117,6 +117,7 @@ Followed by the basic template engine configuration:
 ----
 TEMPLATES = [
     {
+        "NAME": "jinja2",
         "BACKEND": "django_jinja.backend.Jinja2",
         "DIRS": [],
         "APP_DIRS": True,
@@ -138,6 +139,12 @@ django-jinja backend, take care of the template engines order, because the
 django-jinja backend by default uses the same directory for the templates as
 the django template engine. If you put the django engine first every jinja
 template will be found by the django engine.
+
+Also, keep in mind that the automatically inferred `NAME` for the django-jinja
+backend will be `backend`. For this, you probably want to manually set the `NAME`
+setting to something more meaningful (e.g. `jinja2`), which you can later use
+when you need to specify a template engine by name
+(e.g. `render_to_string("myapp/template.jinja", context, using="jinja2")`).
 ====
 
 To read more on the logic of the `DIRS` and `APP_DIRS` settings,
@@ -356,6 +363,7 @@ This is a complete configuration example with django-jinja's defaults:
 ----
 TEMPLATES = [
     {
+        "NAME": "jinja2",
         "BACKEND": "django_jinja.backend.Jinja2",
         "APP_DIRS": True,
         "OPTIONS": {
