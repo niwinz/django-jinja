@@ -5,8 +5,8 @@ Unreleased
 ----------
 
 - Drop Django 2.2 support, now require >=3.2.
-- Drop Python 3.6 support, now require >=3.7.
-- Add Django 4.1 support.
+- Drop Python 3.6 and 3.7 support, now require >=3.8.
+- Add Django 4.1 and 4.2 support.
 - Add Python 3.11 support.
 
 
