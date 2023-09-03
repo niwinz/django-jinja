@@ -1,8 +1,10 @@
 Changelog
 =========
 
-Unreleased
-----------
+Version 2.11.0
+--------------
+
+_Released September 3rd, 2023_
 
 - Drop Django 2.2 support, now require >=3.2.
 - Drop Python 3.6 and 3.7 support, now require >=3.8.
