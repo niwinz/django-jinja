@@ -8,6 +8,30 @@ Unreleased
 - Drop Python 3.6 and 3.7 support, now require >=3.8.
 - Add Django 4.1 and 4.2 support.
 - Add Python 3.11 support.
+- Provide a better default template engine NAME than 'backend' (#303):
+
+Previously, when configuring `TEMPLATES` in Django's settings,
+`NAME` had to be set to avoid the template engine's name becoming `"backend"`:
+
+[source,python]
+----
+TEMPLATES = [
+    {
+        "NAME": "jinja2",
+        "BACKEND": "django_jinja.backend.Jinja2",
+----
+
+If your code matches that pattern, it can now be simplified to:
+
+[source,python]
+----
+TEMPLATES = [
+    {
+        "BACKEND": "django_jinja.jinja2.Jinja2",
+----
+
+There are no plans to remove support for the old `backend` import path, for consideration of existing projects.
+Also, be careful if you've set `NAME` to `"jinja"` (not `"jinja2"`)!
 
 
 Version 2.10.2

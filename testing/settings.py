@@ -61,8 +61,7 @@ JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
 
 TEMPLATES = [
     {
-        "BACKEND": "django_jinja.backend.Jinja2",
-        "NAME": "jinja2",
+        "BACKEND": "django_jinja.jinja2.Jinja2",
         "APP_DIRS": True,
         "OPTIONS": {
             "debug": True,

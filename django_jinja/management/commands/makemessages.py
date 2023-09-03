@@ -67,10 +67,11 @@ class Command(makemessages.Command):
 
     def _get_default_jinja_template_engine(self):
         # dev's note: i would love to have this easy default: --jinja2-engine-name=jinja2
-        # but as currently implemented, django-jinja's engine's name defaults to 'backend'.
+        # but due to historical reasons, django-jinja's engine's name can default to either `jinja2` or 'backend'.
         # see: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-NAME
-        # for now, the default engine will be the first one exactly matching our backend's path.
-        return [e for e in engines.templates.values() if e["BACKEND"] == "django_jinja.backend.Jinja2"][0]
+        # the default engine will be the first one exactly matching either of the new or old import paths.
+        supported_import_paths = ["django_jinja.backend.Jinja2", "django_jinja.jinja2.Jinja2"]
+        return [e for e in engines.templates.values() if e["BACKEND"] in supported_import_paths][0]
 
     def handle(self, *args, **options):
         old_endblock_re = trans_real.endblock_re
