@@ -117,8 +117,7 @@ Followed by the basic template engine configuration:
 ----
 TEMPLATES = [
     {
-        "NAME": "jinja2",
-        "BACKEND": "django_jinja.backend.Jinja2",
+        "BACKEND": "django_jinja.jinja2.Jinja2",
         "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {}
@@ -139,12 +138,6 @@ django-jinja backend, take care of the template engines order, because the
 django-jinja backend by default uses the same directory for the templates as
 the django template engine. If you put the django engine first every jinja
 template will be found by the django engine.
-
-Also, keep in mind that the automatically inferred `NAME` for the django-jinja
-backend will be `backend`. For this, you probably want to manually set the `NAME`
-setting to something more meaningful (e.g. `jinja2`), which you can later use
-when you need to specify a template engine by name
-(e.g. `render_to_string("myapp/template.jinja", context, using="jinja2")`).
 ====
 
 To read more on the logic of the `DIRS` and `APP_DIRS` settings,
@@ -338,6 +331,21 @@ from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 ----
 
+=== Setting the template engine name
+
+Keep in mind that the automatically inferred `NAME` for any template backend
+link:https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-TEMPLATES-NAME[will depend on the backend's import path].
+This name is used when you need to specify a template engine by name
+(e.g. `render_to_string("myapp/template.jinja", context, using="jinja2")`).
+
+In previous versions of django-jinja, the backend's import path was `django_jinja.backend.Jinja2`,
+providing the unhelpful default engine name, `"backend"`.
+
+Now, the import path `django_jinja.jinja2.Jinja2` can be used,
+which provides a more meaningful engine name, `"jinja2"`.
+
+The old import path is still available for compatability with existing Django projects.
+
 
 === Gettext Style
 
@@ -363,8 +371,7 @@ This is a complete configuration example with django-jinja's defaults:
 ----
 TEMPLATES = [
     {
-        "NAME": "jinja2",
-        "BACKEND": "django_jinja.backend.Jinja2",
+        "BACKEND": "django_jinja.jinja2.Jinja2",
         "APP_DIRS": True,
         "OPTIONS": {
             "match_extension": ".jinja",
