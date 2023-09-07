@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.17">
+<meta name="generator" content="Asciidoctor 2.0.20">
 <meta name="author" content="Andrey Antukh, &lt;niwi@niwi.be&gt;">
 <title>django-jinja - jinja2 backend for Django</title>
 <style>
@@ -86,7 +86,7 @@ pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
 <h1>django-jinja - jinja2 backend for Django</h1>
 <div class="details">
 <span id="author" class="author">Andrey Antukh, &lt;niwi@niwi.be&gt;</span><br>
-<span id="revdate">2.10.2</span>
+<span id="revdate">2.11.0</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -107,6 +107,7 @@ pre.pygments .tok-il { color: #40a070 } /* Literal.Number.Integer.Long */
 <li><a href="#_custom_filters_globals_constants_and_tests">Custom filters, globals, constants and tests</a></li>
 <li><a href="#_set_policies">Set policies</a></li>
 <li><a href="#_add_additional_extensions">Add additional extensions</a></li>
+<li><a href="#_setting_the_template_engine_name">Setting the template engine name</a></li>
 <li><a href="#_gettext_style">Gettext Style</a></li>
 <li><a href="#_complete_example">Complete example</a></li>
 </ul>
@@ -212,10 +213,10 @@ in the "Custom filters, globals, constants and tests" section.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Python &gt;= 3.6</p>
+<p>Python &gt;= 3.8</p>
 </li>
 <li>
-<p>Django &gt;= 2.2</p>
+<p>Django &gt;= 3.2</p>
 </li>
 <li>
 <p>jinja2 &gt;= 3.0</p>
@@ -269,6 +270,11 @@ in the "Custom filters, globals, constants and tests" section.</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3.6, 3.7, 3.8, 3.9, 3.10</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">2.2, 3.2, 4.0</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&gt;=2.11.0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3.8, 3.9, 3.10, 3.11</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3.2, 4.0, 4.1, 4.2</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -279,7 +285,7 @@ in the "Custom filters, globals, constants and tests" section.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="pygments highlight"><code data-lang="bash"><span></span>pip install django-jinja</code></pre>
+<pre class="pygments highlight"><code data-lang="bash"><span></span>pip<span class="tok-w"> </span>install<span class="tok-w"> </span>django-jinja</code></pre>
 </div>
 </div>
 </div>
@@ -303,7 +309,7 @@ in the "Custom filters, globals, constants and tests" section.</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">TEMPLATES</span> <span class="tok-o">=</span> <span class="tok-p">[</span>
     <span class="tok-p">{</span>
-        <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.backend.Jinja2&quot;</span><span class="tok-p">,</span>
+        <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.jinja2.Jinja2&quot;</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-p">[],</span>
         <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{}</span>
@@ -572,6 +578,26 @@ using the <code>extensions</code> entry of the backend options:</p>
 </div>
 </div>
 <div class="sect2">
+<h3 id="_setting_the_template_engine_name"><a class="link" href="#_setting_the_template_engine_name">Setting the template engine name</a></h3>
+<div class="paragraph">
+<p>Keep in mind that the automatically inferred <code>NAME</code> for any template backend
+<a href="https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-TEMPLATES-NAME">will depend on the backend&#8217;s import path</a>.
+This name is used when you need to specify a template engine by name
+(e.g. <code>render_to_string("myapp/template.jinja", context, using="jinja2")</code>).</p>
+</div>
+<div class="paragraph">
+<p>In previous versions of django-jinja, the backend&#8217;s import path was <code>django_jinja.backend.Jinja2</code>,
+providing the unhelpful default engine name, <code>"backend"</code>.</p>
+</div>
+<div class="paragraph">
+<p>Now, the import path <code>django_jinja.jinja2.Jinja2</code> can be used,
+which provides a more meaningful engine name, <code>"jinja2"</code>.</p>
+</div>
+<div class="paragraph">
+<p>The old import path is still available for compatability with existing Django projects.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_gettext_style"><a class="link" href="#_gettext_style">Gettext Style</a></h3>
 <div class="paragraph">
 <p>Jinja2 implements two styles of gettext. You can read about it here:
@@ -598,7 +624,7 @@ backend options:</p>
 <div class="content">
 <pre class="pygments highlight"><code data-lang="python"><span></span><span class="tok-n">TEMPLATES</span> <span class="tok-o">=</span> <span class="tok-p">[</span>
     <span class="tok-p">{</span>
-        <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.backend.Jinja2&quot;</span><span class="tok-p">,</span>
+        <span class="tok-s2">&quot;BACKEND&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;django_jinja.jinja2.Jinja2&quot;</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;APP_DIRS&quot;</span><span class="tok-p">:</span> <span class="tok-kc">True</span><span class="tok-p">,</span>
         <span class="tok-s2">&quot;OPTIONS&quot;</span><span class="tok-p">:</span> <span class="tok-p">{</span>
             <span class="tok-s2">&quot;match_extension&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;.jinja&quot;</span><span class="tok-p">,</span>
@@ -743,14 +769,14 @@ from django applications.</p>
 
 <span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">test</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-o">=</span><span class="tok-s2">&quot;one&quot;</span><span class="tok-p">)</span>
 <span class="tok-k">def</span> <span class="tok-nf">is_one</span><span class="tok-p">(</span><span class="tok-n">n</span><span class="tok-p">):</span>
-    <span class="tok-sd">&quot;&quot;&quot;</span>
+<span class="tok-w">    </span><span class="tok-sd">&quot;&quot;&quot;</span>
 <span class="tok-sd">    Usage: {% if m is one %}Foo{% endif %}</span>
 <span class="tok-sd">    &quot;&quot;&quot;</span>
     <span class="tok-k">return</span> <span class="tok-n">n</span> <span class="tok-o">==</span> <span class="tok-mi">1</span>
 
 <span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">filter</span>
 <span class="tok-k">def</span> <span class="tok-nf">mylower</span><span class="tok-p">(</span><span class="tok-n">name</span><span class="tok-p">):</span>
-    <span class="tok-sd">&quot;&quot;&quot;</span>
+<span class="tok-w">    </span><span class="tok-sd">&quot;&quot;&quot;</span>
 <span class="tok-sd">    Usage: {{ &#39;Hello&#39;|mylower() }}</span>
 <span class="tok-sd">    &quot;&quot;&quot;</span>
     <span class="tok-k">return</span> <span class="tok-n">name</span><span class="tok-o">.</span><span class="tok-n">lower</span><span class="tok-p">()</span>
@@ -758,7 +784,7 @@ from django applications.</p>
 <span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">filter</span>
 <span class="tok-nd">@jinja2</span><span class="tok-o">.</span><span class="tok-n">pass_context</span>
 <span class="tok-k">def</span> <span class="tok-nf">replace</span><span class="tok-p">(</span><span class="tok-n">context</span><span class="tok-p">,</span> <span class="tok-n">value</span><span class="tok-p">,</span> <span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">y</span><span class="tok-p">):</span>
-    <span class="tok-sd">&quot;&quot;&quot;</span>
+<span class="tok-w">    </span><span class="tok-sd">&quot;&quot;&quot;</span>
 <span class="tok-sd">    Filter with template context. Usage: {{ &#39;Hello&#39;|replace(&#39;H&#39;,&#39;M&#39;) }}</span>
 <span class="tok-sd">    &quot;&quot;&quot;</span>
     <span class="tok-k">return</span> <span class="tok-n">value</span><span class="tok-o">.</span><span class="tok-n">replace</span><span class="tok-p">(</span><span class="tok-n">x</span><span class="tok-p">,</span> <span class="tok-n">y</span><span class="tok-p">)</span>
@@ -766,7 +792,7 @@ from django applications.</p>
 
 <span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">global_function</span>
 <span class="tok-k">def</span> <span class="tok-nf">myecho</span><span class="tok-p">(</span><span class="tok-n">data</span><span class="tok-p">):</span>
-    <span class="tok-sd">&quot;&quot;&quot;</span>
+<span class="tok-w">    </span><span class="tok-sd">&quot;&quot;&quot;</span>
 <span class="tok-sd">    Usage: {{ myecho(&#39;foo&#39;) }}</span>
 <span class="tok-sd">    &quot;&quot;&quot;</span>
     <span class="tok-k">return</span> <span class="tok-n">data</span>
@@ -775,7 +801,7 @@ from django applications.</p>
 <span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">global_function</span>
 <span class="tok-nd">@library</span><span class="tok-o">.</span><span class="tok-n">render_with</span><span class="tok-p">(</span><span class="tok-s2">&quot;test-render-with.jinja&quot;</span><span class="tok-p">)</span>
 <span class="tok-k">def</span> <span class="tok-nf">myrenderwith</span><span class="tok-p">(</span><span class="tok-o">*</span><span class="tok-n">args</span><span class="tok-p">,</span> <span class="tok-o">**</span><span class="tok-n">kwargs</span><span class="tok-p">):</span>
-    <span class="tok-sd">&quot;&quot;&quot;</span>
+<span class="tok-w">    </span><span class="tok-sd">&quot;&quot;&quot;</span>
 <span class="tok-sd">    Render result with jinja template. Usage: {{ myrenderwith() }}</span>
 <span class="tok-sd">    &quot;&quot;&quot;</span>
     <span class="tok-k">return</span> <span class="tok-p">{</span><span class="tok-s2">&quot;name&quot;</span><span class="tok-p">:</span> <span class="tok-s2">&quot;Foo&quot;</span><span class="tok-p">}</span>
@@ -940,7 +966,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-05-12 17:12:23 -0700
+Last updated 2023-09-03 13:38:47 -0700
 </div>
 </div>
 </body>
