@@ -34,11 +34,17 @@ from django.utils.translation import template as trans_real
 
 strip_whitespace_right = re.compile(fr"({BLOCK_TAG_START}-?\s*(trans|pluralize).*?-{BLOCK_TAG_END})\s+", re.U)
 strip_whitespace_left = re.compile(fr"\s+({BLOCK_TAG_START}-\s*(endtrans|pluralize).*?-?{BLOCK_TAG_END})", re.U)
+trim_blocks = re.compile(fr"({BLOCK_TAG_START}-?\s*(trans|pluralize)[^+]*?{BLOCK_TAG_END})\n", re.U)
+lstrip_blocks = re.compile(fr"^[ \t]+({BLOCK_TAG_START}\s*(endtrans|pluralize).*?-?{BLOCK_TAG_END})", re.U | re.M)
 
 
-def strip_whitespaces(src):
+def strip_whitespaces(src, engine):
     src = strip_whitespace_left.sub(r'\1', src)
     src = strip_whitespace_right.sub(r'\1', src)
+    if engine.get("OPTIONS", {}).get("trim_blocks"):
+        src = trim_blocks.sub(r'\1', src)
+    if engine.get("OPTIONS", {}).get("lstrip_blocks"):
+        src = lstrip_blocks.sub(r'\1', src)
     return src
 
 
@@ -95,7 +101,7 @@ class Command(makemessages.Command):
             jinja_engine = self._get_default_jinja_template_engine()
 
         def my_templatize(src, origin=None, **kwargs):
-            new_src = strip_whitespaces(src)
+            new_src = strip_whitespaces(src, jinja_engine)
             new_src = apply_i18n_trimmed_policy(new_src, jinja_engine)
             return old_templatize(new_src, origin, **kwargs)
 
