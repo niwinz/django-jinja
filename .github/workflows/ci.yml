@@ -10,7 +10,7 @@ on:
     - cron: 33 3 * * MON  # Run Mondays at 03:33 UTC
 jobs:
   Build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version:
