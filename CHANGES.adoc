@@ -1,6 +1,13 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+- Add Django 5.0 support.
+- Switch from `setup.py` to `pyproject.toml`-style package definition.
+
+
 Version 2.11.0
 --------------
 
