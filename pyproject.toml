@@ -1,0 +1,63 @@
+[project]
+name = "django-jinja"
+version = "2.11.0"
+description = "Jinja2 templating language integrated in Django."
+readme = "README.rst"
+requires-python = ">=3.8"
+license = {file = "LICENSE"}
+keywords = ["django", "jinja2"]
+authors = [
+  {name = "Andrey Antukh", email = "niwi@niwi.be" },
+]
+maintainers = [
+  {name = "Asif Saif Uddin", email = "auvipy@gmail.com" },
+  {name = "Phillip Marshall", email = "wizpig64@gmail.com" },
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Framework :: Django",
+  "Framework :: Django :: 3.2",
+  "Framework :: Django :: 4.0",
+  "Framework :: Django :: 4.1",
+  "Framework :: Django :: 4.2",
+  "Framework :: Django :: 5.0",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Internet :: WWW/HTTP",
+]
+dependencies = [
+  "jinja2>=3",
+  "django>=3.2",
+]
+
+[project.urls]
+"Documentation" = "https://niwi.nz/django-jinja/latest/"
+"Changelog" = "https://github.com/niwinz/django-jinja/blob/master/CHANGES.adoc"
+"Source" = "https://github.com/niwinz/django-jinja/"
+"Issues" = "https://github.com/niwinz/django-jinja/issues/"
+
+[tool.setuptools]
+packages = [
+  "django_jinja",
+  "django_jinja.builtins",
+  "django_jinja.management",
+  "django_jinja.management.commands",
+  "django_jinja.contrib",
+  "django_jinja.contrib._easy_thumbnails",
+  "django_jinja.contrib._easy_thumbnails.templatetags",
+  "django_jinja.contrib._humanize",
+  "django_jinja.contrib._humanize.templatetags",
+  "django_jinja.contrib._subdomains",
+  "django_jinja.contrib._subdomains.templatetags",
+  "django_jinja.views",
+  "django_jinja.views.generic",
+]
