@@ -6,6 +6,7 @@ Unreleased
 
 - Add Django 5.0 support.
 - Switch from `setup.py` to `pyproject.toml`-style package definition.
+- The `makemessages` management command emulates Jinja's `trim_blocks` and `lstrip_blocks` settings.
 
 
 Version 2.11.0

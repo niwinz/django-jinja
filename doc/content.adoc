@@ -37,7 +37,7 @@ list of differences with django's built-in backend:
   It works as middleware, intercepts Jinja templates by file path pattern.
 - Django template filters and tags can mostly be used in Jinja2 templates.
 - I18n subsystem adapted for Jinja2 (makemessages now collects messages from
-  Jinja templates, respects the `ext.i18n.trimmed` policy)
+  Jinja templates, respects the `ext.i18n.trimmed` policy, `trim_blocks`, `lstrip_blocks`)
 - jinja2 bytecode cache adapted for using django's cache subsystem.
 - Support for django context processors.
 
@@ -412,6 +412,8 @@ TEMPLATES = [
                 "backend": "django_jinja.cache.BytecodeCache",
                 "enabled": False,
             },
+            "strip_blocks": False,
+            "lstrip_blocks": False,
             "autoescape": True,
             "auto_reload": settings.DEBUG,
             "translation_engine": "django.utils.translation",

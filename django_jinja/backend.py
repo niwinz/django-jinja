@@ -184,6 +184,8 @@ class Jinja2(BaseEngine):
         options.setdefault("extensions", builtins.DEFAULT_EXTENSIONS)
         options.setdefault("auto_reload", settings.DEBUG)
         options.setdefault("autoescape", True)
+        options.setdefault("trim_blocks", False)
+        options.setdefault("lstrip_blocks", False)
 
         self.env = environment_cls(**options)
 
