@@ -19,9 +19,10 @@ jobs:
           - '3.10'
           - '3.11'
     steps:
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v5
         with:
           python-version: '${{ matrix.python-version }}'
-      - uses: actions/checkout@v2
+          cache: 'pip'
+      - uses: actions/checkout@v4
       - run: pip install tox tox-gh-actions
       - run: tox
