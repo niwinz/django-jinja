@@ -1,4 +1,4 @@
-#: testapp/templates/i18n_test.html:1
+#: testapp/templates/i18n_test.html:1 testapp/templates/i18n_test.jinja:1
 #, python-format
 msgid ""
 "\n"
@@ -26,7 +26,7 @@ msgid ""
 "3 This is %(book_title)s by %(author)s\n"
 msgstr ""
 
-#: testapp/templates/i18n_test.html:20
+#: testapp/templates/i18n_test.html:20 testapp/templates/i18n_test.jinja:19
 #, python-format
 msgid ""
 "\n"
@@ -41,7 +41,7 @@ msgstr[1] ""
 msgid "5 Hello World!"
 msgstr ""
 
-#: testapp/templates/i18n_test.html:33
+#: testapp/templates/i18n_test.html:33 testapp/templates/i18n_test.jinja:32
 #, python-format
 msgid ""
 "\n"
@@ -59,25 +59,6 @@ msgid_plural "#%(trimmed_invoice_count)s trimmed invoices"
 msgstr[0] ""
 msgstr[1] ""
 
-#: testapp/templates/i18n_test.jinja:1
-#, python-format
-msgid "Foo %(bar)s"
-msgstr ""
-
-#: testapp/templates/i18n_test.jinja:19
-#, python-format
-msgid "4 There is %(count)s %(name)s object."
-msgid_plural "4 There are %(count)s %(name)s objects."
-msgstr[0] ""
-msgstr[1] ""
-
-#: testapp/templates/i18n_test.jinja:32
-#, python-format
-msgid "#%(invoice_count)s invoice"
-msgid_plural "#%(invoice_count)s invoices"
-msgstr[0] ""
-msgstr[1] ""
-
 #: testapp/templates/i18n_test.jinja:48
 #, python-format
 msgid ""
@@ -91,21 +72,31 @@ msgstr[1] ""
 
 #: testapp/templates/i18n_test.jinja:56
 #, python-format
-msgid "#%(trimmed_invoice_count)s dash on my left"
-msgid_plural "#%(trimmed_invoice_count)s dash on my right"
+msgid "#%(trimmed_invoice_count)s dash on my left\n"
+msgid_plural ""
+"\n"
+"  #%(trimmed_invoice_count)s dash on my right"
 msgstr[0] ""
 msgstr[1] ""
 
 #: testapp/templates/i18n_test.jinja:62
 #, python-format
-msgid "#%(trimmed_invoice_count)s plus on my left"
-msgid_plural "#%(trimmed_invoice_count)s plus on my right"
+msgid ""
+"\n"
+"  #%(trimmed_invoice_count)s plus on my left\n"
+msgid_plural ""
+"\n"
+"  #%(trimmed_invoice_count)s plus on my right\n"
 msgstr[0] ""
 msgstr[1] ""
 
 #: testapp/templates/i18n_test.jinja:70
 #, python-format
-msgid "#%(invoice_count)s tabbed for lstrip"
-msgid_plural "#%(invoice_count)s tabbed for lstrip plural"
+msgid ""
+"\n"
+"    #%(invoice_count)s tabbed for lstrip\n"
+msgid_plural ""
+"\n"
+"    #%(invoice_count)s tabbed for lstrip plural\n"
 msgstr[0] ""
 msgstr[1] ""
