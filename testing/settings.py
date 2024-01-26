@@ -80,6 +80,8 @@ TEMPLATES = [
             "policies": {
                 "ext.i18n.trimmed": True,
             },
+            # "trim_blocks": True,
+            # "lstrip_blocks": True,
             "extensions": DEFAULT_EXTENSIONS + [
                 "django_jinja.builtins.extensions.DjangoExtraFiltersExtension",
             ]
