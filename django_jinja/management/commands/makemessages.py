@@ -32,21 +32,27 @@ from django.template.base import BLOCK_TAG_START, BLOCK_TAG_END
 from django.utils.translation import template as trans_real
 
 
-strip_whitespace_right = re.compile(fr"({BLOCK_TAG_START}-?\s*(trans|pluralize).*?-{BLOCK_TAG_END})\s+", re.U)
-strip_whitespace_left = re.compile(fr"\s+({BLOCK_TAG_START}-\s*(endtrans|pluralize).*?-?{BLOCK_TAG_END})", re.U)
+strip_whitespace_right = re.compile(fr"({BLOCK_TAG_START}[-+]?\s*(trans|pluralize).*?-{BLOCK_TAG_END})\s+", re.U)
+strip_whitespace_left = re.compile(fr"\s+({BLOCK_TAG_START}-\s*(endtrans|pluralize).*?[-+]?{BLOCK_TAG_END})", re.U)
+trim_blocks = re.compile(fr"({BLOCK_TAG_START}[-+]?\s*(trans|pluralize)[^+]*?{BLOCK_TAG_END})\n", re.U)
+lstrip_blocks = re.compile(fr"^[ \t]+({BLOCK_TAG_START}\s*(endtrans|pluralize).*?[-+]?{BLOCK_TAG_END})", re.U | re.M)
 
 
-def strip_whitespaces(src):
+def strip_whitespaces(src, engine):
     src = strip_whitespace_left.sub(r'\1', src)
     src = strip_whitespace_right.sub(r'\1', src)
+    if engine.get("OPTIONS", {}).get("trim_blocks"):
+        src = trim_blocks.sub(r'\1', src)
+    if engine.get("OPTIONS", {}).get("lstrip_blocks"):
+        src = lstrip_blocks.sub(r'\1', src)
     return src
 
 
 # this regex looks for {% trans %} blocks that don't have 'trimmed' or 'notrimmed' set.
 # capturing {% endtrans %} ensures this doesn't affect DTL {% trans %} tags.
 trans_block_re = re.compile(
-    fr"({BLOCK_TAG_START}-?\s*trans)(?!\s+(?:no)?trimmed)"
-    fr"(.*?{BLOCK_TAG_END}.*?{BLOCK_TAG_START}-?\s*?endtrans\s*?-?{BLOCK_TAG_END})",
+    fr"({BLOCK_TAG_START}[-+]?\s*trans)(?!\s+(?:no)?trimmed)"
+    fr"(.*?{BLOCK_TAG_END}.*?{BLOCK_TAG_START}[-+]?\s*?endtrans\s*?[-+]?{BLOCK_TAG_END})",
     re.U | re.DOTALL
 )
 
@@ -67,10 +73,11 @@ class Command(makemessages.Command):
 
     def _get_default_jinja_template_engine(self):
         # dev's note: i would love to have this easy default: --jinja2-engine-name=jinja2
-        # but as currently implemented, django-jinja's engine's name defaults to 'backend'.
+        # but due to historical reasons, django-jinja's engine's name can default to either `jinja2` or 'backend'.
         # see: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-TEMPLATES-NAME
-        # for now, the default engine will be the first one exactly matching our backend's path.
-        return [e for e in engines.templates.values() if e["BACKEND"] == "django_jinja.backend.Jinja2"][0]
+        # the default engine will be the first one exactly matching either of the new or old import paths.
+        supported_import_paths = ["django_jinja.backend.Jinja2", "django_jinja.jinja2.Jinja2"]
+        return [e for e in engines.templates.values() if e["BACKEND"] in supported_import_paths][0]
 
     def handle(self, *args, **options):
         old_endblock_re = trans_real.endblock_re
@@ -81,11 +88,11 @@ class Command(makemessages.Command):
         # Extend the regular expressions that are used to detect
         # translation blocks with an "OR jinja-syntax" clause.
         trans_real.endblock_re = re.compile(
-            trans_real.endblock_re.pattern + '|' + r"""^-?\s*endtrans\s*-?$""")
+            trans_real.endblock_re.pattern + '|' + r"""^[-+]?\s*endtrans\s*[-+]?$""")
         trans_real.block_re = re.compile(
-            trans_real.block_re.pattern + '|' + r"""^-?\s*trans(?:\s+(?:no)?trimmed)?(?:\s+(?!'|")(?=.*?=.*?)|\s*-?$)""")
+            trans_real.block_re.pattern + '|' + r"""^[-+]?\s*trans(?:\s+(?:no)?trimmed)?(?:\s+(?!'|")(?=.*?=.*?)|\s*[-+]?$)""")
         trans_real.plural_re = re.compile(
-            trans_real.plural_re.pattern + '|' + r"""^-?\s*pluralize(?:\s+.+|-?$)""")
+            trans_real.plural_re.pattern + '|' + r"""^[-+]?\s*pluralize(?:\s+.+|[-+]?$)""")
         trans_real.constant_re = re.compile(r""".*?_\(((?:".*?(?<!\\)")|(?:'.*?(?<!\\)')).*?\)""")
 
         if options['jinja_engine']:
@@ -94,7 +101,7 @@ class Command(makemessages.Command):
             jinja_engine = self._get_default_jinja_template_engine()
 
         def my_templatize(src, origin=None, **kwargs):
-            new_src = strip_whitespaces(src)
+            new_src = strip_whitespaces(src, jinja_engine)
             new_src = apply_i18n_trimmed_policy(new_src, jinja_engine)
             return old_templatize(new_src, origin, **kwargs)
 

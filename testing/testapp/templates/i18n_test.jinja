@@ -43,3 +43,35 @@ Foo {{ bar }}
   #{{ trimmed_invoice_count }} trimmed invoices
 {% endtrans %}
 </p>
+
+</p>
+{% trans notrimmed %}
+  #{{ trimmed_invoice_count }} notrimmed invoice
+{% pluralize %}
+  #{{ trimmed_invoice_count }} notrimmed invoices
+{% endtrans %}
+</p>
+
+</p>
+{% trans -%}
+  #{{ trimmed_invoice_count }} dash on my left
+{% pluralize %}
+  #{{ trimmed_invoice_count }} dash on my right
+{%- endtrans %}
+</p>
+
+</p>
+{% trans +%}
+  #{{ trimmed_invoice_count }} plus on my left
+{% pluralize %}
+  #{{ trimmed_invoice_count }} plus on my right
+{%+ endtrans %}
+</p>
+
+<p>
+  {% trans %}
+    #{{ invoice_count }} tabbed for lstrip
+  {% pluralize %}
+    #{{ invoice_count }} tabbed for lstrip plural
+  {% endtrans %}
+</p>

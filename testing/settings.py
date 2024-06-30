@@ -61,8 +61,7 @@ JINJA2_MUTE_URLRESOLVE_EXCEPTIONS = True
 
 TEMPLATES = [
     {
-        "BACKEND": "django_jinja.backend.Jinja2",
-        "NAME": "jinja2",
+        "BACKEND": "django_jinja.jinja2.Jinja2",
         "APP_DIRS": True,
         "OPTIONS": {
             "debug": True,
@@ -81,6 +80,8 @@ TEMPLATES = [
             "policies": {
                 "ext.i18n.trimmed": True,
             },
+            # "trim_blocks": True,
+            # "lstrip_blocks": True,
             "extensions": DEFAULT_EXTENSIONS + [
                 "django_jinja.builtins.extensions.DjangoExtraFiltersExtension",
             ]

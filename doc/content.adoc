@@ -1,6 +1,6 @@
 = django-jinja - jinja2 backend for Django
 Andrey Antukh, <niwi@niwi.be>
-2.10.2
+2.11.0
 :toc: left
 :!numbered:
 :source-highlighter: pygments
@@ -37,7 +37,7 @@ list of differences with django's built-in backend:
   It works as middleware, intercepts Jinja templates by file path pattern.
 - Django template filters and tags can mostly be used in Jinja2 templates.
 - I18n subsystem adapted for Jinja2 (makemessages now collects messages from
-  Jinja templates, respects the `ext.i18n.trimmed` policy)
+  Jinja templates, respects the `ext.i18n.trimmed` policy, `trim_blocks`, `lstrip_blocks`)
 - jinja2 bytecode cache adapted for using django's cache subsystem.
 - Support for django context processors.
 
@@ -53,7 +53,7 @@ in the "Custom filters, globals, constants and tests" section.
 
 === Requirements
 
-- Python >= 3.7
+- Python >= 3.8
 - Django >= 3.2
 - jinja2 >= 3.0
 
@@ -86,9 +86,9 @@ If you are using older versions of Django or Python, you need an older version o
 |3.6, 3.7, 3.8, 3.9, 3.10
 |2.2, 3.2, 4.0
 
-|>=2.next
-|3.7, 3.8, 3.9, 3.10, 3.11
-|3.2, 4.0, 4.1
+|>=2.11.0
+|3.8, 3.9, 3.10, 3.11
+|3.2, 4.0, 4.1, 4.2, 5.0 (dev version only)
 |===
 
 
@@ -117,7 +117,7 @@ Followed by the basic template engine configuration:
 ----
 TEMPLATES = [
     {
-        "BACKEND": "django_jinja.backend.Jinja2",
+        "BACKEND": "django_jinja.jinja2.Jinja2",
         "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {}
@@ -331,6 +331,21 @@ from django_jinja.builtins import DEFAULT_EXTENSIONS
 
 ----
 
+=== Setting the template engine name
+
+Keep in mind that the automatically inferred `NAME` for any template backend
+link:https://docs.djangoproject.com/en/dev/ref/settings/#std-setting-TEMPLATES-NAME[will depend on the backend's import path].
+This name is used when you need to specify a template engine by name
+(e.g. `render_to_string("myapp/template.jinja", context, using="jinja2")`).
+
+In previous versions of django-jinja, the backend's import path was `django_jinja.backend.Jinja2`,
+providing the unhelpful default engine name, `"backend"`.
+
+Now, the import path `django_jinja.jinja2.Jinja2` can be used,
+which provides a more meaningful engine name, `"jinja2"`.
+
+The old import path is still available for compatability with existing Django projects.
+
 
 === Gettext Style
 
@@ -356,7 +371,7 @@ This is a complete configuration example with django-jinja's defaults:
 ----
 TEMPLATES = [
     {
-        "BACKEND": "django_jinja.backend.Jinja2",
+        "BACKEND": "django_jinja.jinja2.Jinja2",
         "APP_DIRS": True,
         "OPTIONS": {
             "match_extension": ".jinja",
@@ -397,6 +412,8 @@ TEMPLATES = [
                 "backend": "django_jinja.cache.BytecodeCache",
                 "enabled": False,
             },
+            "strip_blocks": False,
+            "lstrip_blocks": False,
             "autoescape": True,
             "auto_reload": settings.DEBUG,
             "translation_engine": "django.utils.translation",
