@@ -3,11 +3,22 @@ on:
   push:
     branches:
       - master
+    paths:
+        - '**.py'
+        - '**.txt'
+        - '.github/workflows/ci.yml'
+        - '**.toml'
+        - "tox.ini"
   pull_request:
     branches:
       - master
-  schedule:
-    - cron: 33 3 * * MON  # Run Mondays at 03:33 UTC
+    paths:
+        - '**.py'
+        - '**.txt'
+        - '.github/workflows/ci.yml'
+        - '**.toml'
+        - "tox.ini"
+
 jobs:
   Build:
     runs-on: ubuntu-latest
