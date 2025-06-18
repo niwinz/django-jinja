@@ -13,9 +13,9 @@ urlpatterns = [
     url(r"^test1/(?P<data>\d+)/$", BasicTestView.as_view(), name="test-1"),
     url(r"^test-i18n/$", I18nTestView.as_view(), name="i18n-test"),
     url(r"^test-i18n-dtl/$", I18nTestViewDTL.as_view(), name="i18n-dtl-test"),
-    url(r"^test/404$", views.PageNotFound.as_view(), name="page-404"),
-    url(r"^test/403$", views.PermissionDenied.as_view(), name="page-403"),
-    url(r"^test/500$", views.ServerError.as_view(), name="page-500"),
+    url(r"^test/404$", views.page_not_found, name="page-404"),
+    url(r"^test/403$", views.permission_denied, name="page-403"),
+    url(r"^test/500$", views.server_error, name="page-500"),
     url(r"^test-streaming/$", StreamingTestView.as_view(), name='streaming-test'),
 
     url(r"^testmodel/$", ListTestView.as_view()),
