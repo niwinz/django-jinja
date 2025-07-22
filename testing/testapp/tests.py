@@ -136,7 +136,9 @@ class RenderTemplatesTests(TestCase):
         result = template.render({"form": form})
 
         major, minor, _, _, _ = django.VERSION
-        if major > 5 or (major == 5 and minor >= 2):
+        is_django_5_2_or_later = major > 5 or (major == 5 and minor >= 2)
+
+        if is_django_5_2_or_later:
             self.assertEqual(result,
                             ("""<ul class="errorlist" id="id_name_error">"""
                              """<li>Ensure this value has at most 2 characters"""
@@ -150,7 +152,7 @@ class RenderTemplatesTests(TestCase):
         template = self.env.from_string("{{ form.errors }}")
         result = template.render({"form": form})
 
-        if major > 5 or (major == 5 and minor >= 2):
+        if is_django_5_2_or_later:
             self.assertEqual(result,
                             ("""<ul class="errorlist">"""
                              """<li>name<ul class="errorlist" id="id_name_error">"""
