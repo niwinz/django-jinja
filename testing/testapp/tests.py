@@ -1,7 +1,7 @@
 import datetime
-
 from unittest import mock
 
+import django
 from django.conf import global_settings
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
@@ -135,17 +135,35 @@ class RenderTemplatesTests(TestCase):
         template = self.env.from_string("{{ form.name.errors }}")
         result = template.render({"form": form})
 
-        self.assertEqual(result,
-                         ("""<ul class="errorlist"><li>Ensure this value """
-                          """has at most 2 characters (it has 3).</li></ul>"""))
+        major, minor, _, _, _ = django.VERSION
+        is_django_5_2_or_later = major > 5 or (major == 5 and minor >= 2)
+
+        if is_django_5_2_or_later:
+            self.assertEqual(result,
+                            ("""<ul class="errorlist" id="id_name_error">"""
+                             """<li>Ensure this value has at most 2 characters"""
+                             """ (it has 3).</li></ul>"""))
+        else:
+            self.assertEqual(result,
+                            ("""<ul class="errorlist">"""
+                             """<li>Ensure this value has at most 2 characters"""
+                             """ (it has 3).</li></ul>"""))
 
         template = self.env.from_string("{{ form.errors }}")
         result = template.render({"form": form})
 
-        self.assertEqual(result,
-                         ("""<ul class="errorlist"><li>name<ul class="errorlist">"""
-                          """<li>Ensure this value has at most 2 characters (it """
-                          """has 3).</li></ul></li></ul>"""))
+        if is_django_5_2_or_later:
+            self.assertEqual(result,
+                            ("""<ul class="errorlist">"""
+                             """<li>name<ul class="errorlist" id="id_name_error">"""
+                             """<li>Ensure this value has at most 2 characters"""
+                             """ (it has 3).</li></ul></li></ul>"""))
+        else:
+            self.assertEqual(result,
+                            ("""<ul class="errorlist">"""
+                             """<li>name<ul class="errorlist">"""
+                             """<li>Ensure this value has at most 2 characters"""
+                             """ (it has 3).</li></ul></li></ul>"""))
 
     def test_autoescape_01(self):
         template = self.env.from_string("{{ foo|safe }}")
