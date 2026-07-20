@@ -548,28 +548,21 @@ library.extension(MyExtension)
 
 This only works within a Django app. If you don't have an app for your project, create an app specifically for this purpose and put your templatetags there.
 
-=== Render 4xx/500 pages with jinja
+=== Render error pages with jinja
 
-django-jinja also provides a set of views for easy
-render 4xx/500 pages using jinja engine:
+django-jinja also provides a set of views for rendering
+400, 403, 404, and 500 error pages using the jinja engine:
 
 [source, python]
 ----
 # yourproject/urls.py
 from django_jinja import views
 
-handler400 = views.BadRequest.as_view()
-handler403 = views.PermissionDenied.as_view()
-handler404 = views.PageNotFound.as_view()
-handler500 = views.ServerError.as_view()
+handler400 = views.bad_request
+handler403 = views.permission_denied
+handler404 = views.page_not_found
+handler500 = views.server_error
 ----
-
-
-== Known Issues
-
-- The above handler500 is broken as of django 2.2. see: https:github.com/niwinz/django-jinja/issues/234
-
-
 
 == Builtin contrib modules
 
